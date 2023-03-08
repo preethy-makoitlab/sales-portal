@@ -9,3 +9,11 @@ export enum ApprovalStatus {
     REJECTED = 4,
     ONHOLD = 5
 }
+
+export enum ApiType{
+    get = 'get',
+    post = 'post',
+    delete = 'delete',
+    patch = 'patch',
+    put = 'put'
+}
