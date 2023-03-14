@@ -1,0 +1,13 @@
+{
+    "my-s3-datasource": {
+      "name": "my-s3-datasource",
+      "connector": "s3",
+      "credentials": {
+        "accessKeyId": "AKIAYRXY4QOXVNPBEGGM",
+        "secretAccessKey": "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",
+        "region": "ap-south-1"
+      },
+      "bucket": "anyo-content"
+    }
+  }
+  

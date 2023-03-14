@@ -4,12 +4,12 @@ import {juggler} from "@loopback/repository";
 const config = {
   name: 'db',
   connector: 'mongodb',
-  url: 'mongodb://127.0.0.1:27017/anyo',
+  url: 'mongodb+srv://admin:admin123@cluster-veract.7lqu9fi.mongodb.net/CRM?retryWrites=true&w=majority',
   host: 'localhost',
   port: 27017,
   user: '',
   password: '',
-  database: 'anyo',
+  database: 'CRM',
 };
 // Observe application"s life cycle to disconnect the datasource when
 // application is stopped. This allows the application to be shut down
