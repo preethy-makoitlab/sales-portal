@@ -1,0 +1,219 @@
+// /* You can add global styles to this file, and also import other style files */
+@tailwind base; //dark theme
+@tailwind utilities;
+@tailwind components;
+
+@import 'src/styles/constants.scss';
+// @layer base {
+//     html {
+//         font-family: 'Poppins' !important;
+//     }
+// }
+
+html, body {
+    overflow: auto;
+    min-height: 100vh;
+    font-family: $ft-family-primary !important;
+}
+
+body {
+    // background: $clr-bg-secondary;
+    background: $background-primary;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;  
+    font-family: $ft-family-primary !important;
+}
+
+thead {
+    tr {
+        background-color: $background-secondary;
+        th {
+            font-size: $ft-size-small;
+            font-weight: $ft-semi-bold;
+        }
+    }
+}
+
+tbody {
+    td {
+        font-size: $ft-size-small;
+        font-weight: $ft-semi-bold;
+    }
+    tr:nth-child(even) {
+        background-color: $background-tertiary;
+    }
+}
+
+.header {
+    background-color: $background-primary;
+    font-size: $ft-size-regular;
+    font-weight: $ft-medium;
+}
+
+.header-text {
+    background-color: $background-primary;
+    font-size: $ft-size-large;
+    font-weight: $ft-bold;
+}
+
+.content {
+    background-color: $background-secondary;
+}
+
+.menu {
+    background-color: $background-primary;  
+    .selected-item {
+        background-color: $background-secondary;
+    }
+}
+
+.container {
+    height: 100vh;
+}
+
+.custom-card {
+    background: $clr-bg-primary;
+    border-radius: 16px;
+    width: 80%;
+    height: 80%;
+}
+
+.btn-link {
+    color: $clr-text-primary;
+}
+
+.custom-btn-primary {
+    background: $clr-btn-primary;
+    border: none;
+    color: $clr-text-tertiary;
+    text-align: center;
+    font-size: $ft-size-regular;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.instruction {
+    font-size: $ft-size-regular;
+    font-weight: $ft-medium;
+    color: $clr-text-primary;
+    &.small {
+        font-size: $ft-size-small;
+    }
+    &.light {
+        color: $clr-text-secondary;
+    }
+    &.center {
+        text-align: center;
+    }
+}
+
+.vertical-separator {
+    border-right: $border-separator
+}
+
+.horizontal-separator {
+    border-bottom: $border-separator
+}
+
+.no-border {
+    border: none;
+}
+
+::placeholder {
+    color: $clr-text-placeholder;
+    font-size: $ft-size-regular;
+    font-weight: $ft-light;
+}
+
+.input {
+    border: $border-secondary;
+    max-width: 100%;
+    border-radius: 6px !important;
+
+    &.small-text {
+        font-size: $ft-size-small;
+    }
+
+    &.center {
+        text-align: center;
+    }
+}
+
+.focussed:focus {
+    border-color: $clr-border-focussed !important;
+}
+
+.input-focussed {
+    border-color: $clr-border-focussed;
+}
+
+.input-error {
+    border-color: $clr-border-error;
+}
+
+.input-success {
+    border-color: $clr-border-success;
+}
+
+.form-label {
+    font-size: $ft-size-small;
+    font-weight: $ft-medium;
+}
+
+.text-q { 
+    color: $clr-text-quarternary;
+}
+
+.inputwithicon {
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    border: 2px solid #E8E8E8;
+    justify-content: space-between;
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.inputwithicon .input {
+    border: transparent;
+    background: transparent;
+    margin-left: 0rem;
+}
+
+.pass-require {
+    margin: 1rem;
+}
+
+.card .mini {
+    position: absolute;
+    height: 20%;
+    width: 17%;
+    background: #F9F9F9;
+    border: 1px solid #EEEEEE;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-left: 5.7rem;
+    margin-top: 8px;
+    z-index: 9999;
+}
+
+.card p{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #333333;
+}
+
+.card li {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 16px;
+    color: #6F6F6F;
+    margin-left: 0.5rem;
+    margin-top: 4px;
+}
