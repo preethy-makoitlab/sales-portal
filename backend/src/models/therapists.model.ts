@@ -64,9 +64,8 @@ export class Therapists extends Entity {
   })
   dob: Date;
 
-  @property({
-    type: 'string',
-    required: true,
+  @property.array({
+    type: 'string'
   })
   qualification: string[];
 
