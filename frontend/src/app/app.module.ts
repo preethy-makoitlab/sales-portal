@@ -12,6 +12,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { VideostreamComponent } from './components/videostream/videostream.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MainLayoutComponent } from './components/main-layout/main-layout.compon
     FooterComponent,
     VideostreamComponent,
     MenuComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,

@@ -348,3 +348,60 @@ body {
 //     margin-left: -30px;
 //     cursor: pointer;
 // }
+
+.table {
+    height: 50%;
+    width: 50%;
+    background: white;
+    color: black !important;
+    border-radius: 8px;
+    margin: 1rem;
+}
+
+.b1 {
+    background: #FFFFFF;
+}
+
+.table>tbody>tr {
+    border-radius: 8px;
+}
+
+.table>thead>tr {
+    border-radius: 8px;
+}
+
+.table.table-zebra>tbody>tr:nth-child(2n)>td {
+    background: #F3F3FF;
+    color: black;
+}
+
+.table>thead>tr>th {
+    background: #E1E1FD;
+    color: black;
+    border-color: transparent;
+}
+
+.table>tbody>tr>td {
+    border-color: transparent;
+    color: black;
+}
+
+.table>thead>tr :not(.th:first-child,.th:last-child) {
+    border-color: transparent;
+}
+
+.switch {
+    --switch-bg: #E1E1FD;
+    --switch-bg-hover: #E1E1FD;
+    --circle-color: #FFFFFF;
+    border-color: transparent;
+    border-radius: 200px;
+    border-width: 0px;
+}
+
+.table-container {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    width: 69.7%;
+    margin: 2rem;
+}
