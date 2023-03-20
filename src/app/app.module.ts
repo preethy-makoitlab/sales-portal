@@ -4,33 +4,29 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { VideostreamComponent } from './components/videostream/videostream.component';
-import { MenuComponent } from './components/menu/menu.component';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
-import { TableComponent } from './components/table/table.component';
-import { AdminPortalModule } from './components/admin-portal/admin-portal.module';
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { TherapistModule } from './therapist/therapist.module';
+import { SharedModule } from 'shared-ui/src/app/components/shared/shared.module';
+import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    HeaderComponent,
-    FooterComponent,
-    VideostreamComponent,
-    MenuComponent,
     MainLayoutComponent,
-    TableComponent
+    AdminHomeComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AdminPortalModule,
+    TherapistModule,
+    SharedModule,
+    TherapistModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

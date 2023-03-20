@@ -4,15 +4,13 @@
 @tailwind components;
 
 @import 'src/styles/constants.scss';
-// @layer base {
-//     html {
-//         font-family: 'Poppins' !important;
-//     }
-// }
 
 html, body {
     overflow: auto;
     min-height: 100vh;
+}
+
+*, html, body {
     font-family: $ft-family-primary !important;
 }
 
@@ -70,6 +68,7 @@ tbody {
 
 .container {
     height: 100vh;
+    max-width: 100%;
 }
 
 .custom-card {
