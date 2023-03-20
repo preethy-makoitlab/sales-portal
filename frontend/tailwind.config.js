@@ -1,10 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ['./src/app/components/**/*.{html,js,ts,jsx,tsx}',
-  './src/app/pages/**/*.{html,js,ts,tsx,jsx}'],
+  content: ['./src/app/**/*.{html,js,ts}'],
+  rippleui: {
+		defaultStyle: false,
+	},
   theme: {
     extend: {},
+    container: {
+      center: true
+    }
   },
   plugins: [require("rippleui")]
 }
+// plugins: [require("rippleui")]

@@ -10,9 +10,9 @@ export class TableComponent {
   // data = ['icon', 'Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6']
 
   data: any[] = [
-    ['icon', 'Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
-    ['icon', 'Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
-    ['icon', 'Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
-    ['icon', 'Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6']
+    ['Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
+    ['Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
+    ['Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6'],
+    ['Sierra Thompson', 'sierra@gmail.com', '11:00 am', '0', '0', '4.6']
   ]
 }

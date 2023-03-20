@@ -4,6 +4,11 @@
 @tailwind components;
 
 @import 'src/styles/constants.scss';
+@layer base {
+    html {
+        font-family: $ft-family-primary !important;
+    }
+}
 
 html, body {
     overflow: auto;
@@ -12,11 +17,53 @@ html, body {
 
 body {
     // background: $clr-bg-secondary;
-    // background-image: url('/assets/images/background.svg');
+    background: $background-primary;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;  
-    font-family: $ft-family-primary;
+}
+
+thead {
+    tr {
+        background-color: $background-secondary;
+        th {
+            font-size: $ft-size-small;
+            font-weight: $ft-semi-bold;
+        }
+    }
+}
+
+tbody {
+    td {
+        font-size: $ft-size-small;
+        font-weight: $ft-semi-bold;
+    }
+    tr:nth-child(even) {
+        background-color: $background-tertiary;
+    }
+}
+
+.header {
+    background-color: $background-primary;
+    font-size: $ft-size-regular;
+    font-weight: $ft-medium;
+}
+
+.header-text {
+    background-color: $background-primary;
+    font-size: $ft-size-large;
+    font-weight: $ft-bold;
+}
+
+.content {
+    background-color: $background-secondary;
+}
+
+.menu {
+    background-color: $background-primary;  
+    .selected-item {
+        background-color: $background-secondary;
+    }
 }
 
 .container {
@@ -30,11 +77,6 @@ body {
     height: 80%;
 }
 
-.header-text {
-    font-size: $ft-size-header;
-    font-weight: $ft-medium;
-}
-
 .btn-link {
     color: $clr-text-primary;
 }
@@ -44,17 +86,17 @@ body {
     border: none;
     color: $clr-text-tertiary;
     text-align: center;
-    font-size: $ft-size-primary;
+    font-size: $ft-size-regular;
     cursor: pointer;
     border-radius: 6px;
 }
 
 .instruction {
-    font-size: $ft-size-primary;
+    font-size: $ft-size-regular;
     font-weight: $ft-medium;
     color: $clr-text-primary;
     &.small {
-        font-size: $ft-size-secondary;
+        font-size: $ft-size-small;
     }
     &.light {
         color: $clr-text-secondary;
@@ -64,8 +106,12 @@ body {
     }
 }
 
-.border-separator {
+.vertical-separator {
     border-right: $border-separator
+}
+
+.horizontal-separator {
+    border-bottom: $border-separator
 }
 
 .no-border {
@@ -74,7 +120,7 @@ body {
 
 ::placeholder {
     color: $clr-text-placeholder;
-    font-size: $ft-size-primary;
+    font-size: $ft-size-regular;
     font-weight: $ft-light;
 }
 
@@ -84,7 +130,7 @@ body {
     border-radius: 6px !important;
 
     &.small-text {
-        font-size: $ft-size-secondary;
+        font-size: $ft-size-small;
     }
 
     &.center {
@@ -109,7 +155,7 @@ body {
 }
 
 .form-label {
-    font-size: $ft-size-secondary;
+    font-size: $ft-size-small;
     font-weight: $ft-medium;
 }
 
@@ -372,18 +418,29 @@ body {
 
 .table.table-zebra>tbody>tr:nth-child(2n)>td {
     background: #F3F3FF;
-    color: black;
 }
 
 .table>thead>tr>th {
     background: #E1E1FD;
-    color: black;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    color: #15154C;
     border-color: transparent;
+    text-align: center;
 }
 
 .table>tbody>tr>td {
     border-color: transparent;
-    color: black;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #192A3E;
+    text-align: center;
 }
 
 .table>thead>tr :not(.th:first-child,.th:last-child) {
@@ -397,11 +454,16 @@ body {
     border-color: transparent;
     border-radius: 200px;
     border-width: 0px;
+    --switch-bg-checked: #219653;
 }
 
 .table-container {
     background-color: #FFFFFF;
     border-radius: 12px;
-    width: 69.7%;
+    width: 72%;
     margin: 2rem;
+}
+
+.info {
+    max-width: max-content;
 }
