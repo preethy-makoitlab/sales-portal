@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-
+  lastSeenAt: string = new Date().toISOString();
+  name: string = "user";
 }
+

@@ -3,27 +3,18 @@
         "title": "Welcome to ANYO"
     },
     "titles": {
-        "register": "Register",
-        "setPassword": "Set Password"
+        
     },
     "labels": {
-        "loginId": "Email / Mobile #",
-        "otp": "OTP",
-        "password": "Create your password"
+        "hello": "Hello"
     },
     "placeholders": {
-        "loginIdPlaceholder": "Enter email or mobile #",
-        "enterPassword": "Enter password",
-        "confirmPassword": "Enter password"
+        
     },
     "buttons": {
-        "sendOtp": "Send OTP",
-        "verifyOtp": "Verify OTP"
+        
     },
     "instructions": {
-        "otpSentToEmail": "We have sent a 4-digit verification code to your email",
-        "otpSentToMobile": "We have sent a 4-digit verification code to your mobile",
-        "didntReceiveOtp": "Didn't receive OTP?",
-        "resendOtp": "Resend OTP"
+        
     }
 }

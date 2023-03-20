@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AnyoTranslateService } from './services/anyo-translate.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Hello World!';
+  title = 'Anyo - Portal';
+
+  constructor(private translate: AnyoTranslateService) {
+  }
 }

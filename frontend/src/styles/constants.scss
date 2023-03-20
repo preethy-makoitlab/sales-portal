@@ -1,0 +1,54 @@
+// /* You can add global styles to this file, and also import other style files */
+@tailwind base; //dark theme
+@tailwind utilities;
+@tailwind components;
+
+$background-primary: #FFFFFF;
+$background-secondary: linear-gradient(#ABA8DD, #55DFE0);
+
+$clr-text-primary: #15154C;
+$clr-text-secondary: #6F6F6F;
+$clr-text-tertiary: #ffffff;
+$clr-text-quarternary: #1900C0;
+
+$clr-text-muted: #E8E8E8;
+$clr-text-placeholder: #D2D2D2;
+$clr-text-error: #EB5757;
+
+$clr-bg-primary: #ffffff;
+$clr-bg-secondary: linear-gradient(#ABA8DD, #55DFE0);
+
+$border-separator: 1px solid #AAA9DD;
+
+$clr-border-focussed: #5A55D2;
+$clr-border-success: #219653;
+$clr-border-error: #EB5757;
+$clr-border-primary: #E8E8E8;
+$clr-border-secondary: #c4c4c4;
+
+$border-primary: 1px solid $clr-text-primary;
+$border-secondary: 1px solid $clr-border-secondary;
+
+$clr-btn-primary: #15154C; 
+$clr-btn-secondary: #15154C; // TBD
+$clr-btn-cancel: #E8E8E8;  // TBD
+$clr-btn-disabled: #E8E8E8;  // TBD
+
+// define fonts
+$ft-family-primary: 'Poppins';
+$ft-family-secondary: 'Poppins';    // TBD
+
+$ft-thin: 100;
+$ft-extralight: 200;
+$ft-light: 300;
+$ft-normal: 400;
+$ft-medium: 500;
+$ft-semi-bold: 600;
+$ft-bold: 700;
+$ft-extrabold: 800;
+
+$ft-size-primary: 14px;
+$ft-size-secondary: 12px;
+$ft-size-header: 15px;
+
+

@@ -10,6 +10,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { VideostreamComponent } from './components/videostream/videostream.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { VideostreamComponent } from './components/videostream/videostream.compo
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    VideostreamComponent
+    VideostreamComponent,
+    MenuComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
