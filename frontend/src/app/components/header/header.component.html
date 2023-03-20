@@ -1,10 +1,11 @@
-<div class="flex flex-row justify-between">
-  <div class="flex flex-col items-center">
+<div class="flex flex-row justify-between header">
+  <div class="flex flex-col items-center gap-1">
     <div>{{ 'labels.hello' | translate }} {{ name }}</div>
     <div>{{ lastSeenAt }}</div>
   </div>
-  <div class="flex flex-row justify-between">
-    <div>notif</div>
-    <div>user</div>
+  <div class="flex flex-row justify-between items-center gap-2">
+    <div><img class="info" src="../../../assets/icons/notifications-unread.svg"></div>
+    <div><img class="info" src="../../../assets/icons/default-user.svg"></div>
+    <div>{{ name }}</div>
   </div>
 </div>
