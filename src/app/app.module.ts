@@ -10,7 +10,7 @@ import { VideostreamComponent } from './components/videostream/videostream.compo
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { TherapistModule } from './therapist/therapist.module';
-import { SharedModule } from 'shared-ui/src/app/components/shared/shared.module';
+import { SharedModule } from './common/shared.module';
 import { MenuComponent } from './components/menu/menu.component';
 
 @NgModule({
@@ -24,7 +24,6 @@ import { MenuComponent } from './components/menu/menu.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    TherapistModule,
     SharedModule,
     TherapistModule,
     TranslateModule.forRoot({
