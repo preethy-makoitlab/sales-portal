@@ -21,6 +21,7 @@ body {
     background-attachment: fixed;
     background-size: cover;  
     font-family: $ft-family-primary !important;
+    color: $clr-text-primary;
 }
 
 thead {
@@ -50,9 +51,9 @@ tbody {
 }
 
 .header-text {
-    background-color: $background-primary;
     font-size: $ft-size-large;
     font-weight: $ft-bold;
+    color: $clr-text-header;
 }
 
 .content {
