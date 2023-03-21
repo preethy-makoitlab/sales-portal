@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
+import { AnyoTranslateService } from '../../services/anyo-translate.service';
 
 @Component({
   selector: 'app-manage',
