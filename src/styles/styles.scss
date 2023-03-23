@@ -54,6 +54,7 @@ tbody {
     font-size: $ft-size-large;
     font-weight: $ft-bold;
     color: $clr-text-header;
+    white-space: nowrap;
 }
 
 .sub-header-text {
@@ -97,7 +98,7 @@ tbody {
 .custom-btn-primary {
     background: $clr-btn-primary;
     border: none;
-    color: $clr-text-tertiary;
+    color: $clr-text-quarternary;
     text-align: center;
     font-size: $ft-size-regular;
     cursor: pointer;

@@ -1,12 +1,27 @@
-<div class="therapist-flexbox">
-    <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
-    <h1 class="header-text">Manage Therapist</h1>
-    <img class="separator" src="../../../assets/icons/separator.svg">
-    <h1 class="sub-header-text">{{count}} Therapists</h1>
-    <app-search></app-search>
-    <div class="inputwithicon button">
-    <img class="add-icon" src="../../../assets/icons/add-icon.svg">
-    <button class="btn btn-primary btn-block">Add new therapist</button>
+<div class="flex flex-row justify-between items-center mb-3">
+    <div class="flex flex-row md:gap-3 items-center">
+        <div class="flex flex-row flex-nowrap md:gap-3 items-center">
+            <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+            <h1 class="header-text md:break-keep">Manage Therapist</h1>
+        </div>
+        <div>
+            <img class="separator" src="../../../assets/icons/separator.svg">
+        </div>
+        <div>
+            <h1 class="sub-header-text">{{count}} Therapists</h1>
+        </div>
+    </div>
+    
+    <!-- <div>
+        <app-search></app-search>
+    </div> -->
+    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/therapist/add']">
+        <div>
+            <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+        </div>
+        <div>
+            <span class="">Add new therapist</span>
+        </div>
     </div>
 </div>
 <app-table [fields]="fields"></app-table>
