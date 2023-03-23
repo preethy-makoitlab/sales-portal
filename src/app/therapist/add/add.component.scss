@@ -47,6 +47,23 @@
     color: #6F6F6F;
 }
 
+.form2-select {
+    width: 150%;
+    max-width: inherit;
+    background: $background-primary;
+    border: 1px solid $clr-text-muted;
+    border-radius: 6px;
+    background-image: url("../../../assets/icons/dropdown-arrow.svg");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    color: #6F6F6F;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    letter-spacing: 0.25px;
+    height: 2.5rem;
+}
+
 .enter {
     width: 150%;
     background-image: none;
@@ -63,12 +80,28 @@
     height: 0rem;
 }
 
-.add-form-flex {
+.add-form-buttons {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-bottom: 1.5rem;
-    margin-right: 5rem;
+    justify-content: flex-end;
+}
+
+.upload-pic {
+    border: 1.4px dashed #E8E8E8;;
+}
+
+.text-xs {
+    font-size: 8px;
+    font-weight: 400;
+    line-height: 12px;
+}
+
+.btn {
+    width: 15%;
+    margin: 5px;
+    border: 6px;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
 }
 
 .title-class {
@@ -79,6 +112,40 @@
     color: $clr-text-placeholder;
     font-size: $ft-size-small;
     font-weight: $ft-light;
+}
+
+.textarea {
+    border: 1px solid #E8E8E8;
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    width: 150%;
+    max-width: inherit;
+    margin-right: 9rem;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    color: #6F6F6F;
+    height: 50%;
+    max-height: inherit;
+}
+
+.checkbox-sm {
+    background-color: transparent;
+    border: 2px solid #15154C;
+    --checkbox-bg-hover: #FFFFFF;
+    border-radius: 0px;
+}
+
+.checkbox:checked{
+    background-color: #15154C;
+    border: 1px solid #15154C;
+}
+
+.checkbox-span {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #6F6F6F;
 }
 
 //select1
@@ -157,7 +224,14 @@
 tag-input {
     border: 1px solid lightgray;
     border-radius: 6px;
-    width: 50%;
+    display: flex;
+    height: auto;
+    width: 100%;
+    max-width: inherit;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    color: #6F6F6F;
 }
   
 .ng2-dropdown-menu {
@@ -166,3 +240,4 @@ top: auto !important;
 left: auto !important;
 width: 100% !important;
 }
+

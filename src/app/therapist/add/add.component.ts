@@ -10,7 +10,10 @@ import { TagInputComponent } from 'ngx-chips';
 })
 export class AddComponent {
 
+  gotonext: boolean = false;
+
   @ViewChild('tagInput') tagInputRef: TagInputComponent | undefined;
+  @ViewChild('fileInput') fileInput: any;
   show: boolean = false;
 
   selectedTag: { category: string; } | undefined;
@@ -25,7 +28,16 @@ export class AddComponent {
   autocompleteItems = [
     { value: 3, display: 'Item3' },
     { value: 4, display: 'Item4' },
-    { value: 5, display: 'Item5' }
+    { value: 5, display: 'Item5' },
+    { value: 6, display: 'Item6' },
+    { value: 7, display: 'Item7' },
+    { value: 8, display: 'Item8' },
+    { value: 9, display: 'Item9' },
+    { value: 10, display: 'Item10' },
+    { value:11, display: 'Item11' },
+    { value: 12, display: 'Item12' },
+    { value: 13, display: 'Item13' },
+    { value: 14, display: 'Item14' }
   ];
 
   autocompleteItemsAsObjects = [
@@ -108,4 +120,20 @@ export class AddComponent {
   //   this.userSelectsString = '';
   //   this.userSelects.map((item) => this.userSelectsString += item.name + ' ');
   // }
+
+  next() {
+    this.gotonext = true;
+  }
+
+  previous() {
+    this.gotonext = false;
+  }
+
+  submit() {
+
+  }
+
+  openFileExplorer() {
+    this.fileInput.nativeElement.click();
+  }
 }
