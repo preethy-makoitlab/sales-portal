@@ -5,49 +5,125 @@
 
 <div class="card">
     <div class="card-body">
-        <app-progress-bar></app-progress-bar>
-        <div class="title-class">
-        <label class="label">Title<span class="span-imp">*</span></label>
-        <select class="select select-sm title-select">
-            <option>Mr.</option>
-            <option>Mrs.</option>
-            <option>Ms.</option>
-        </select>
-        </div>
-        <div class="divider"></div>
-        <div class="add-form-flex">
-            <div class="firstname">
-                <label class="label">First Name<span class="span-imp">*</span></label>
-                <input class="input title-select enter" name="firstname" placeholder="Enter your firstname"/>
+        <app-progress-bar [status]="gotonext"></app-progress-bar>
+        <div [hidden]="gotonext">
+          <div class="title-class">
+            <label class="label">Title<span class="span-imp">*</span></label>
+            <select class="select select-sm title-select">
+                <option>Mr.</option>
+                <option>Mrs.</option>
+                <option>Ms.</option>
+            </select>
             </div>
-            <div class="lastname">
-                <label class="label">Last Name<span class="span-imp">*</span></label>
-                <input class="input title-select enter" name="lastname" placeholder="Enter your lastname"/>
+            <div class="divider"></div>
+            <div class="flex items-center justify-around flex-wrap">
+                <div class="firstname">
+                    <label class="label">First Name<span class="span-imp">*</span></label>
+                    <input class="input title-select enter" name="firstname" placeholder="Enter your firstname"/>
+                </div>
+                <div class="lastname">
+                    <label class="label">Last Name<span class="span-imp">*</span></label>
+                    <input class="input title-select enter" name="lastname" placeholder="Enter your lastname"/>
+                </div>
+                <div class="email">
+                    <label class="label">E-mail ID<span class="span-imp">*</span></label>
+                    <input class="input title-select enter" name="email" placeholder="Enter your e-mail"/>
+                </div>
             </div>
-            <div class="email">
-                <label class="label">E-mail ID<span class="span-imp">*</span></label>
-                <input class="input title-select enter" name="email" placeholder="Enter your e-mail"/>
-            </div>
-        </div>
-        <div class="add-form-flex">
-            <div class="firstname">
+            <div class="flex items-center m-4 justify-around flex-wrap">
+              <div class="mobile">
                 <label class="label">Mobile Number<span class="span-imp">*</span></label>
                 <input class="input title-select enter" name="mobile" placeholder="Enter your mobile number"/>
-            </div>
-            <div>
-                <tag-input
-                  [(ngModel)]="items"
-                  (click)="hello()"
-                >
-                  <tag-input-dropdown
-                    [autocompleteItems]="autocompleteItems"
-                    [showDropdownIfEmpty]="false"
-                    (onFocus)="hello()"
-                  >
-                  </tag-input-dropdown>
-                </tag-input>
+              </div>
+                <div>
+                    <label class="label">Qualifications<span class="span-imp">*</span></label>
+                    <tag-input
+                      [(ngModel)]="items"
+                      (click)="hello()"
+                    >
+                      <tag-input-dropdown
+                        [autocompleteItems]="autocompleteItems"
+                        [showDropdownIfEmpty]="false"
+                        (onFocus)="hello()"
+                      >
+                      </tag-input-dropdown>
+                    </tag-input>
+                  </div>
+                </div>
+                <div class="divider"></div>
+                <div class="flex items-stretch justify-around flex-wrap">
+                  <div class="flex flex-col gap-8">
+                    <div class="flex justify-between items-stretch">
+                        <div class="flex flex-col mr-32 experience">
+                          <label class="label">Years of Experience<span class="span-imp">*</span></label>
+                        <input type="number" class="input title-select enter" name="experience" placeholder="Enter your experience in years"/>
+                      </div>
+                      <div class="flex flex-col expertise">
+                        <label class="label">Years of Expertise<span class="span-imp">*</span></label>
+                        <select class="select select-sm h-12 form2-select">
+                          <option disabled selected>Please select here</option>
+                          <option>Trauma</option>
+                          <option>PTSD</option>
+                          <option>Anxiety</option>
+                          <option>Stress</option>
+                          <option>Self Harm</option>
+                      </select>
+                    </div>
+                    </div>
+                    <div class="flex items-center justify-start flex-wrap">
+                    <div class="flex flex-col">
+                      <label class="label">About Therapist<span class="span-imp">*</span></label>
+                      <textarea class="textarea" placeholder="Enter short description here"></textarea>
+                    </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="label">Upload Profile Picture<span class="span-imp">*</span></label>
+                    <div class="flex p-6 border-dashed rounded-md upload-pic">
+                      <img class="m-2 cursor-pointer" (click)="openFileExplorer()" src="../../../assets/icons/upload-pic.svg">
+                      <div class="flex flex-col items-center">
+                        <p>Browse to select file</p>
+                        <p class="text-xs">Upload jpg/png Max 5MB*</p>
+                      </div>
+                      <input type="file" #fileInput style="display:none">
+                    </div>
+                  </div>
+                </div>
+                </div>
+        
+        <div [hidden]="!gotonext">
+          
+            <div class="divider"></div>
+              <div class="flex flex-col flex-wrap">
+                <label class="label">Preferred Mode of Therapy<span class="span-imp">*</span></label>
+                <div class="flex items-center flex-wrap">
+                  <div>
+                    <label class="flex flex-wrap cursor-pointer gap-4">
+                      <input type="checkbox" class="checkbox checkbox-sm" />
+                      <span class="checkbox-span">Audio Call</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label class="flex flex-wrap cursor-pointer gap-4">
+                      <input type="checkbox" class="checkbox checkbox-sm" />
+                      <span class="checkbox-span">Video Call</span>
+                    </label>
+                  </div>
+                  <div>
+                    <label class="flex flex-wrap cursor-pointer gap-4">
+                      <input type="checkbox" class="checkbox checkbox-sm" />
+                      <span class="checkbox-span">Chat</span>
+                    </label>
+                  </div>
               </div>
         </div>
+        </div>    
+        <div class="add-form-buttons">
+          <button class="btn btn-primary btn-block" [disabled]="!gotonext" (click)="previous()">Previous</button>
+          <button *ngIf="gotonext" class="btn btn-primary btn-block previous" (click)="submit()">Save and Submit</button>
+          <button *ngIf="!gotonext" class="btn btn-primary btn-block previous" (click)="next()">Save and Continue</button>
+        </div>
+      </div> 
         <!-- <div class="autocomplete">
             <div class="chips-input-container">
             <div class="user-chip" *ngFor="let user of userSelects">

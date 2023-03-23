@@ -143,6 +143,10 @@ tbody {
     font-weight: $ft-light;
 }
 
+:root {
+    color-scheme: light;
+}
+
 .input {
     border: $border-secondary;
     max-width: 100%;
