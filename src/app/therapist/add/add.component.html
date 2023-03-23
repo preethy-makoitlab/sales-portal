@@ -1,0 +1,66 @@
+<div class="add-therapist-flexbox">
+    <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+    <h1 class="header-text">Add Therapist</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <app-progress-bar></app-progress-bar>
+        <div class="title-class">
+        <label class="label">Title<span class="span-imp">*</span></label>
+        <select class="select select-sm title-select">
+            <option>Mr.</option>
+            <option>Mrs.</option>
+            <option>Ms.</option>
+        </select>
+        </div>
+        <div class="divider"></div>
+        <div class="add-form-flex">
+            <div class="firstname">
+                <label class="label">First Name<span class="span-imp">*</span></label>
+                <input class="input title-select enter" name="firstname" placeholder="Enter your firstname"/>
+            </div>
+            <div class="lastname">
+                <label class="label">Last Name<span class="span-imp">*</span></label>
+                <input class="input title-select enter" name="lastname" placeholder="Enter your lastname"/>
+            </div>
+            <div class="email">
+                <label class="label">E-mail ID<span class="span-imp">*</span></label>
+                <input class="input title-select enter" name="email" placeholder="Enter your e-mail"/>
+            </div>
+        </div>
+        <div class="add-form-flex">
+            <div class="firstname">
+                <label class="label">Mobile Number<span class="span-imp">*</span></label>
+                <input class="input title-select enter" name="mobile" placeholder="Enter your mobile number"/>
+            </div>
+            <div>
+                <tag-input
+                  [(ngModel)]="items"
+                  (click)="hello()"
+                >
+                  <tag-input-dropdown
+                    [autocompleteItems]="autocompleteItems"
+                    [showDropdownIfEmpty]="false"
+                    (onFocus)="hello()"
+                  >
+                  </tag-input-dropdown>
+                </tag-input>
+              </div>
+        </div>
+        <!-- <div class="autocomplete">
+            <div class="chips-input-container">
+            <div class="user-chip" *ngFor="let user of userSelects">
+              {{user.name}}
+              <span (click)="deleteSelects(user)" class="delete-icon-chip">&#10006;</span>
+            </div>
+        
+            <input name="suggestion" type="text" placeholder="User" (click)="suggest()" [(ngModel)]="userSelectsString">
+            </div>
+        
+            <div class="autocomplete-items" *ngIf="show">
+              <div *ngFor="let s of suggestions" [ngClass]="isSelected(s) ? 'selected-suggestion' : ''" (click)="selectSuggestion(s)">{{ s.name }}</div>
+            </div>
+        </div> -->
+        
+</div>

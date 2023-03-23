@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { VideoserviceService } from 'src/app/services/videoservice.service';
+import { VideoserviceService } from '../../services/videoservice.service';
 
 @Component({
   selector: 'app-videostream',
