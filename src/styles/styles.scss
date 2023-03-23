@@ -1,3 +1,38 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$frontend-primary: mat.define-palette(mat.$indigo-palette);
+$frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$frontend-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$frontend-theme: mat.define-light-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($frontend-theme);
+
 // /* You can add global styles to this file, and also import other style files */
 @tailwind base; //dark theme
 @tailwind utilities;
@@ -6,7 +41,7 @@
 @import 'src/styles/constants.scss';
 
 html, body {
-    overflow: auto;
+    // overflow: auto;
     min-height: 100vh;
 }
 
@@ -143,15 +178,11 @@ tbody {
     font-weight: $ft-light;
 }
 
-:root {
-    color-scheme: light;
-}
-
 .input {
     border: $border-secondary;
     max-width: 100%;
     border-radius: 6px !important;
-
+    color: $clr-text-input;
     &.small-text {
         font-size: $ft-size-small;
     }
@@ -159,6 +190,25 @@ tbody {
     &.center {
         text-align: center;
     }
+}
+
+.select {
+    border: $border-secondary;
+    max-width: 100%;
+    border-radius: 6px !important;
+    color: $clr-text-input;
+    &.small-text {
+        font-size: $ft-size-small;
+    }
+
+    &.center {
+        text-align: center;
+    }
+}
+
+.divider {
+    border: $border-divider;
+    height: 0px;
 }
 
 .focussed:focus {
@@ -178,8 +228,19 @@ tbody {
 }
 
 .form-label {
-    font-size: $ft-size-small;
+    font-size: $ft-size-xs;
     font-weight: $ft-medium;
+    color: $clr-text-secondary;
+    justify-content: start;
+    gap: 5px;
+    &.additional-label {
+        color: $clr-text-input
+    }
+
+    &.required:after {
+        content: "*";
+        color: $clr-text-error;
+    }
 }
 
 .text-q { 
@@ -239,3 +300,6 @@ tbody {
     margin-left: 0.5rem;
     margin-top: 4px;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

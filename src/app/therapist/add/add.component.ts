@@ -10,7 +10,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./add.component.scss']
 })
 export class AddComponent {
-
   availability: any = {
     'monday': {
       slot1: '',
@@ -38,6 +37,11 @@ export class AddComponent {
       slot2: ''
     },
     'saturday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'sunday': {
       slot1: '',
       ifSlot2: false,
       slot2: ''
@@ -100,8 +104,8 @@ export class AddComponent {
     });
   }
 
-  hello() {
-    this.show = !this.show;
+  setQualifications(qualifications: string[]) {
+    console.log(qualifications);
   }
 
   autocompleteItems = [
@@ -113,39 +117,16 @@ export class AddComponent {
     { value: 8, display: 'Item8' },
     { value: 9, display: 'Item9' },
     { value: 10, display: 'Item10' },
-    { value:11, display: 'Item11' },
+    { value: 11, display: 'Item11' },
     { value: 12, display: 'Item12' },
     { value: 13, display: 'Item13' },
     { value: 14, display: 'Item14' }
   ];
 
-  autocompleteItemsAsObjects = [
-    { id: '1', name: 'Angular', category: 'Framework' },
-    { id: '0', name: 'React', category: 'Framework' },
-    { id: '2', name: 'TypeScript', category: 'Language' }
-  ];
 
   public onInputFocused(event: any) {
     console.log('focused', event, this.itemsAsObjects);
   }
-
-  public onTagSelected(event: any) {
-    console.log('selected', event, this.tagInputRef);
-    this.selectedTag = event;
-    this.tagInputRef?.dropdown.show();
-  }
-
-  public requestAutocompleteItems$ = (text: string): Observable<TagModel[]> => {
-    console.log('autocomplete', this.selectedTag);
-    if (this.selectedTag) {
-      return of(
-        this.autocompleteItemsAsObjects.filter(
-          item => item.category === this.selectedTag?.category
-        )
-      );
-    }
-    return of(this.autocompleteItemsAsObjects);
-  };
 
 
   // userSelectsString = '';
