@@ -26,10 +26,28 @@
 .label {
     font-size: 12px;
     line-height: 18px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     letter-spacing: 0.5px;
     color: $clr-text-secondary;
+}
+
+.day-label {
+    color: #6F6F6F;
+}
+
+.switch {
+    margin: 7px;
+}
+
+.divide {
+    height: 0rem;
+}
+
+.divide-vertical {
+    height: 20rem;
+    width: 0rem;
 }
 
 .span-imp {
@@ -45,6 +63,10 @@
     background-position: right 0.5rem center;
     background-repeat: no-repeat;
     color: #6F6F6F;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    letter-spacing: 0.25px;
 }
 
 .form2-select {
@@ -77,12 +99,7 @@
 .divider {
     border: 1px solid #EFF0F4;
     display: block;
-    height: 0rem;
-}
-
-.add-form-buttons {
-    display: flex;
-    justify-content: flex-end;
+    // height: 0rem;
 }
 
 .upload-pic {
@@ -147,6 +164,24 @@
     line-height: 18px;
     color: #6F6F6F;
 }
+
+.reset-button {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    color: #15154C;
+    border: 2px solid #15154C;
+    width: 100%;
+}
+
+.switch {
+    --switch-bg: #E1E1FD;
+    --switch-bg-hover: #E1E1FD;
+    --circle-color: #FFFFFF;
+    border-color: transparent;
+    border-radius: 200px;
+    border-width: 0px;
+    --switch-bg-checked: #219653;
+  }
 
 //select1
 // .autocomplete {
