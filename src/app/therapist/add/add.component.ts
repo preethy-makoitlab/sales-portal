@@ -1,7 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TagModel } from 'ngx-chips/core/tag-model';
 import { TagInputComponent } from 'ngx-chips';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add',
@@ -10,16 +11,94 @@ import { TagInputComponent } from 'ngx-chips';
 })
 export class AddComponent {
 
+  availability: any = {
+    'monday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'tuesday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'wednesday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'thursday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'friday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'saturday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'monfri': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'alldays': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    }
+  }
+
+  therapist: any = {
+    title: '',
+    firstName: '',
+    lastName: '',
+    emailId: '',
+    mobile: '',
+    qualifications: [],
+    experience: '',
+    expertise: '',
+    profilePic: '',
+    about: '',
+    availability: this.availability,
+    flexibleWithTimings: false,
+    therapistAvailable: false,
+    modeOfTherapy: []
+  }
+
   gotonext: boolean = false;
+  addTherapistForm!: FormGroup;
 
   @ViewChild('tagInput') tagInputRef: TagInputComponent | undefined;
   @ViewChild('fileInput') fileInput: any;
+  @ViewChild('first') first: any;
+  @ViewChildren('checkbox') checkbox!: ElementRef<HTMLInputElement>;
+
   show: boolean = false;
+  addSlot: boolean = false;
 
   selectedTag: { category: string; } | undefined;
   items = [];
 
   itemsAsObjects = [];
+
+  constructor(private formBuilder: FormBuilder) {
+    this.addTherapistForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', Validators.required],
+      mobile: ['', Validators.required],
+      experience: ['', Validators.required],
+      expertise: ['', Validators.required],
+      about: ['', Validators.required],
+    });
+  }
 
   hello() {
     this.show = !this.show;
@@ -129,11 +208,27 @@ export class AddComponent {
     this.gotonext = false;
   }
 
-  submit() {
-
+  submit(form: any) {
+    console.log(this.therapist)
+    console.log(form.value)
   }
 
   openFileExplorer() {
     this.fileInput.nativeElement.click();
+  }
+
+  add(day: string) {
+    this.addSlot = true;
+    this.availability[day].ifSlot2 = true;
+    console.log(this.availability)
+  }
+
+  remove(day: string) {
+    this.addSlot = false;
+    this.availability[day].ifSlot2 = false;
+  }
+
+  reset() {
+    this.checkbox.nativeElement.checked = false;
   }
 }
