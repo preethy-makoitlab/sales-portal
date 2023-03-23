@@ -63,6 +63,12 @@ tbody {
     color: $clr-text-sub-header;
 }
 
+.sub-text {
+    color: #707EAE;
+    font-size: $ft-size-xs;
+    font-weight: $ft-normal;
+}
+
 .content {
     background-color: $background-secondary;
 }
@@ -93,7 +99,6 @@ tbody {
 .btn-block {
     background: $clr-text-secondary;
 }
-
 
 .custom-btn-primary {
     background: $clr-btn-primary;
