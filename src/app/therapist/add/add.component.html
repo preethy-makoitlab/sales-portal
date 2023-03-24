@@ -1,57 +1,68 @@
-<div class="add-therapist-flexbox">
-    <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
-    <h1 class="header-text">Add Therapist</h1>
+<div class="flex flex-row flex-nowrap md:gap-3 items-center">
+  <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+  <h1 class="header-text">Add Therapist</h1>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <app-progress-bar [status]="gotonext"></app-progress-bar>
+<div class="custom-card">
+  <div class="card-body">
+    <app-progress-bar [status]="gotonext"></app-progress-bar>
 
-        <form #addTherapistForm="ngForm" (ngSubmit)="submit(addTherapistForm)">
+    <form #addTherapistForm="ngForm" (ngSubmit)="submit(addTherapistForm)">
 
-        <div [hidden]="gotonext">
+      <div [hidden]="gotonext">
+        <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
           <div class="title-class">
-            <label class="label">Title<span class="span-imp">*</span></label>
+            <label class="form-label required">Title</label>
             <select class="select select-sm title-select" name="title" [(ngModel)]="therapist.title" ngModel required>
                 <option value="" disabled selected>Title</option>
                 <option>Mr</option>
                 <option>Ms</option>
             </select>
+          </div>
+          <div class="divider"></div>
+          <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+            <div class="flex-auto">
+              <label class="form-label required">First Name</label>
+              <input class="input small-text" name="firstname" placeholder="Enter your firstname"
+                [(ngModel)]="therapist.firstName" ngModel required />
             </div>
-            <div class="divider divide"></div>
-            <div class="flex items-center justify-around flex-wrap">
-                <div class="firstname">
-                    <label class="label">First Name<span class="span-imp">*</span></label>
-                    <input class="input title-select enter" name="firstname" placeholder="Enter your firstname" [(ngModel)]="therapist.firstName" ngModel required/>
-                </div>
-                <div class="lastname">
-                    <label class="label">Last Name<span class="span-imp">*</span></label>
-                    <input class="input title-select enter" name="lastname" placeholder="Enter your lastname" [(ngModel)]="therapist.lastName" ngModel required/>
-                </div>
-                <div class="email">
-                    <label class="label">E-mail ID<span class="span-imp">*</span></label>
-                    <input class="input title-select enter" name="email" placeholder="Enter your e-mail" [(ngModel)]="therapist.email" ngModel required/>
-                </div>
+            <div class="flex-auto">
+              <label class="form-label required">Last Name</label>
+              <input class="input small-text" name="lastname" placeholder="Enter your lastname"
+                [(ngModel)]="therapist.lastName" ngModel required />
             </div>
-            <div class="flex items-center m-4 justify-around flex-wrap">
-              <div class="mobile">
-                <label class="label">Mobile Number<span class="span-imp">*</span></label>
-                <input class="input title-select enter" name="mobile" placeholder="Enter your mobile number" [(ngModel)]="therapist.contactNo" ngModel required/>
-              </div>
-                <div>
-                    <label class="label">Qualifications<span class="span-imp">*</span></label>
-                    <tag-input
-                      [(ngModel)]="items"
-                      (click)="hello()"
-                    >
-                      <tag-input-dropdown
-                        [autocompleteItems]="autocompleteItems"
-                        [showDropdownIfEmpty]="false"
-                        (onFocus)="hello()"
-                      >
-                      </tag-input-dropdown>
-                    </tag-input>
-                  </div>
+            <div class="flex-auto">
+              <label class="form-label required">E-mail ID</label>
+              <input class="input small-text" name="email" placeholder="Enter your e-mail"
+                [(ngModel)]="therapist.emailId" ngModel required />
+            </div>
+            <div class="flex-auto">
+              <label class="form-label required">Mobile Number</label>
+              <input class="input small-text" name="mobile" placeholder="Enter your mobile number"
+                [(ngModel)]="therapist.mobile" ngModel required />
+            </div>
+          </div>
+          <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+            <div class="flex-auto">
+              <label class="form-label required">Qualifications</label>
+              <app-tags-input [list]="[]" [placeholder]="getPlaceholder('Qualifications')"
+                (tags)="setQualifications($event)"></app-tags-input>
+            </div>
+            <div class="flex-auto">
+              <label class="form-label required">Areas of Expertise</label>
+              <app-tags-input [list]="[]" [placeholder]="getPlaceholder('Areas of Expertise')"
+                (tags)="setAreasOfExpertise($event)"></app-tags-input>
+            </div>
+          </div>
+          <div class="divider"></div>
+
+          <div class="flex flex-row justify-between items-center md:gap-4 lg:gap-4 sm:gap-2">
+            <div class="flex flex-col justify-between grow basis-1/2 md:gap-4 lg:gap-4 sm:gap-2">
+              <div class="flex flex-row justify-between md:gap-4 lg:gap-4 sm:gap-2">
+                <div class="grow">
+                  <label class="form-label required">Years of Experience</label>
+                  <input type="number" max="30" min="0" class="input small-text" name="experience"
+                    placeholder="Enter your experience in years" [(ngModel)]="therapist.experience" ngModel required />
                 </div>
                 <div class="divider divide"></div>
                 <div class="flex items-stretch justify-around flex-wrap">
@@ -243,48 +254,51 @@
                 </div>
               </div>
 
-              <div class="flex flex-row items-center justify-between">
-                <div class="flex flex-row w-1/4 justify-between">
-                  <label class="label m-2">Flexible With Timings</label>
-                  <input type="checkbox" class="switch switch-sm flex gap-3" (change)="flexible($event)"/>
-                </div>
-                <div>
-                  <button type="button" class="btn btn-primary btn-block reset-button" (click)="reset()">Reset All</button>
-                </div>
-              </div>
-
-              <div class="divider divide"></div>
-
-        
-              <div class="flex flex-row w-1/4 mb-4 justify-between">
-                  <label class="label m-2">Therapist Available</label>
-                  <input type="checkbox" class="switch switch-sm flex gap-3" (change)="available($event)"/>
-              </div>
-              
-              <label class="label mb-4">Preferred Mode of Therapy<span class="span-imp">*</span></label>
-              <div class="flex flex-row w-4/12 justify-between">
-                <div class="flex flex-wrap cursor-pointer gap-4">
-                  <input type="checkbox" name="mode1" value="audio" class="checkbox checkbox-sm" ngModel />
-                  <span class="checkbox-span">Audio Call</span>
-                </div>
-                <div class="flex flex-wrap cursor-pointer gap-4">
-                  <input type="checkbox" name="mode2" value="video" class="checkbox checkbox-sm" ngModel />
-                  <span class="checkbox-span">Video Call</span>
-                </div>
-                <div class="flex flex-wrap cursor-pointer gap-4">
-                  <input type="checkbox" name="mode3" value="chat" class="checkbox checkbox-sm" ngModel />
-                  <span class="checkbox-span">Chat</span>
-                </div>
-              </div>
-        </div>    
-        <div class="flex justify-end">
-          <button type="button" class="btn btn-primary btn-block" [disabled]="!gotonext" (click)="previous()">Previous</button>
-          <button *ngIf="gotonext" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save and Submit</button>
-          <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block previous" (click)="next()">Save and Continue</button>
+        <div class="flex flex-row items-center justify-between">
+          <div class="flex flex-row w-1/4 justify-between">
+            <label class="form-label m-2">Flexible With Timings</label>
+            <input type="checkbox" class="switch switch-sm flex gap-3" (change)="flexible($event)" />
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary btn-block reset-button" (click)="reset()">Reset All</button>
+          </div>
         </div>
-      </form>
-      </div> 
-        <!-- <div class="autocomplete">
+
+        <div class="divider"></div>
+
+
+        <div class="flex flex-row w-1/4 mb-4 justify-between">
+          <label class="form-label m-2">Therapist Available</label>
+          <input type="checkbox" class="switch switch-sm flex gap-3" (change)="available($event)" />
+        </div>
+
+        <label class="form-label mb-4 required">Preferred Mode of Therapy</label>
+        <div class="flex flex-row w-4/12 justify-between">
+          <div class="flex flex-wrap cursor-pointer gap-4">
+            <input type="checkbox" name="mode1" value="audio" class="checkbox checkbox-sm" ngModel />
+            <span class="checkbox-span">Audio Call</span>
+          </div>
+          <div class="flex flex-wrap cursor-pointer gap-4">
+            <input type="checkbox" name="mode2" value="video" class="checkbox checkbox-sm" ngModel />
+            <span class="checkbox-span">Video Call</span>
+          </div>
+          <div class="flex flex-wrap cursor-pointer gap-4">
+            <input type="checkbox" name="mode3" value="chat" class="checkbox checkbox-sm" ngModel />
+            <span class="checkbox-span">Chat</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="btn btn-primary btn-block" [disabled]="!gotonext"
+          (click)="previous()">Previous</button>
+        <button *ngIf="gotonext" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save
+          and Submit</button>
+        <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block previous" (click)="next()">Save and
+          Continue</button>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="autocomplete">
             <div class="chips-input-container">
             <div class="user-chip" *ngFor="let user of userSelects">
               {{user.name}}
@@ -298,5 +312,5 @@
               <div *ngFor="let s of suggestions" [ngClass]="isSelected(s) ? 'selected-suggestion' : ''" (click)="selectSuggestion(s)">{{ s.name }}</div>
             </div>
         </div> -->
-        
+
 </div>

@@ -8,6 +8,7 @@ $clr-text-tertiary: #333333;
 $clr-text-quarternary: #ffffff;
 $clr-text-header: #00140E;
 $clr-text-sub-header: #5B5F7B;
+$clr-text-input: #6F6F6F;
 
 $clr-text-muted: #E8E8E8;
 $clr-text-placeholder: #D2D2D2;
@@ -26,6 +27,7 @@ $clr-border-secondary: #c4c4c4;
 
 $border-primary: 1px solid $clr-text-primary;
 $border-secondary: 1px solid $clr-border-secondary;
+$border-divider: 1px solid $background-secondary;
 
 $clr-btn-primary: #15154C; 
 $clr-btn-secondary: #15154C; // TBD
@@ -47,6 +49,7 @@ $ft-extrabold: 800;
 
 $ft-size-regular: 14px;
 $ft-size-small: 12px;
+$ft-size-xs: 12px;
 $ft-size-large: 21px;
 $ft-size-medium: 18px;
 

@@ -1,8 +1,8 @@
 <nav class="menu bg-gray-2 p-4 rounded-md">
 	<section class="menu-section">
-		<img src="../../../assets/images/logo.svg" alt="image" class="horizontal-separator pb-2">
+		<img src="../../../assets/images/logo.svg" alt="image" class="horizontal-separator pb-2" [routerLink]="['/']">
 		<ul class="menu-items">
-			<li class="menu-item">
+			<li class="menu-item" [routerLink]="['/']">
 				<img src="../../../assets/icons/dashboard.svg">
 				<span>Dashboard</span>
 			</li>
@@ -22,7 +22,7 @@
 				</label>
 				<div class="menu-item-collapse">
 					<div class="min-h-0">
-						<label class="menu-item ml-6">Manage Therapists</label>
+						<label class="menu-item ml-6" [routerLink]="['/therapist']">Manage Therapists</label>
 						<label class="menu-item ml-6">Manage Appointments</label>
 					</div>
 				</div>

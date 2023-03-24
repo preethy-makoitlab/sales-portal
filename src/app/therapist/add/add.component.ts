@@ -1,7 +1,4 @@
-import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { TagModel } from 'ngx-chips/core/tag-model';
-import { TagInputComponent } from 'ngx-chips';
+import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TherapistService } from 'src/app/services/therapist.service';
 
@@ -61,10 +58,13 @@ export class AddComponent {
       slot2Start: '',
       slot2End: ''
     },
-    {
-      day: 'monfri',
-      slot1Start: '',
-      slot1End: '',
+    'sunday': {
+      slot1: '',
+      ifSlot2: false,
+      slot2: ''
+    },
+    'monfri': {
+      slot1: '',
       ifSlot2: false,
       slot2Start: '',
       slot2End: ''
@@ -109,7 +109,6 @@ export class AddComponent {
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
 
-  @ViewChild('tagInput') tagInputRef: TagInputComponent | undefined;
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
   @ViewChild('checkbox') checkbox!: ElementRef<HTMLInputElement>;
@@ -138,8 +137,12 @@ export class AddComponent {
     });
   }
 
-  hello() {
-    this.show = !this.show;
+  setQualifications(qualifications: string[]) {
+    console.log(qualifications);
+  }
+
+  setAreasOfExpertise(areasOfExpertise: string[]) {
+    console.log(areasOfExpertise);
   }
 
   autocompleteItems = [
@@ -151,41 +154,27 @@ export class AddComponent {
     { value: 8, display: 'Item8' },
     { value: 9, display: 'Item9' },
     { value: 10, display: 'Item10' },
-    { value:11, display: 'Item11' },
+    { value: 11, display: 'Item11' },
     { value: 12, display: 'Item12' },
     { value: 13, display: 'Item13' },
     { value: 14, display: 'Item14' }
   ];
 
-  autocompleteItemsAsObjects = [
-    { id: '1', name: 'Angular', category: 'Framework' },
-    { id: '0', name: 'React', category: 'Framework' },
-    { id: '2', name: 'TypeScript', category: 'Language' }
-  ];
 
   public onInputFocused(event: any) {
     console.log('focused', event, this.itemsAsObjects);
   }
 
-  public onTagSelected(event: any) {
-    console.log('selected', event, this.tagInputRef);
-    this.selectedTag = event;
-    this.tagInputRef?.dropdown.show();
-  }
-
-  public requestAutocompleteItems$ = (text: string): Observable<TagModel[]> => {
-    console.log('autocomplete', this.selectedTag);
-    if (this.selectedTag) {
-      return of(
-        this.autocompleteItemsAsObjects.filter(
-          item => item.category === this.selectedTag?.category
-        )
-      );
+  getPlaceholder(category: string) {
+    switch(category) {
+      case 'Qualifications': 
+        return 'Enter Qualifications';
+      case 'Areas of Expertise':
+        return 'Select Areas of Expertise';
+      default:
+        return 'Enter..';
     }
-    return of(this.autocompleteItemsAsObjects);
-  };
-
-
+  }
   // userSelectsString = '';
   // name = 'Angular';
   // userSelects: any[] = [];
