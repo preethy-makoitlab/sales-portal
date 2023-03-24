@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
@@ -125,6 +125,9 @@ export class AddComponent {
 
   show: boolean = false;
   addSlot: boolean = false;
+  audio: any;
+  video: any;
+  chat: any;
 
   selectedTag: { category: string; } | undefined;
   items = [];
@@ -133,6 +136,7 @@ export class AddComponent {
 
   constructor(private formBuilder: FormBuilder,
     private therapistService: TherapistService,
+    private router: Router,
     private activatedRoute: ActivatedRoute) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
@@ -263,6 +267,7 @@ export class AddComponent {
     this.therapistService.createTherapist(req).subscribe({
       next: (value) => {
         console.log(value);
+        this.router.navigate(['/therapist']);
       },
       error: (err) => {
         console.log(err);
@@ -323,6 +328,9 @@ export class AddComponent {
         console.log(value);
         this.therapist = value;
         this.availability = value.availability;
+        this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
+        this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
+        this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
       },
       error: (err) => {
         console.log(err);
