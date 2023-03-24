@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { TagModel } from 'ngx-chips/core/tag-model';
 import { TagInputComponent } from 'ngx-chips';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
   selector: 'app-add',
@@ -11,64 +12,98 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddComponent {
 
-  availability: any = {
-    'monday': {
-      slot1: '',
+  availability: any = [
+    {
+      day: 'monday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'tuesday': {
-      slot1: '',
+    {
+      day: 'tuesday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'wednesday': {
-      slot1: '',
+    {
+      day: 'wednesday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'thursday': {
-      slot1: '',
+    {
+      day: 'thursday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'friday': {
-      slot1: '',
+    {
+      day: 'friday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'saturday': {
-      slot1: '',
+    {
+      day: 'saturday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'monfri': {
-      slot1: '',
+    {
+      day: 'monfri',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'alldays': {
-      slot1: '',
+    {
+      day: 'alldays',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     }
-  }
+  ]
 
   therapist: any = {
-    title: '',
-    firstName: '',
-    lastName: '',
-    emailId: '',
-    mobile: '',
-    qualifications: [],
-    experience: '',
-    expertise: '',
-    profilePic: '',
-    about: '',
+    u_id: "01",
+    title: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    contactNo: "",
+    qualification: [""],
+    yearsOfExperience: "",
+    areaOfExpertise: [""],
     availability: this.availability,
-    flexibleWithTimings: false,
-    therapistAvailable: false,
-    modeOfTherapy: []
+    bio: "",
+    isFlexibleWithTiming: false,
+    isAvailable: false,
+    status: "active",
+    preferredModesOfTherapy: [],
+    picture: "default",
+    availableFrom: "2023-03-24T03:33:11.796Z",
+    createdAt: "2023-03-24T03:33:11.796Z",
+    createdBy: "admin",
+    lastModifiedAt: "2023-03-24T03:33:11.796Z",
+    lastModifiedBy: "admin",
+    lastSeen: "2023-03-24T03:33:11.796Z",
+    rating: 0,
+    additionalProp1: {}
   }
 
   gotonext: boolean = false;
@@ -77,7 +112,10 @@ export class AddComponent {
   @ViewChild('tagInput') tagInputRef: TagInputComponent | undefined;
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
-  @ViewChildren('checkbox') checkbox!: ElementRef<HTMLInputElement>;
+  @ViewChild('checkbox') checkbox!: ElementRef<HTMLInputElement>;
+  @ViewChild('mode1') mode1!: ElementRef<HTMLInputElement>;
+  @ViewChild('mode2') mode2!: ElementRef<HTMLInputElement>;
+  @ViewChild('mode3') mode3!: ElementRef<HTMLInputElement>;
 
   show: boolean = false;
   addSlot: boolean = false;
@@ -87,7 +125,8 @@ export class AddComponent {
 
   itemsAsObjects = [];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+    private therapistService: TherapistService) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -95,8 +134,7 @@ export class AddComponent {
       email: ['', Validators.required],
       mobile: ['', Validators.required],
       experience: ['', Validators.required],
-      expertise: ['', Validators.required],
-      about: ['', Validators.required],
+      about: ['', Validators.required]
     });
   }
 
@@ -209,8 +247,33 @@ export class AddComponent {
   }
 
   submit(form: any) {
+    this.therapist.preferredModesOfTherapy = []
+    if(form.value.mode1 == true){
+      this.therapist.preferredModesOfTherapy.push('audio')
+    }
+    if(form.value.mode2 == true){
+      this.therapist.preferredModesOfTherapy.push('video')
+    }
+    if(form.value.mode3 == true){
+      this.therapist.preferredModesOfTherapy.push('chat')
+    }
+    if(!form.value.mode1 && !form.value.mode2 && !form.value.mode3) {
+      this.therapist.preferredModesOfTherapy.push('')
+    }
     console.log(this.therapist)
     console.log(form.value)
+    let req = this.therapist;
+    this.therapistService.createTherapist(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        alert("Login successful");
+      },
+      error: (err) => {
+        console.log(err);
+        alert("Invalid credentials");
+      }
+    })
+
   }
 
   openFileExplorer() {
@@ -219,16 +282,44 @@ export class AddComponent {
 
   add(day: string) {
     this.addSlot = true;
-    this.availability[day].ifSlot2 = true;
-    console.log(this.availability)
+    // this.availability[day].ifSlot2 = true;
+    // console.log(this.availability)
+    var flag = true;
+    this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+      console.log(item);
+      if(item['day'] == day){
+        this.availability[index].ifSlot2 = true;
+        flag = false
+      }
+      return flag;
+    })
   }
 
   remove(day: string) {
     this.addSlot = false;
-    this.availability[day].ifSlot2 = false;
+    var flag = true;
+    this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+      console.log(item);
+      if(item['day'] == day){
+        this.availability[index].ifSlot2 = false;
+        flag = false
+      }
+      return flag;
+    })
+    // this.availability[day].ifSlot2 = false;
   }
 
   reset() {
     this.checkbox.nativeElement.checked = false;
   }
+
+  flexible(event: any) {
+    console.log("here")
+    this.therapist['isFlexibleWithTiming'] = !this.therapist['isFlexibleWithTiming'];
+  }
+
+  available(event: any){
+    this.therapist['isAvailable'] = !this.therapist['isAvailable'];
+  }
+
 }
