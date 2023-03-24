@@ -1,7 +1,4 @@
-import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { TagModel } from 'ngx-chips/core/tag-model';
-import { TagInputComponent } from 'ngx-chips';
+import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -78,9 +75,7 @@ export class AddComponent {
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
 
-  @ViewChild('tagInput') tagInputRef: TagInputComponent | undefined;
   @ViewChild('fileInput') fileInput: any;
-  @ViewChild('first') first: any;
   @ViewChildren('checkbox') checkbox!: ElementRef<HTMLInputElement>;
 
   show: boolean = false;
@@ -108,6 +103,10 @@ export class AddComponent {
     console.log(qualifications);
   }
 
+  setAreasOfExpertise(areasOfExpertise: string[]) {
+    console.log(areasOfExpertise);
+  }
+
   autocompleteItems = [
     { value: 3, display: 'Item3' },
     { value: 4, display: 'Item4' },
@@ -128,7 +127,16 @@ export class AddComponent {
     console.log('focused', event, this.itemsAsObjects);
   }
 
-
+  getPlaceholder(category: string) {
+    switch(category) {
+      case 'Qualifications': 
+        return 'Enter Qualifications';
+      case 'Areas of Expertise':
+        return 'Select Areas of Expertise';
+      default:
+        return 'Enter..';
+    }
+  }
   // userSelectsString = '';
   // name = 'Angular';
   // userSelects: any[] = [];
