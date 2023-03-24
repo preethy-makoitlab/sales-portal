@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
@@ -130,7 +131,8 @@ export class AddComponent {
   itemsAsObjects = [];
 
   constructor(private formBuilder: FormBuilder,
-    private therapistService: TherapistService) {
+    private therapistService: TherapistService,
+    private router: Router) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -260,6 +262,7 @@ export class AddComponent {
     this.therapistService.createTherapist(req).subscribe({
       next: (value) => {
         console.log(value);
+        this.router.navigate(['/therapist']);
       },
       error: (err) => {
         console.log(err);
