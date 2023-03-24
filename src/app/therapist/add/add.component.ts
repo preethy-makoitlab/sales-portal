@@ -266,11 +266,9 @@ export class AddComponent {
     this.therapistService.createTherapist(req).subscribe({
       next: (value) => {
         console.log(value);
-        alert("Login successful");
       },
       error: (err) => {
         console.log(err);
-        alert("Invalid credentials");
       }
     })
 
