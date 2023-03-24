@@ -113,6 +113,7 @@ export class AddComponent {
 
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
+  url: string = window.location.href;
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
@@ -312,6 +313,24 @@ export class AddComponent {
 
   available(event: any){
     this.therapist['isAvailable'] = !this.therapist['isAvailable'];
+  }
+
+  populate(_id: string) {
+    this.therapistService.getTherapist(_id).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  ngOnInit(): void {
+    const _id = this.url.split('/therapist/add/')[1];
+    if(_id){
+      this.populate(_id);
+    }
   }
 
 }

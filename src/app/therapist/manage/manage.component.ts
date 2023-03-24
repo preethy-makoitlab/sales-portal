@@ -33,7 +33,9 @@ export class ManageComponent {
     this.therapistService.therapistList().subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { firstName: string; lastName: string; email: any; lastSeen: any; rating: any; }) => {
+        value.forEach((d: { id: string; firstName: string; lastName: string; email: any; lastSeen: any; rating: any; }) => {
+          var therapistData: any = {};
+          var _id = d.id;
           var name = d.firstName + " " + d.lastName;
           var email = d.email;
           var lastSeen = d.lastSeen;
@@ -41,7 +43,9 @@ export class ManageComponent {
           var patients = 0;
           var rating = d.rating;
           var data = [name, email, lastSeen, sessions, patients, rating]
-          this.tableData.push(data)
+          therapistData.id = _id;
+          therapistData.data = data;
+          this.tableData.push(therapistData)
           console.log(this.tableData);
           })
       },

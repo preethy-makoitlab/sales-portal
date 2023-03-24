@@ -97,5 +97,28 @@ export class TherapistService {
       }
     );
   }
+
+  public getTherapist(
+    body?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/therapists/{id}`,
+      {
+        body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
   
 }
