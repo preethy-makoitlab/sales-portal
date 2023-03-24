@@ -206,6 +206,10 @@ tbody {
     }
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 .divider {
     border: $border-divider;
     height: 0px;
