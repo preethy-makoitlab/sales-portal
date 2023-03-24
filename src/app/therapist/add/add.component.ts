@@ -58,13 +58,18 @@ export class AddComponent {
       slot2Start: '',
       slot2End: ''
     },
-    'sunday': {
-      slot1: '',
+    {
+      day: 'sunday',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
-      slot2: ''
+      slot2Start: '',
+      slot2End: ''
     },
-    'monfri': {
-      slot1: '',
+    {
+      day: 'monfri',
+      slot1Start: '',
+      slot1End: '',
       ifSlot2: false,
       slot2Start: '',
       slot2End: ''
