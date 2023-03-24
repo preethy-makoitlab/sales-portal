@@ -99,7 +99,7 @@ export class TherapistService {
   }
 
   public getTherapist(
-    body?:  Object,
+    id?:  Object,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
@@ -111,9 +111,8 @@ export class TherapistService {
   
     return this.httpClient.request<Object>(
       'get',
-      `${this.basePath}/therapists/{id}`,
+      `${this.basePath}/therapists/${String(id)}`,
       {
-        body: body,
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,

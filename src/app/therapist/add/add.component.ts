@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
@@ -131,7 +132,8 @@ export class AddComponent {
   itemsAsObjects = [];
 
   constructor(private formBuilder: FormBuilder,
-    private therapistService: TherapistService) {
+    private therapistService: TherapistService,
+    private activatedRoute: ActivatedRoute) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -319,17 +321,24 @@ export class AddComponent {
     this.therapistService.getTherapist(_id).subscribe({
       next: (value) => {
         console.log(value);
+        this.therapist = value;
+        this.availability = value.availability;
       },
       error: (err) => {
         console.log(err);
       }
     })
+
   }
 
   ngOnInit(): void {
-    const _id = this.url.split('/therapist/add/')[1];
-    if(_id){
-      this.populate(_id);
+
+    if(this.activatedRoute.snapshot.params){
+      console.log(this.activatedRoute.snapshot.params);
+      let value = this.activatedRoute.snapshot.params['id'];
+      if(value){
+       this.populate(value)
+      }
     }
   }
 
