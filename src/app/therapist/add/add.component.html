@@ -101,18 +101,19 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
+              <!-- <app-timepicker></app-timepicker> -->
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.monday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('monday')">
           </div>
           <div *ngIf="availability.monday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('monday')">
           </div>
         </div>
@@ -122,18 +123,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.tuesday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('tuesday')">
           </div>
           <div *ngIf="availability.tuesday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('tuesday')">
           </div>
         </div>
@@ -143,18 +144,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.wednesday.ifSlot2" src="../../../assets/icons/plus.svg"
               class="mx-4 cursor-pointer" (click)="add('wednesday')">
           </div>
           <div *ngIf="availability.wednesday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('wednesday')">
           </div>
         </div>
@@ -164,18 +165,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.thursday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('thursday')">
           </div>
           <div *ngIf="availability.thursday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('thursday')">
           </div>
         </div>
@@ -185,18 +186,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.friday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('friday')">
           </div>
           <div *ngIf="availability.friday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('friday')">
           </div>
         </div>
@@ -206,18 +207,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.saturday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('saturday')">
           </div>
           <div *ngIf="availability.saturday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('saturday')">
           </div>
         </div>
@@ -227,18 +228,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.sunday.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('sunday')">
           </div>
           <div *ngIf="availability.sunday.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('sunday')">
           </div>
         </div>
@@ -248,18 +249,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.monfri.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('monfri')">
           </div>
           <div *ngIf="availability.monfri.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('monfri')">
           </div>
         </div>
@@ -269,18 +270,18 @@
             <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
           </div>
           <div class="flex flex-row my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img *ngIf="!availability.alldays.ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer"
               (click)="add('alldays')">
           </div>
           <div *ngIf="availability.alldays.ifSlot2" class="flex flex-row ml-12 my-1">
-            <input type="number" min="9" max="12" step="1" class="input small-text" name="slots"
+            <input type="time" class="input small-text" name="slots"
               placeholder="Start timing" />
             <label class="form-label additional-label m-2">To</label>
-            <input type="number" class="input small-text" name="slots" placeholder="End timing" />
+            <input type="time" class="input small-text" name="slots" placeholder="End timing" />
             <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('alldays')">
           </div>
         </div>
