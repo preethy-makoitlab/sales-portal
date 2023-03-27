@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
@@ -113,6 +114,7 @@ export class AddComponent {
 
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
+  url: string = window.location.href;
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
@@ -123,6 +125,9 @@ export class AddComponent {
 
   show: boolean = false;
   addSlot: boolean = false;
+  audio: any;
+  video: any;
+  chat: any;
 
   selectedTag: { category: string; } | undefined;
   items = [];
@@ -130,7 +135,9 @@ export class AddComponent {
   itemsAsObjects = [];
 
   constructor(private formBuilder: FormBuilder,
-    private therapistService: TherapistService) {
+    private therapistService: TherapistService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -260,6 +267,7 @@ export class AddComponent {
     this.therapistService.createTherapist(req).subscribe({
       next: (value) => {
         console.log(value);
+        this.router.navigate(['/therapist']);
       },
       error: (err) => {
         console.log(err);
@@ -312,6 +320,34 @@ export class AddComponent {
 
   available(event: any){
     this.therapist['isAvailable'] = !this.therapist['isAvailable'];
+  }
+
+  populate(_id: string) {
+    this.therapistService.getTherapist(_id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.therapist = value;
+        this.availability = value.availability;
+        this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
+        this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
+        this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+
+  }
+
+  ngOnInit(): void {
+
+    if(this.activatedRoute.snapshot.params){
+      console.log(this.activatedRoute.snapshot.params);
+      let value = this.activatedRoute.snapshot.params['id'];
+      if(value){
+       this.populate(value)
+      }
+    }
   }
 
 }
