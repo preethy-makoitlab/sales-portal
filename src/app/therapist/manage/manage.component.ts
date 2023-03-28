@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AnyoTranslateService } from '../../services/anyo-translate.service';
 import { TherapistService } from 'src/app/services/therapist.service';
-import { isoToDate } from 'src/app/common/utils/utils';
+import { isoToDDMMYYHHMM } from 'src/app/common/utils/utils';
 import { Status } from 'src/app/stores/types';
 
 @Component({
@@ -40,7 +40,7 @@ export class ManageComponent {
           var _id = d.id;
           var name = d.firstName + " " + d.lastName;
           var email = d.email;
-          var lastSeen = isoToDate(d.lastSeen);
+          var lastSeen = isoToDDMMYYHHMM(d.lastSeen);
           var sessions = 0;
           var patients = 0;
           var rating = d.rating;
