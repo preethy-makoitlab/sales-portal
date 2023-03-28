@@ -107,14 +107,22 @@ export class AddComponent {
     createdBy: "admin",
     lastModifiedAt: "2023-03-24T03:33:11.796Z",
     lastModifiedBy: "admin",
-    lastSeen: "2023-03-24T03:33:11.796Z",
+    lastSeen: new Date().toISOString(),
     rating: 0,
     additionalProp1: {}
   }
 
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
-  url: string = window.location.href;
+  viewForm: boolean = false;
+  editMode: boolean = false;
+  isAlert: boolean = false;
+  isDisabled: boolean = false;
+  alertHeaderDisable: string = "Therapist Disable"
+  alertBodyDisable: string = "Please make sure that you want to disable the therapist"
+  alertHeaderEnable: string = "Therapist Enable"
+  alertBodyEnable: string = "Please make sure that you want to enable the therapist"
+
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
@@ -187,58 +195,7 @@ export class AddComponent {
         return 'Enter..';
     }
   }
-  // userSelectsString = '';
-  // name = 'Angular';
-  // userSelects: any[] = [];
-  //  suggestions = [{"id":"001","name":"mango"},{"id":"002","name":"apple"},{"id":"003","name":"banana"},{"id":"004","name":"pine"},{"id":"005","name":"orange"},{"id":"006","name":"chery"},{"id":"007","name":"watermelon"},{"id":"008","name":"grapes"},{"id":"009","name":"lemon"}];
-
-  // show: boolean = false;
-
-  // suggest() {
-  //   this.show = true;
-  // }
-
-  // isSelected(s:any) {
-  //  return this.userSelects.findIndex((item: any) => item.id === s.id) > -1 ? true : false;
-  // }
-
-
-  // // selectSuggestion(s) {
-  // //   if(this.userSelects.indexOf(s) > -1){
-  // //      this.userSelects = this.userSelects.replace(s,'');
-  // //   } else {
-  // //      this.userSelects += ' '+s;
-  // // }
-  // //   this.userSelects = this.userSelects.replace(/^\s*/,'');//.trim();
-  // //   this.deleteInvalidSelects();
-  // //   this.show = false;
-  // // }
-
-  // selectSuggestion(s: any) {
-  //   this.userSelects.find((item) => item.id === s.id) ? 
-  //   this.userSelects = this.userSelects.filter((item) => item.id !== s.id) :
-  //   this.userSelects.push(s);
-  //   // this.assignToNgModel();
-  // }
-
-  // // deleteInvalidSelects() {
-  // //  for(var user of this.invalidUsers){
-  // //     if(this.userSelects.indexOf(user) > -1){
-  // //        this.userSelects = this.userSelects.replace(user, ' ');
-  // //     }
-  // //   }
-  // // }
-
-  // deleteSelects(s: any) {
-  //   this.userSelects = this.userSelects.filter((item) => item.id !== s.id);
-  //   // this.assignToNgModel();
-  // }
-
-  // assignToNgModel() {
-  //   this.userSelectsString = '';
-  //   this.userSelects.map((item) => this.userSelectsString += item.name + ' ');
-  // }
-
+  
   next() {
     this.gotonext = true;
   }
@@ -247,7 +204,13 @@ export class AddComponent {
     this.gotonext = false;
   }
 
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
   submit(form: any) {
+    console.log(form.value);
     this.therapist.preferredModesOfTherapy = []
     if(form.value.mode1 == true){
       this.therapist.preferredModesOfTherapy.push('audio')
@@ -264,15 +227,29 @@ export class AddComponent {
     console.log(this.therapist)
     console.log(form.value)
     let req = this.therapist;
-    this.therapistService.createTherapist(req).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.router.navigate(['/therapist']);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    if(this.editMode){
+      let _id = String(this.activatedRoute.snapshot.params['id']);
+      this.therapistService.updateTherapist(_id, req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/therapist']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else {
+      this.therapistService.createTherapist(req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/therapist']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
 
   }
 
@@ -282,31 +259,32 @@ export class AddComponent {
 
   add(day: string) {
     this.addSlot = true;
-    // this.availability[day].ifSlot2 = true;
-    // console.log(this.availability)
-    var flag = true;
-    this.availability.every((item: { [x: string]: string; }, index: string | number) => {
-      console.log(item);
-      if(item['day'] == day){
-        this.availability[index].ifSlot2 = true;
-        flag = false
-      }
-      return flag;
+    if(!this.viewForm){
+      var flag = true;
+      this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+        console.log(item);
+        if(item['day'] == day){
+          this.availability[index].ifSlot2 = true;
+          flag = false
+        }
+        return flag;
     })
+    }
   }
 
   remove(day: string) {
     this.addSlot = false;
-    var flag = true;
-    this.availability.every((item: { [x: string]: string; }, index: string | number) => {
-      console.log(item);
-      if(item['day'] == day){
-        this.availability[index].ifSlot2 = false;
-        flag = false
-      }
-      return flag;
-    })
-    // this.availability[day].ifSlot2 = false;
+    if(!this.viewForm) {
+      var flag = true;
+      this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+        console.log(item);
+        if(item['day'] == day){
+          this.availability[index].ifSlot2 = false;
+          flag = false
+        }
+        return flag;
+      })
+    }
   }
 
   reset() {
@@ -322,15 +300,62 @@ export class AddComponent {
     this.therapist['isAvailable'] = !this.therapist['isAvailable'];
   }
 
+  dialogShow() {
+    this.isAlert = !this.isAlert;
+  }
+
+  disableTherapist() {
+    let req = {
+       'status' : 'inactive', 
+       'isAvailable' : false
+    };
+    this.therapist.status = 'inactive';
+    this.therapist.isAvailable = false;   
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.therapistService.updateTherapist(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+
+  enableTherapist() {
+    let req = {
+       'status' : 'active', 
+       'isAvailable' : true
+    };
+    this.therapist.status = 'active';
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.therapistService.updateTherapist(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = false;
+  }
+
   populate(_id: string) {
     this.therapistService.getTherapist(_id).subscribe({
       next: (value) => {
         console.log(value);
+        this.viewForm = true;
         this.therapist = value;
         this.availability = value.availability;
         this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
         this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
         this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
+        if(value.status == 'inactive') {
+          this.isDisabled = true;
+        }
       },
       error: (err) => {
         console.log(err);

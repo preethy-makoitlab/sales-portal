@@ -118,6 +118,7 @@
     font-weight: $ft-medium;
     font-size: $ft-size-small;
     line-height: 120%;
+    border-radius: 6px;
 }
 
 // .title-class {
@@ -142,6 +143,13 @@ tag {
     min-width: 100%
 }
 
+.btn-discard {
+    background-color: $background-primary;
+    border: 1px solid $clr-text-secondary;
+    border-radius: 6px;
+    color: $clr-text-secondary;
+    font-weight: $ft-semi-bold;
+}
 // .textarea {
 //     border: 1px solid #E8E8E8;
 //     background-color: #FFFFFF;
@@ -178,10 +186,17 @@ tag {
 
 .reset-button {
     background-color: #FFFFFF;
-    border-radius: 12px;
+    border-radius: 6px;
     color: #15154C;
     border: 2px solid #15154C;
     width: 100%;
+}
+
+.enable-button {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    color: #15154C;
+    border: 2px solid #15154C;
 }
 
 .switch {
@@ -193,6 +208,11 @@ tag {
     border-width: 0px;
     --switch-bg-checked: #219653;
   }
+
+.btn-error {
+    background-color: #c62828;
+}
+
 
 //select1
 // .autocomplete {
