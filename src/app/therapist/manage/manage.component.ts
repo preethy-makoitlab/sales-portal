@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AnyoTranslateService } from '../../services/anyo-translate.service';
 import { TherapistService } from 'src/app/services/therapist.service';
 import { isoToDate } from 'src/app/common/utils/utils';
+import { Status } from 'src/app/stores/types';
 
 @Component({
   selector: 'app-manage',
@@ -34,7 +35,7 @@ export class ManageComponent {
     this.therapistService.therapistList().subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { id: string; firstName: string; lastName: string; email: any; lastSeen: any; rating: any; isAvailable: boolean; }) => {
+        value.forEach((d: { id: string; firstName: string; lastName: string; email: any; lastSeen: any; rating: any; isAvailable: boolean; status: Status}) => {
           var therapistData: any = {};
           var _id = d.id;
           var name = d.firstName + " " + d.lastName;
@@ -47,6 +48,7 @@ export class ManageComponent {
           therapistData.id = _id;
           therapistData.data = data;
           therapistData.isAvailable = d.isAvailable;
+          therapistData.isDisabled = d.status === Status.inactive ? true : false;
           this.tableData.push(therapistData)
           console.log(this.tableData);
           })
