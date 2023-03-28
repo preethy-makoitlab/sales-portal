@@ -15,15 +15,20 @@ export class ManageComponent {
     private therapistService: TherapistService) {
   }
   
-  count: number = 10;
+  totalCount: number = 0;
+  activeCount: number = 0;
   fields: any[] = ['', 'Therapist', 'EmailID', 'Last Active On', 'No of Sessions', 'No of Patients', 'Rating']
   tableData: any[] = [];
 
   getCount() {
     this.therapistService.therapistCount().subscribe({
       next: (value) => {
-        console.log(value);
-        this.count = value.count;
+        value.forEach((v: { _id: string, count: number; }) => {
+          this.totalCount += v.count;
+          if(v._id === 'active') {
+            this.activeCount += v.count;
+          }
+        })
       },
       error: (err) => {
         console.log(err);
