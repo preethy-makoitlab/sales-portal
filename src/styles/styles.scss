@@ -77,6 +77,11 @@ tbody {
     tr:nth-child(even) {
         background-color: $background-tertiary;
     }
+    tr {
+        &.disabled-row {
+            background-color: $clr-text-muted;
+        }
+    }
 }
 
 .header {
