@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 import { VideostreamComponent } from './components/videostream/videostream.component';
+import { PartnerRoutingModule } from './partner/partner-routing.module';
 import { TherapistRoutingModule } from './therapist/therapist-routing.module';
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: 'therapist',
         loadChildren: () => TherapistRoutingModule
+      },
+      {
+        path: 'partner',
+        loadChildren: () => PartnerRoutingModule
       },
     ]
   },
