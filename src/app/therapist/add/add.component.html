@@ -1,6 +1,19 @@
-<div class="flex flex-row flex-nowrap md:gap-3 items-center">
-  <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
-  <h1 class="header-text">Add Therapist</h1>
+<div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
+  <div class="flex flex-wrap w-1/4 justify-start">
+    <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+    <h1 class="header-text">Add Therapist</h1>
+  </div>
+  <div *ngIf="viewForm" class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+    <div>
+        <img class="edit-icon" src="../../../assets/icons/edit-icon.svg">
+    </div>
+    <div>
+        <span class="">Edit therapist</span>
+    </div>
+  </div>
+  <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1" [routerLink]="['/therapist']">
+    Discard
+  </div>
 </div>
 
 <div class="custom-card">
@@ -13,7 +26,7 @@
         <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
           <div class="title-class">
             <label class="form-label required">Title</label>
-            <select class="select select-sm title-select" name="title" [(ngModel)]="therapist.title" ngModel required>
+            <select class="select select-sm title-select" name="title" [(ngModel)]="therapist.title" ngModel required [disabled]="viewForm">
                 <option value="" disabled selected>Title</option>
                 <option>Mr</option>
                 <option>Ms</option>
@@ -24,22 +37,22 @@
             <div class="flex-auto">
               <label class="form-label required">First Name</label>
               <input class="input small-text" name="firstname" placeholder="Enter your firstname"
-                [(ngModel)]="therapist.firstName" ngModel required />
+                [(ngModel)]="therapist.firstName" ngModel required [disabled]="viewForm" [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Last Name</label>
               <input class="input small-text" name="lastname" placeholder="Enter your lastname"
-                [(ngModel)]="therapist.lastName" ngModel required />
+                [(ngModel)]="therapist.lastName" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">E-mail ID</label>
               <input class="input small-text" name="email" placeholder="Enter your e-mail"
-                [(ngModel)]="therapist.email" ngModel required />
+                [(ngModel)]="therapist.email" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Mobile Number</label>
               <input class="input small-text" name="mobile" placeholder="Enter your mobile number"
-                [(ngModel)]="therapist.contactNo" ngModel required />
+                [(ngModel)]="therapist.contactNo" ngModel required [disabled]="viewForm" />
             </div>
           </div>
           <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
@@ -62,13 +75,13 @@
                 <div class="grow">
                   <label class="form-label required">Years of Experience</label>
                   <input type="number" max="30" min="0" class="input small-text" name="experience"
-                    placeholder="Enter your experience in years" [(ngModel)]="therapist.yearsOfExperience" ngModel required />
+                    placeholder="Enter your experience in years" [(ngModel)]="therapist.yearsOfExperience" ngModel required [disabled]="viewForm" />
                 </div>
               </div>
               <div>
                 <label class="form-label required">About Therapist</label>
                 <textarea class="textarea" name="about" placeholder="Enter short description here"
-                  [(ngModel)]="therapist.bio" ngModel required></textarea>
+                  [(ngModel)]="therapist.bio" ngModel required [disabled]="viewForm"></textarea>
               </div>
             </div>
             <div class="vertical-separator"></div>
@@ -94,162 +107,153 @@
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Monday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3" #checkbox />
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time" class="input small-text" name="monday-start" placeholder="Start timing" [(ngModel)]="availability[0].slot1Start"/>
+                  <input type="time" class="input small-text" name="monday-start" placeholder="Start timing" [(ngModel)]="availability[0].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="monday-end" placeholder="End timing" [(ngModel)]="availability[0].slot1End"/>
+                  <input type="time" class="input small-text" name="monday-end" placeholder="End timing" [(ngModel)]="availability[0].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[0].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('monday')">
                 </div>
                 <div *ngIf="availability[0].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time" class="input small-text" name="monday2-start" placeholder="Start timing" [(ngModel)]="availability[0].slot2Start"/>
+                  <input type="time" class="input small-text" name="monday2-start" placeholder="Start timing" [(ngModel)]="availability[0].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="monday2-end" placeholder="End timing" [(ngModel)]="availability[0].slot2End"/>
+                  <input type="time" class="input small-text" name="monday2-end" placeholder="End timing" [(ngModel)]="availability[0].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('monday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Tuesday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox/>
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="tuesday-start" placeholder="Start timing" [(ngModel)]="availability[1].slot1Start"/>
+                  <input type="time"class="input small-text" name="tuesday-start" placeholder="Start timing" [(ngModel)]="availability[1].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="tuesday-end" placeholder="End timing" [(ngModel)]="availability[1].slot1End"/>
+                  <input type="time" class="input small-text" name="tuesday-end" placeholder="End timing" [(ngModel)]="availability[1].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[1].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('tuesday')">
                 </div>
                 <div *ngIf="availability[1].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="tuesday2-start" placeholder="Start timing" [(ngModel)]="availability[1].slot2Start"/>
+                  <input type="time"class="input small-text" name="tuesday2-start" placeholder="Start timing" [(ngModel)]="availability[1].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="tuesday2-end" placeholder="End timing" [(ngModel)]="availability[1].slot2End"/>
+                  <input type="time" class="input small-text" name="tuesday2-end" placeholder="End timing" [(ngModel)]="availability[1].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('tuesday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Wednesday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox />
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="wednesday-start" placeholder="Start timing" [(ngModel)]="availability[2].slot1Start"/>
+                  <input type="time"class="input small-text" name="wednesday-start" placeholder="Start timing" [(ngModel)]="availability[2].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="wednesday-end" placeholder="End timing" [(ngModel)]="availability[2].slot1End"/>
+                  <input type="time" class="input small-text" name="wednesday-end" placeholder="End timing" [(ngModel)]="availability[2].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[2].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('wednesday')">
                 </div>
                 <div *ngIf="availability[2].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="wednesday2-end" placeholder="Start timing" [(ngModel)]="availability[2].slot2Start"/>
+                  <input type="time"class="input small-text" name="wednesday2-end" placeholder="Start timing" [(ngModel)]="availability[2].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="wednesday2-end" placeholder="End timing" [(ngModel)]="availability[2].slot2End"/>
+                  <input type="time" class="input small-text" name="wednesday2-end" placeholder="End timing" [(ngModel)]="availability[2].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('wednesday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Thursday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox />
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="thursday-start" placeholder="Start timing" [(ngModel)]="availability[3].slot1Start"/>
+                  <input type="time"class="input small-text" name="thursday-start" placeholder="Start timing" [(ngModel)]="availability[3].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="thursday-end" placeholder="End timing" [(ngModel)]="availability[3].slot1End"/>
+                  <input type="time" class="input small-text" name="thursday-end" placeholder="End timing" [(ngModel)]="availability[3].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[3].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('thursday')">
                 </div>
                 <div *ngIf="availability[3].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="thursday2-start" placeholder="Start timing" [(ngModel)]="availability[3].slot2Start"/>
+                  <input type="time"class="input small-text" name="thursday2-start" placeholder="Start timing" [(ngModel)]="availability[3].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="thursday2-end" placeholder="End timing" [(ngModel)]="availability[3].slot2End"/>
+                  <input type="time" class="input small-text" name="thursday2-end" placeholder="End timing" [(ngModel)]="availability[3].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('thursday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Friday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox />
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="friday-start" placeholder="Start timing" [(ngModel)]="availability[4].slot1Start"/>
+                  <input type="time"class="input small-text" name="friday-start" placeholder="Start timing" [(ngModel)]="availability[4].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="friday-end" placeholder="End timing" [(ngModel)]="availability[4].slot1End"/>
+                  <input type="time" class="input small-text" name="friday-end" placeholder="End timing" [(ngModel)]="availability[4].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[4].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('friday')">
                 </div>
                 <div *ngIf="availability[4].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="friday2-start" placeholder="Start timing" [(ngModel)]="availability[4].slot2Start"/>
+                  <input type="time"class="input small-text" name="friday2-start" placeholder="Start timing" [(ngModel)]="availability[4].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="friday2-end" placeholder="End timing" [(ngModel)]="availability[4].slot2End"/>
+                  <input type="time" class="input small-text" name="friday2-end" placeholder="End timing" [(ngModel)]="availability[4].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('friday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Saturday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox/>
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="saturday-start" placeholder="Start timing" [(ngModel)]="availability[5].slot1Start"/>
+                  <input type="time"class="input small-text" name="saturday-start" placeholder="Start timing" [(ngModel)]="availability[5].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="saturday-end" placeholder="End timing" [(ngModel)]="availability[5].slot1End"/>
+                  <input type="time" class="input small-text" name="saturday-end" placeholder="End timing" [(ngModel)]="availability[5].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[5].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('saturday')">
                 </div>
                 <div *ngIf="availability[5].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="saturday2-start" placeholder="Start timing" [(ngModel)]="availability[5].slot2Start"/>
+                  <input type="time"class="input small-text" name="saturday2-start" placeholder="Start timing" [(ngModel)]="availability[5].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="saturday2-end" placeholder="End timing" [(ngModel)]="availability[5].slot2End"/>
+                  <input type="time" class="input small-text" name="saturday2-end" placeholder="End timing" [(ngModel)]="availability[5].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('saturday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Sunday</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox/>
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="sunday-start" placeholder="Start timing" [(ngModel)]="availability[6].slot1Start"/>
+                  <input type="time"class="input small-text" name="sunday-start" placeholder="Start timing" [(ngModel)]="availability[6].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="sunday-end" placeholder="End timing" [(ngModel)]="availability[6].slot1End"/>
+                  <input type="time" class="input small-text" name="sunday-end" placeholder="End timing" [(ngModel)]="availability[6].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[6].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('sunday')">
                 </div>
                 <div *ngIf="availability[6].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="sunday2-start" placeholder="Start timing" [(ngModel)]="availability[6].slot2Start"/>
+                  <input type="time"class="input small-text" name="sunday2-start" placeholder="Start timing" [(ngModel)]="availability[6].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="sunday2-end" placeholder="End timing" [(ngModel)]="availability[6].slot2End"/>
+                  <input type="time" class="input small-text" name="sunday2-end" placeholder="End timing" [(ngModel)]="availability[6].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('sunday')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Mon-Fri</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox/>
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="monfri-start" placeholder="Start timing" [(ngModel)]="availability[7].slot1Start"/>
+                  <input type="time"class="input small-text" name="monfri-start" placeholder="Start timing" [(ngModel)]="availability[7].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="monfri-end" placeholder="End timing" [(ngModel)]="availability[7].slot1End"/>
+                  <input type="time" class="input small-text" name="monfri-end" placeholder="End timing" [(ngModel)]="availability[7].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[7].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('monfri')">
                 </div>
                 <div *ngIf="availability[7].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="monfri2-start" placeholder="Start timing" [(ngModel)]="availability[7].slot2Start"/>
+                  <input type="time"class="input small-text" name="monfri2-start" placeholder="Start timing" [(ngModel)]="availability[7].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="monfri2-end" placeholder="End timing" [(ngModel)]="availability[7].slot2End"/>
+                  <input type="time" class="input small-text" name="monfri2-end" placeholder="End timing" [(ngModel)]="availability[7].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('monfri')" >
                 </div>
               </div>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">All Days</label>
-                  <input type="checkbox" value="monday" class="switch switch-xs flex gap-3"  #checkbox/>
                 </div>
                 <div class="flex flex-row my-1">
-                  <input type="time"class="input small-text" name="alldays-start" placeholder="Start timing" [(ngModel)]="availability[8].slot1Start"/>
+                  <input type="time"class="input small-text" name="alldays-start" placeholder="Start timing" [(ngModel)]="availability[8].slot1Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="alldays-end" placeholder="End timing" [(ngModel)]="availability[8].slot1End"/>
+                  <input type="time" class="input small-text" name="alldays-end" placeholder="End timing" [(ngModel)]="availability[8].slot1End" [disabled]="viewForm"/>
                   <img *ngIf="!availability[8].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('alldays')">
                 </div>
                 <div *ngIf="availability[8].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="alldays2-start" placeholder="Start timing" [(ngModel)]="availability[8].slot2Start"/>
+                  <input type="time"class="input small-text" name="alldays2-start" placeholder="Start timing" [(ngModel)]="availability[8].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
-                  <input type="time" class="input small-text" name="alldays2-end" placeholder="End timing" [(ngModel)]="availability[8].slot2End"/>
+                  <input type="time" class="input small-text" name="alldays2-end" placeholder="End timing" [(ngModel)]="availability[8].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('alldays')" >
                 </div>
               </div>
@@ -257,10 +261,10 @@
         <div class="flex flex-row items-center justify-between">
           <div class="flex flex-row w-1/4 justify-between">
             <label class="form-label m-2">Flexible With Timings</label>
-            <input type="checkbox" class="switch switch-sm flex gap-3" (change)="flexible($event)" [(checked)]="therapist.isFlexibleWithTiming" />
+            <input type="checkbox" class="switch switch-sm flex gap-3" (change)="flexible($event)" [(checked)]="therapist.isFlexibleWithTiming" [disabled]="viewForm" />
           </div>
           <div>
-            <button type="button" class="btn btn-primary btn-block reset-button" (click)="reset()">Reset All</button>
+            <button type="button" class="btn btn-primary btn-block reset-button" (click)="reset()" [disabled]="viewForm">Reset All</button>
           </div>
         </div>
 
@@ -269,32 +273,46 @@
 
         <div class="flex flex-row w-1/4 mb-4 justify-between">
           <label class="form-label m-2">Therapist Available</label>
-          <input type="checkbox" class="switch switch-sm flex gap-3" (change)="available($event)" [(checked)]="therapist.isAvailable" />
+          <input type="checkbox" class="switch switch-sm flex gap-3" (change)="available($event)" [(checked)]="therapist.isAvailable" [disabled]="viewForm" />
         </div>
 
         <label class="form-label mb-4 required">Preferred Mode of Therapy</label>
         <div class="flex flex-row w-4/12 justify-between">
           <div class="flex flex-wrap cursor-pointer gap-4">
-            <input type="checkbox" name="mode1" value="audio" class="checkbox checkbox-sm" [(checked)]="audio" ngModel />
+            <input type="checkbox" name="mode1" value="audio" class="checkbox checkbox-sm" [(checked)]="audio" ngModel [disabled]="viewForm" />
             <span class="checkbox-span">Audio Call</span>
           </div>
           <div class="flex flex-wrap cursor-pointer gap-4">
-            <input type="checkbox" name="mode2" value="video" class="checkbox checkbox-sm" [(checked)]="video" ngModel />
+            <input type="checkbox" name="mode2" value="video" class="checkbox checkbox-sm" [(checked)]="video" ngModel [disabled]="viewForm" />
             <span class="checkbox-span">Video Call</span>
           </div>
           <div class="flex flex-wrap cursor-pointer gap-4">
-            <input type="checkbox" name="mode3" value="chat" class="checkbox checkbox-sm" [(checked)]="chat" ngModel />
+            <input type="checkbox" name="mode3" value="chat" class="checkbox checkbox-sm" [(checked)]="chat" ngModel [disabled]="viewForm" />
             <span class="checkbox-span">Chat</span>
           </div>
         </div>
       </div>
       <div class="flex justify-end">
+        <div *ngIf="editMode && gotonext && !isDisabled" class="flex justify-start w-11/12">
+          <button type="button" class="btn btn-error previous" (click)="dialogShow()">Disable</button>
+        </div>
+        <div *ngIf="editMode && gotonext && isDisabled" class="flex justify-start w-11/12">
+          <button type="button" class="btn btn-primary enable-button" (click)="dialogShow()">Enable</button>
+        </div>
+        <div *ngIf="isAlert && !isDisabled">
+          <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()" (isDisable)="disableTherapist()"></app-alert-box>
+        </div>
+        <div *ngIf="isAlert && isDisabled">
+          <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable" (closeAlert)="dialogShow()" (isDisable)="enableTherapist()"></app-alert-box>
+        </div>
+        
         <button type="button" class="btn btn-primary btn-block" [disabled]="!gotonext"
           (click)="previous()">Previous</button>
-        <button *ngIf="gotonext" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save
+        <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save
           and Submit</button>
-        <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block previous" (click)="next()">Save and
+        <button type="button" *ngIf="!gotonext && !viewForm" class="btn btn-primary btn-block previous" (click)="next()">Save and
           Continue</button>
+        <button type="button" *ngIf="!gotonext && viewForm" class="btn btn-primary btn-block previous" (click)="next()">Next</button>
       </div>
     </form>
   </div>

@@ -12,6 +12,7 @@ import { AdminHomeComponent } from './components/admin-home/admin-home.component
 import { TherapistModule } from './therapist/therapist.module';
 import { SharedModule } from './common/shared.module';
 import { MenuComponent } from './components/menu/menu.component';
+import { PartnerModule } from './partner/partner.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MenuComponent } from './components/menu/menu.component';
     HttpClientModule,
     SharedModule,
     TherapistModule,
+    PartnerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

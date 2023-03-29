@@ -77,6 +77,11 @@ tbody {
     tr:nth-child(even) {
         background-color: $background-tertiary;
     }
+    tr {
+        &.disabled-row {
+            background-color: $clr-text-muted;
+        }
+    }
 }
 
 .header {
@@ -113,6 +118,18 @@ tbody {
     .selected-item {
         background-color: $background-secondary;
     }
+}
+
+.menu-item:active {
+    background-color: $background-primary;
+}
+
+.menu-item:hover {
+    background-color: transparent;
+}
+
+.menu-item {
+    color: $clr-text-primary;
 }
 
 .container {
@@ -190,6 +207,7 @@ tbody {
     &.center {
         text-align: center;
     }
+    background-color: $background-primary;
 }
 
 .select {
@@ -206,6 +224,14 @@ tbody {
     }
 }
 
+.textarea {
+    background-color: $background-primary;
+    border: $border-secondary;
+    max-width: 100%;
+    border-radius: 6px !important;
+    color: $clr-text-input;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -213,6 +239,10 @@ tbody {
 .divider {
     border: $border-divider;
     height: 0px;
+}
+
+.divider-horizontal:after, .divider-horizontal:before, .divider:after, .divider:before {
+    background-color: transparent;
 }
 
 .focussed:focus {
