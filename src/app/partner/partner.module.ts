@@ -9,6 +9,7 @@ import { ManageComponent } from './manage/manage.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { DatepickerModule } from 'ng2-datepicker';
 
 
 @NgModule({
@@ -27,7 +28,9 @@ import { HttpClient } from '@angular/common/http';
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    ReactiveFormsModule,
+    DatepickerModule
   ]
 })
 export class PartnerModule { }

@@ -3,185 +3,197 @@
       <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
       <h1 class="header-text">Add Company</h1>
     </div>
-  </div>
+</div>
   
   <div class="custom-card">
     <div class="card-body">
-      <app-progress-bar [status]="gotonext"></app-progress-bar>
+      <app-progress-bar [steppertitle1]="steppertitle1" [steppertitle2]="steppertitle2" [status]="gotonext"></app-progress-bar>
   
-      <form #addCompanyForm="ngForm" (ngSubmit)="submit(addCompanyForm)">
+        <form #addCompanyForm="ngForm" (ngSubmit)="submit(addCompanyForm)">
+            <div [hidden]="gotonext">
+                <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Partner Type</label>
+                            <select class="select select-md title-select" name="partnertype" [(ngModel)]="partner.partnerType" ngModel required >
+                                <option value="" disabled selected>Select here</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="institution">Institution</option>
+                            </select>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Name of the Partner</label>
+                            <input class="input small-text" name="companyname" placeholder="Enter Company Name" [(ngModel)]="partner.companyName" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label">Partner Branch</label>
+                            <input class="input small-text" name="companybranch" placeholder="Enter Company Branch" [(ngModel)]="partner.companyBranch" ngModel/>
+                        </div>
+                    </div>
         
-        <div [hidden]="gotonext">
-            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Partner Sector</label>
+                            <select class="select select-md title-select" name="companysector" [(ngModel)]="partner.companySector" ngModel required >
+                                <option value="" disabled selected>Select here</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="airlines">Airlines</option>
+                                <option value="bank">Bank - Private</option>
+                                <option value="bpo">BPO/iTeS</option>
+                                <option value="carbonblack">Carbon Black</option>
+                            </select>
+                        </div>
+                        <div class="flex-auto">
+                        <label class="form-label required">Website Link</label>
+                        <input class="input small-text" name="weblink" placeholder="Enter website link" [(ngModel)]="partner.websiteLink" ngModel required />
+                        </div>     
+                    </div>
+        
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Partner Address</label>
+                            <input class="input small-text" name="address" placeholder="Enter Company Address" [(ngModel)]="partner.address" ngModel required />
+                        </div>
+                        <div class="flex-auto">
+                        <label class="form-label required">City</label>
+                        <input class="input small-text" name="city" placeholder="Enter City" [(ngModel)]="partner.city" ngModel required />
+                        </div>
+                        <div class="flex-auto">
+                        <label class="form-label required">State</label>
+                        <input class="input small-text" name="state" placeholder="Enter State" [(ngModel)]="partner.state" ngModel required />
+                        </div>
+                    </div>
 
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                  <div class="flex-auto">
-                    <label class="form-label required">Name of the Company</label>
-                    <input class="input small-text" name="companyname" placeholder="Enter Company Name" ngModel required/>
-                  </div>
-                  <div class="flex-auto">
-                    <label class="form-label required">Company Branch</label>
-                    <input class="input small-text" name="companyname" placeholder="Enter Company Name" ngModel required/>
-                  </div>
-                  <div class="flex-auto">
-                    <label class="form-label required">Partner Type</label>
-                    <select class="select select-md title-select" name="title" ngModel required >
-                        <option value="" disabled selected>Select here</option>
-                        <option>Corporate</option>
-                        <option>Institution</option>
-                    </select>
-                  </div>
-                </div>
-    
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Company Sector</label>
-                        <select class="select select-md title-select" name="title" ngModel required >
-                            <option value="" disabled selected>Select here</option>
-                            <option>Agriculture</option>
-                            <option>Airlines</option>
-                            <option>Bank - Private</option>
-                            <option>BPO/iTeS</option>
-                            <option>Carbon Black</option>
-                        </select>
-                    </div>
-                    <!-- <div class="flex-auto">
-                        <label class="form-label">Year of Company Incorporation</label>
-                        <input class="input small-text" name="companyyear" placeholder="Enter year" ngModel />
-                    </div>
-                    <div class="flex-auto">
-                      <label class="form-label">Total Employee Strength</label>
-                      <input class="input small-text" name="employeestrength" placeholder="Enter employee strength" ngModel />
-                    </div> -->
-                    <div class="flex-auto">
-                      <label class="form-label required">Website Link of the Company</label>
-                      <input class="input small-text" name="weblink" placeholder="Enter website link" ngModel required />
-                    </div>     
-                </div>
-    
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Company Address</label>
-                        <input class="input small-text" name="address" placeholder="Enter Company Address" ngModel required />
-                    </div>
-                    <div class="flex-auto">
-                      <label class="form-label required">City</label>
-                      <input class="input small-text" name="city" placeholder="Enter City" ngModel required />
-                    </div>
-                    <div class="flex-auto">
-                      <label class="form-label required">State</label>
-                      <input class="input small-text" name="state" placeholder="Enter State" ngModel required />
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label">Year of Company Incorporation</label>
-                        <input class="input small-text" name="companyyear" placeholder="Enter year" ngModel />
-                    </div>
-                    <div class="flex-auto">
-                      <label class="form-label">Total Employee Strength</label>
-                      <input class="input small-text" name="employeestrength" placeholder="Enter employee strength" ngModel />
-                    </div>
-                </div>
-    
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label mb-4">Nature of Ownership of the Company</label>
-                        <div id="group1" class="flex flex-row gap-3 items-center">
-                            <input type="radio" class="radio radio-sm" name="group1" /><span class="form-label">Public</span>
-                            <input type="radio" class="radio radio-sm" name="group1" /><span class="form-label">Private</span>
-                            <input type="radio" class="radio radio-sm" name="group1" /><span class="form-label">Partnership</span>
-                            <input type="radio" class="radio radio-sm" name="group1" /><span class="form-label">NGO</span>
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label">Year of Partner Incorporation</label>
+                            <input class="input small-text" name="companyyear" placeholder="Enter year" [(ngModel)]="partner.year" ngModel />
+                        </div>
+                        <div class="flex-auto">
+                        <label class="form-label">Total Strength</label>
+                        <input class="input small-text" name="employeestrength" placeholder="Enter employee strength" [(ngModel)]="partner.totalStrength" ngModel />
                         </div>
                     </div>
-                    <div class="flex-auto">
-                        <div class="flex flex-wrap cursor-pointer gap-4 mb-2">
-                            <input type="checkbox" name="listed" class="checkbox checkbox-sm" ngModel/>
-                            <span class="checkbox-span">Tick if the company is listed</span>
+        
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label mb-4">Nature of Ownership of the Partner</label>
+                            <div class="flex flex-row gap-3 items-center">
+                                <input type="radio" value="public" class="radio radio-sm" name="public" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">Public</span>
+                                <input type="radio" value="private" class="radio radio-sm" name="private" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">Private</span>
+                                <input type="radio" value="partnership" class="radio radio-sm" name="partnership" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">Partnership</span>
+                                <input type="radio" value="ngo" class="radio radio-sm" name="ngo" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">NGO</span>
+                            </div>
                         </div>
-                        <div class="flex flex-wrap cursor-pointer gap-4">
-                            <input type="checkbox" name="profitable" class="checkbox checkbox-sm" ngModel/>
-                            <span class="checkbox-span">Tick if the company is profitable</span>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
-                </div>
-    
-                <div class="divider"></div>
-    
-                <label class="form-label">SPOC / Partner Login Details</label>
-                <div *ngFor="let item of noOfSpoc; index as index" class="flex w-full">
-                    <div class="flex w-full justify-start items-start">
-                        <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-8 border-2 border-solid rounded-lg border-{#E8E8E8}">
-                            <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-                                <div class="flex-auto">
-                                    <label class="form-label required">SPOC Name</label>
-                                    <input class="input small-text" name="spocname" placeholder="Enter your firstname" ngModel required/>
-                                </div>
-                                <div class="flex-auto">
-                                    <label class="form-label required">E-mail ID</label>
-                                    <input class="input small-text" name="email" placeholder="Enter your e-mail" ngModel required/>
-                                </div>
-                                <div class="flex-auto">
-                                    <label class="form-label required">Mobile Number</label>
-                                    <input class="input small-text" name="mobile" placeholder="Enter your mobile number" ngModel required/>
-                                </div>
+                        <div class="flex-auto">
+                            <div class="flex flex-wrap cursor-pointer gap-4 mb-2">
+                                <input type="checkbox" name="listed" class="checkbox checkbox-sm" [(ngModel)]="partner.isListed" ngModel/>
+                                <span class="checkbox-span">Tick if the partner is listed</span>
                             </div>
                             <div class="flex flex-wrap cursor-pointer gap-4">
-                                <input type="checkbox" name="profitable" class="checkbox checkbox-sm" ngModel/>
-                                <span class="checkbox-span">Operations SPOC</span>
+                                <input type="checkbox" name="profitable" class="checkbox checkbox-sm" [(ngModel)]="partner.isProfitable" ngModel/>
+                                <span class="checkbox-span">Tick if the partner is profitable</span>
                             </div>
-                        </div>  
-                        <img src="../../../assets/icons/spoc-add.svg" class="cursor-pointer" (click)="addSpoc()">
-                        <img *ngIf="index > 0" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="removeSpoc(index)">
+                        </div>
+                        <div class="divider"></div>
+                    </div>
+        
+                    <div class="divider"></div>
+        
+                    <label class="form-label required">SPOC / Partner Login Details</label>
+                    <div *ngFor="let item of spoc; index as index" class="flex w-full">
+                        <div class="flex w-full justify-start items-start">
+                            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-8 border-2 border-solid rounded-lg border-{#E8E8E8}">
+                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                    <div class="flex-auto">
+                                        <label class="form-label required">SPOC Name</label>
+                                        <input class="input small-text" name="spocname{{index}}" placeholder="Enter your firstname" [(ngModel)]="spoc[index].name" ngModel [required]="index == 0"/>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <label class="form-label required">E-mail ID</label>
+                                        <input class="input small-text" name="email{{index}}" placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel [required]="index == 0"/>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <label class="form-label required">Mobile Number</label>
+                                        <input class="input small-text" name="mobile{{index}}" placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile" ngModel [required]="index == 0"/>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap cursor-pointer gap-4">
+                                    <input type="checkbox" name="isoperations{{index}}" class="checkbox checkbox-sm" [(ngModel)]="spoc[index].isOperations" ngModel/>
+                                    <span class="checkbox-span">Operations SPOC</span>
+                                </div>
+                            </div>  
+                            <img src="../../../assets/icons/spoc-add.svg" class="cursor-pointer" (click)="addSpoc()">
+                            <img *ngIf="spoc.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="removeSpoc(index)">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div [hidden]="!gotonext">
-            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Number of Subscriptions</label>
-                        <select class="select select-md title-select" name="subscriptions" ngModel required >
-                            <option value="" disabled selected>Select here</option>
-                            <option>100</option>
-                            <option>200</option>
-                            <option>500</option>
-                            <option>1000</option>
-                            <option>1500 and Above</option>
-                        </select>
-                    </div>
-                    <div class="flex-auto">
-                        <label class="form-label required">Number of Therapy Sessions</label>
-                        <input class="input small-text" name="therapysessions" placeholder="Enter no. of therapy sessions" ngModel required/>
-                    </div>
-                    <div class="flex-auto">
-                        <label class="form-label required">Plan Duration(yr)</label>
-                        <input class="input small-text" name="planduration" placeholder="Enter duration" ngModel required/>
-                    </div>
+            <div class="flex justify-between mt-2">
+                <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
+                <div class="flex justify-end w-full">
+                    <button *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [disabled]="!addCompanyForm.valid">Create and Close</button>
+                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" [disabled]="!addCompanyForm.valid" (click)="next()">Create Partner and Proceed to Add Subscription</button>
                 </div>
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Subscription Start Date</label>
-                        <input type="date" class="input small-text" name="startdate" placeholder="DD / MM / YYYY" ngModel required/>
+            </div>
+        </form>
+
+        <form #addSubscriptionForm="ngForm" (ngSubmit)="submit(addSubscriptionForm)">
+            <div [hidden]="!gotonext">
+                <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Number of Subscriptions</label>
+                            <select class="select select-md title-select" name="subscriptionsnum" [(ngModel)]="partner.noOfSubscriptions" ngModel required>
+                                <option value="" disabled selected>Select here</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                                <option value="1500+">1500 and Above</option>
+                            </select>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Number of Therapy Sessions</label>
+                            <input class="input small-text" name="sessionsnum" placeholder="Enter no. of therapy sessions" [(ngModel)]="partner.noOfSessions" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Plan Duration(yr)</label>
+                            <input type="number" class="input small-text" name="planduration" placeholder="Enter duration" [(ngModel)]="partner.planDuration" ngModel required/>
+                        </div>
                     </div>
-                    <div class="flex-auto">
-                        <label class="form-label required">Subscription End Date</label>
-                        <input type="date" class="input small-text" name="startdate" placeholder="DD / MM / YYYY" ngModel disabled/>
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Subscription End Date</label>
+                            <div class="flex flex-row justify-between gap-1 px-1 border rounded-md border-solid border-{#c4c4c4}">
+                                <!-- <input class="input small-text noborder" placeholder="DD / MM / YYYY" [(ngModel)]="partner.startDate" disabled/> -->
+                                <ngx-datepicker name="startdate" [(ngModel)]="partner.startDate" [options]="options" ngModel required></ngx-datepicker>
+                                <img class="calendar-icon" src="../../../assets/icons/calendar.svg">
+                            </div>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Subscription End Date</label>
+                            <div class="flex flex-row justify-between gap-1 px-1 border rounded-md border-solid border-{#c4c4c4}">
+                                <input class="input small-text noborder" name="enddate" placeholder="DD / MM / YYYY" [(ngModel)]="partner.endDate" ngModel disabled/>
+                                <img class="calendar-icon" src="../../../assets/icons/calendar.svg">
+                            </div>
+                        </div>
+                        <!-- <div class="flex-auto">
+                            <label class="form-label required">Subscription End Date</label>
+                            <input type="date" class="input small-text" name="enddate" placeholder="DD / MM / YYYY" [(ngModel)]="partner.endDate" ngModel disabled/>
+                        </div> -->
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="flex justify-end mt-2">
+              <button *ngIf="gotonext" type="button" class="btn btn-primary btn-block enable-button" (click)="previous()">Cancel</button>
+              <button *ngIf="gotonext" class="btn btn-primary btn-block" [disabled]="!addSubscriptionForm.valid">Save Details</button>
+            </div>
           
-        <div class="flex justify-end mt-2">
-          <button *ngIf="!gotonext" class="btn btn-primary btn-block enable-button">Create and Close</button>
-          <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" (click)="next()">Create Partner and Proceed to Add Subscription</button>
-          <button *ngIf="gotonext" type="button" class="btn btn-primary btn-block enable-button" (click)="previous()">Cancel</button>
-          <button *ngIf="gotonext" type="button" class="btn btn-primary btn-block">Save Details</button>
-        </div>
-      </form>
+        </form>
+          
     </div>
   </div>

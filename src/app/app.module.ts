@@ -13,6 +13,7 @@ import { TherapistModule } from './therapist/therapist.module';
 import { SharedModule } from './common/shared.module';
 import { MenuComponent } from './components/menu/menu.component';
 import { PartnerModule } from './partner/partner.module';
+import { DatepickerModule } from 'ng2-datepicker';
 
 @NgModule({
   declarations: [

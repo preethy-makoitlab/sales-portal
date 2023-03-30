@@ -1,1 +1,33 @@
-<p>manage works!</p>
+<div class="flex flex-row justify-between items-center mb-3">
+    <div class="flex flex-row md:gap-3 items-center">
+        <div class="flex flex-row flex-nowrap md:gap-3 items-center">
+            <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+            <h1 class="header-text md:break-keep">Manage Partners</h1>
+        </div>
+        <div>
+            <img class="separator" src="../../../assets/icons/separator.svg">
+        </div>
+        <div>
+            <h1 class="sub-header-text">{{totalCount}} Partners</h1>
+        </div>
+        <div>
+            <img class="separator" src="../../../assets/icons/separator.svg">
+        </div>
+        <div>
+            <h1 class="sub-header-text">{{activeCount}} Active Partners</h1>
+        </div>
+    </div>
+    
+    <!-- <div>
+        <app-search></app-search>
+    </div> -->
+    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/partner/add']">
+        <div>
+            <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+        </div>
+        <div>
+            <span class="">Add new partner</span>
+        </div>
+    </div>
+</div>
+<app-table [fields]="fields" [data]="tableData"></app-table>
