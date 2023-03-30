@@ -3,7 +3,8 @@
         "title": "Welcome to ANYO"
     },
     "titles": {
-        "manageTherapist": "Manage Therapist"
+        "manageTherapist": "Manage Therapist",
+        "addTherapist": "Add Therapist"
     },
     "labels": {
         "hello": "Hello"
