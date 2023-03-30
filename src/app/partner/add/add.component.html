@@ -14,27 +14,27 @@
                 <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
 
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Name of the Company</label>
-                        <input class="input small-text" name="companyname" placeholder="Enter Company Name" [(ngModel)]="partner.companyName" ngModel required/>
-                    </div>
-                    <div class="flex-auto">
-                        <label class="form-label required">Company Branch</label>
-                        <input class="input small-text" name="companybranch" placeholder="Enter Company Branch" [(ngModel)]="partner.companyBranch" ngModel required/>
-                    </div>
-                    <div class="flex-auto">
-                        <label class="form-label required">Partner Type</label>
-                        <select class="select select-md title-select" name="partnertype" [(ngModel)]="partner.partnerType" ngModel required >
-                            <option value="" disabled selected>Select here</option>
-                            <option value="corporate">Corporate</option>
-                            <option value="institution">Institution</option>
-                        </select>
-                    </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Partner Type</label>
+                            <select class="select select-md title-select" name="partnertype" [(ngModel)]="partner.partnerType" ngModel required >
+                                <option value="" disabled selected>Select here</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="institution">Institution</option>
+                            </select>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Name of the Partner</label>
+                            <input class="input small-text" name="companyname" placeholder="Enter Company Name" [(ngModel)]="partner.companyName" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label">Partner Branch</label>
+                            <input class="input small-text" name="companybranch" placeholder="Enter Company Branch" [(ngModel)]="partner.companyBranch" ngModel/>
+                        </div>
                     </div>
         
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
-                            <label class="form-label required">Company Sector</label>
+                            <label class="form-label required">Partner Sector</label>
                             <select class="select select-md title-select" name="companysector" [(ngModel)]="partner.companySector" ngModel required >
                                 <option value="" disabled selected>Select here</option>
                                 <option value="agriculture">Agriculture</option>
@@ -45,14 +45,14 @@
                             </select>
                         </div>
                         <div class="flex-auto">
-                        <label class="form-label required">Website Link of the Company</label>
+                        <label class="form-label required">Website Link</label>
                         <input class="input small-text" name="weblink" placeholder="Enter website link" [(ngModel)]="partner.websiteLink" ngModel required />
                         </div>     
                     </div>
         
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
-                            <label class="form-label required">Company Address</label>
+                            <label class="form-label required">Partner Address</label>
                             <input class="input small-text" name="address" placeholder="Enter Company Address" [(ngModel)]="partner.address" ngModel required />
                         </div>
                         <div class="flex-auto">
@@ -67,18 +67,18 @@
 
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
-                            <label class="form-label">Year of Company Incorporation</label>
+                            <label class="form-label">Year of Partner Incorporation</label>
                             <input class="input small-text" name="companyyear" placeholder="Enter year" [(ngModel)]="partner.year" ngModel />
                         </div>
                         <div class="flex-auto">
-                        <label class="form-label">Total Employee Strength</label>
+                        <label class="form-label">Total Strength</label>
                         <input class="input small-text" name="employeestrength" placeholder="Enter employee strength" [(ngModel)]="partner.totalStrength" ngModel />
                         </div>
                     </div>
         
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
-                            <label class="form-label mb-4">Nature of Ownership of the Company</label>
+                            <label class="form-label mb-4">Nature of Ownership of the Partner</label>
                             <div class="flex flex-row gap-3 items-center">
                                 <input type="radio" value="public" class="radio radio-sm" name="public" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">Public</span>
                                 <input type="radio" value="private" class="radio radio-sm" name="private" ngModel [(ngModel)]="partner.ownership"/><span class="form-label">Private</span>
@@ -89,11 +89,11 @@
                         <div class="flex-auto">
                             <div class="flex flex-wrap cursor-pointer gap-4 mb-2">
                                 <input type="checkbox" name="listed" class="checkbox checkbox-sm" [(ngModel)]="partner.isListed" ngModel/>
-                                <span class="checkbox-span">Tick if the company is listed</span>
+                                <span class="checkbox-span">Tick if the partner is listed</span>
                             </div>
                             <div class="flex flex-wrap cursor-pointer gap-4">
                                 <input type="checkbox" name="profitable" class="checkbox checkbox-sm" [(ngModel)]="partner.isProfitable" ngModel/>
-                                <span class="checkbox-span">Tick if the company is profitable</span>
+                                <span class="checkbox-span">Tick if the partner is profitable</span>
                             </div>
                         </div>
                         <div class="divider"></div>
@@ -101,7 +101,7 @@
         
                     <div class="divider"></div>
         
-                    <label class="form-label">SPOC / Partner Login Details</label>
+                    <label class="form-label required">SPOC / Partner Login Details</label>
                     <div *ngFor="let item of spoc; index as index" class="flex w-full">
                         <div class="flex w-full justify-start items-start">
                             <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-8 border-2 border-solid rounded-lg border-{#E8E8E8}">
@@ -135,7 +135,7 @@
                 <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
                 <div class="flex justify-end w-full">
                     <button *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [disabled]="!addCompanyForm.valid">Create and Close</button>
-                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" (click)="next()">Create Partner and Proceed to Add Subscription</button>
+                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" [disabled]="!addCompanyForm.valid" (click)="next()">Create Partner and Proceed to Add Subscription</button>
                 </div>
             </div>
         </form>

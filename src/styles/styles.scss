@@ -196,7 +196,7 @@ tbody {
 }
 
 .input {
-    border: $border-secondary;
+    border: 1px solid #E8E8E8;
     max-width: 100%;
     border-radius: 6px !important;
     color: $clr-text-input;
@@ -208,6 +208,15 @@ tbody {
         text-align: center;
     }
     background-color: $background-primary;
+}
+
+input:-internal-autofill-selected {
+    background-color: $background-primary !important;
+    color: $clr-text-input !important;
+}
+
+:root {
+    color-scheme: light;
 }
 
 .select {
