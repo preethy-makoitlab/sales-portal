@@ -122,6 +122,8 @@ export class AddComponent {
   alertBodyDisable: string = "Please make sure that you want to disable the therapist"
   alertHeaderEnable: string = "Therapist Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the therapist"
+  steppertitle1: string = "Profile Information"
+  steppertitle2: string = "Availability"
 
 
   @ViewChild('fileInput') fileInput: any;
@@ -212,13 +214,13 @@ export class AddComponent {
   submit(form: any) {
     console.log(form.value);
     this.therapist.preferredModesOfTherapy = []
-    if(form.value.mode1 == true){
+    if(form.value.mode1 == true || this.audio == true){
       this.therapist.preferredModesOfTherapy.push('audio')
     }
-    if(form.value.mode2 == true){
+    if(form.value.mode2 == true || this.video == true){
       this.therapist.preferredModesOfTherapy.push('video')
     }
-    if(form.value.mode3 == true){
+    if(form.value.mode3 == true || this.chat == true){
       this.therapist.preferredModesOfTherapy.push('chat')
     }
     if(!form.value.mode1 && !form.value.mode2 && !form.value.mode3) {
@@ -226,6 +228,36 @@ export class AddComponent {
     }
     console.log(this.therapist)
     console.log(form.value)
+
+    if(this.availability[8].slot1Start){
+      var temp = this.availability.slice(0,7);
+      temp.forEach((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+        day.slot1Start = this.availability[8].slot1Start;
+        day.slot1End = this.availability[8].slot1End;
+        if(this.availability[8].ifSlot2 == true) {
+          day.ifSlot2 = true;
+          day.slot2Start = this.availability[8].slot2Start;
+          day.slot2End = this.availability[8].slot2End;
+        }
+      })
+    }
+    else if(this.availability[7].slot1Start) {
+      var temp = this.availability.slice(0,5); 
+      temp.forEach((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+        day.slot1Start = this.availability[7].slot1Start;
+        day.slot1End = this.availability[7].slot1End;
+        if(this.availability[7].ifSlot2 == true) {
+          day.ifSlot2 = true;
+          day.slot2Start = this.availability[7].slot2Start;
+          day.slot2End = this.availability[7].slot2End;
+        }
+      })
+    }
+
+    console.log(this.availability);
+    // this.availability = this.availability.splice(7,9);
+    console.log(this.therapist);
+  
     let req = this.therapist;
     if(this.editMode){
       let _id = String(this.activatedRoute.snapshot.params['id']);
@@ -288,7 +320,14 @@ export class AddComponent {
   }
 
   reset() {
-    this.checkbox.nativeElement.checked = false;
+    console.log(this.availability);
+    this.availability.forEach((day: { slot1Start: string; slot1End: string; ifSlot2: boolean; slot2Start: string; slot2End: string; }) => {
+      day.slot1Start = '';
+      day.slot1End = '',
+      day.ifSlot2 = false;
+      day.slot2Start = '';
+      day.slot2End = '';
+    })
   }
 
   flexible(event: any) {
@@ -349,10 +388,65 @@ export class AddComponent {
         console.log(value);
         this.viewForm = true;
         this.therapist = value;
-        this.availability = value.availability;
+        const array: any[] = JSON.parse(JSON.stringify(value.availability));
+        // this.availability = value.availability;
         this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
         this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
         this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
+
+        var count = 0;
+        var flag = true;
+        
+        var slot1Start = value.availability[0].slot1Start;
+        var slot1End = value.availability[0].slot1End;
+        if(value.availability[0].ifSlot2 == true) {
+          var slot2Start = value.availability[0].slot2Start;
+          var slot2End = value.availability[0].slot2End;
+        }  
+
+        console.log(slot1Start, slot1End, slot2Start, slot2End);  
+        
+        var temp = array.splice(1,7);
+        console.log(temp); 
+        
+        temp.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+          console.log(day);
+          if(day.slot1Start == slot1Start && day.slot1End == slot1End) {
+            if(value.availability[0].ifSlot2 == true){
+              if(day.slot2Start == slot2Start && day.slot2End == slot2End){
+                count += 1;
+              }
+              else{
+                flag = false;
+              }
+            }
+            else{
+              count += 1;
+            }
+          }
+          else{
+            flag = false;
+          }
+          return flag;
+        })
+
+        console.log(count);
+        if(count == 6) {
+          console.log('alldays')
+          this.availability[8] = value.availability[0];
+          this.availability[8].day = "alldays";
+        }
+        else if(count == 4){
+          console.log('monfri')
+          this.availability[7] = value.availability[0];
+          this.availability[7].day = "mon-fri";
+        }
+        else{
+          this.availability = value.availability;
+        }
+        console.log(array);
+        console.log(this.availability);
+
         if(value.status == 'inactive') {
           this.isDisabled = true;
         }
