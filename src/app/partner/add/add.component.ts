@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatepickerModule, DatepickerOptions } from 'ng2-datepicker';
 import { dateToddMMYYYY } from 'src/app/common/utils/utils';
+import { PartnerService } from 'src/app/services/partner.service';
 
 @Component({
   selector: 'app-add',
@@ -17,6 +18,7 @@ export class AddComponent {
   steppertitle2: string = "Subsription"
 
   constructor(private router: Router,
+    private partnerService: PartnerService,
     private formBuilder: FormBuilder) {
       this.addCompanyForm = this.formBuilder.group({
         companyname: ['', Validators.required],
@@ -49,11 +51,12 @@ export class AddComponent {
     city: "",
     state: "",
     year: "",
-    totalStrength: "",
+    totalStrength: 0,
     ownership: "",
     isListed: false,
     isProfitable: false,
     spocDetails: this.spoc,
+    status: "active",
     noOfSubscriptions: "",
     noOfSessions: "",
     planDuration: 0,
@@ -74,8 +77,16 @@ export class AddComponent {
   submit(form: any) {
     console.log(form.value);
     console.log(this.partner);
-    console.log(this.addCompanyForm);
-    // this.router.navigate(['/partner']);
+    let req = this.partner;
+    this.partnerService.createPartner(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        // this.router.navigate(['/partner']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   addSpoc() {
