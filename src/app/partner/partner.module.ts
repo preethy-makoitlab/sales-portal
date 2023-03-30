@@ -6,6 +6,7 @@ import { AddComponent } from './add/add.component';
 import { SharedModule } from '../common/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManageComponent } from './manage/manage.component';
+import { DatepickerModule } from 'ng2-datepicker';
 
 
 @NgModule({
@@ -17,7 +18,9 @@ import { ManageComponent } from './manage/manage.component';
     CommonModule,
     PartnerRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    DatepickerModule
   ]
 })
 export class PartnerModule { }
