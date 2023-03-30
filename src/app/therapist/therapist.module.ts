@@ -9,6 +9,9 @@ import { MatChipsModule, MatChipTrailingIcon } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatIconModule} from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpLoaderFactory } from '../app.module';
+import { HttpClient } from '@angular/common/http';
 // import { TagInputModule } from 'ngx-chips';
 @NgModule({
   declarations: [
@@ -24,8 +27,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatIconModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatFormFieldModule
-    
+    MatFormFieldModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ]
 })
 export class TherapistModule { }
