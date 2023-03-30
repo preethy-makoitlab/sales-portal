@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatepickerModule, DatepickerOptions } from 'ng2-datepicker';
+import { dateToddMMYYYY } from 'src/app/common/utils/utils';
 
 @Component({
   selector: 'app-add',
@@ -68,8 +69,8 @@ export class AddComponent {
     scrollBarColor: '#010001',
     placeholder: 'DD-MM-YYYY'
   };
-  
 
+  
   submit(form: any) {
     console.log(form.value);
     console.log(this.partner);
@@ -99,6 +100,16 @@ export class AddComponent {
 
   previous() {
     this.gotonext = false;
+  }
+
+  setEndDate() {
+    if(this.partner.startDate) {
+      var start = new Date(this.partner.startDate);
+      var end = new Date(start);
+      end.setFullYear(start.getFullYear() + this.partner.planDuration);
+      this.partner.endDate = dateToddMMYYYY(end);
+      console.log(start, end);
+    }
   }
 
 }

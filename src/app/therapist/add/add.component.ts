@@ -66,7 +66,10 @@ export class AddComponent {
       ifSlot2: false,
       slot2Start: '',
       slot2End: ''
-    },
+    }
+  ]
+
+  extra : any[] = [
     {
       day: 'monfri',
       slot1Start: '',
@@ -229,33 +232,36 @@ export class AddComponent {
     console.log(this.therapist)
     console.log(form.value)
 
-    if(this.availability[8].slot1Start){
-      var temp = this.availability.slice(0,7);
-      temp.forEach((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
-        day.slot1Start = this.availability[8].slot1Start;
-        day.slot1End = this.availability[8].slot1End;
-        if(this.availability[8].ifSlot2 == true) {
+    if(this.extra[1].slot1Start){
+      this.availability.forEach((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+        day.slot1Start = this.extra[1].slot1Start;
+        day.slot1End = this.extra[1].slot1End;
+        if(this.extra[1].ifSlot2 == true) {
           day.ifSlot2 = true;
-          day.slot2Start = this.availability[8].slot2Start;
-          day.slot2End = this.availability[8].slot2End;
+          day.slot2Start = this.extra[1].slot2Start;
+          day.slot2End = this.extra[1].slot2End;
         }
       })
     }
-    else if(this.availability[7].slot1Start) {
-      var temp = this.availability.slice(0,5); 
-      temp.forEach((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
-        day.slot1Start = this.availability[7].slot1Start;
-        day.slot1End = this.availability[7].slot1End;
-        if(this.availability[7].ifSlot2 == true) {
+    else if(this.extra[0].slot1Start) {
+      var flag = true;
+      this.availability.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }, index: number) => {
+        day.slot1Start = this.extra[0].slot1Start;
+        day.slot1End = this.extra[0].slot1End;
+        if(this.extra[0].ifSlot2 == true) {
           day.ifSlot2 = true;
-          day.slot2Start = this.availability[7].slot2Start;
-          day.slot2End = this.availability[7].slot2End;
+          day.slot2Start = this.extra[0].slot2Start;
+          day.slot2End = this.extra[0].slot2End;
         }
+        if(index > 3) {
+          flag = false;
+        }
+        return flag;
       })
     }
 
     console.log(this.availability);
-    // this.availability = this.availability.splice(7,9);
+    this.therapist.availability = this.availability;
     console.log(this.therapist);
   
     let req = this.therapist;
@@ -293,14 +299,26 @@ export class AddComponent {
     this.addSlot = true;
     if(!this.viewForm){
       var flag = true;
-      this.availability.every((item: { [x: string]: string; }, index: string | number) => {
-        console.log(item);
-        if(item['day'] == day){
-          this.availability[index].ifSlot2 = true;
-          flag = false
-        }
-        return flag;
-    })
+      if(day == 'monfri' || day == 'alldays') {
+        this.extra.every((item, index) => {
+          console.log(item);
+          if(item['day'] == day){
+            this.extra[index].ifSlot2 = true;
+            flag = false
+          }
+          return flag;
+      })
+      }
+      else{
+        this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+          console.log(item);
+          if(item['day'] == day){
+            this.availability[index].ifSlot2 = true;
+            flag = false
+          }
+          return flag;
+      })
+      }
     }
   }
 
@@ -308,20 +326,39 @@ export class AddComponent {
     this.addSlot = false;
     if(!this.viewForm) {
       var flag = true;
-      this.availability.every((item: { [x: string]: string; }, index: string | number) => {
-        console.log(item);
-        if(item['day'] == day){
-          this.availability[index].ifSlot2 = false;
-          flag = false
-        }
-        return flag;
+      if(day == 'monfri' || day == 'alldays') {
+        this.extra.every((item, index) => {
+          console.log(item);
+          if(item['day'] == day){
+            this.extra[index].ifSlot2 = false;
+            flag = false
+          }
+          return flag;
       })
+      }
+      else{
+        this.availability.every((item: { [x: string]: string; }, index: string | number) => {
+          console.log(item);
+          if(item['day'] == day){
+            this.availability[index].ifSlot2 = false;
+            flag = false
+          }
+          return flag;
+        })
+      }
     }
   }
 
   reset() {
-    console.log(this.availability);
+    console.log(this.availability, this.extra);
     this.availability.forEach((day: { slot1Start: string; slot1End: string; ifSlot2: boolean; slot2Start: string; slot2End: string; }) => {
+      day.slot1Start = '';
+      day.slot1End = '',
+      day.ifSlot2 = false;
+      day.slot2Start = '';
+      day.slot2End = '';
+    })
+    this.extra.forEach((day: { slot1Start: string; slot1End: string; ifSlot2: boolean; slot2Start: string; slot2End: string; }) => {
       day.slot1Start = '';
       day.slot1End = '',
       day.ifSlot2 = false;
@@ -388,8 +425,7 @@ export class AddComponent {
         console.log(value);
         this.viewForm = true;
         this.therapist = value;
-        const array: any[] = JSON.parse(JSON.stringify(value.availability));
-        // this.availability = value.availability;
+        const array = JSON.parse(JSON.stringify(value.availability));
         this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
         this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
         this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
@@ -406,10 +442,7 @@ export class AddComponent {
 
         console.log(slot1Start, slot1End, slot2Start, slot2End);  
         
-        var temp = array.splice(1,7);
-        console.log(temp); 
-        
-        temp.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+        value.availability.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
           console.log(day);
           if(day.slot1Start == slot1Start && day.slot1End == slot1End) {
             if(value.availability[0].ifSlot2 == true){
@@ -431,20 +464,22 @@ export class AddComponent {
         })
 
         console.log(count);
-        if(count == 6) {
+        if(count == 7) {
           console.log('alldays')
-          this.availability[8] = value.availability[0];
-          this.availability[8].day = "alldays";
+          this.extra[1] = array[0];
+          this.extra[1].day = "alldays";
+          console.log(this.extra, this.availability, value.availability, array);
         }
-        else if(count == 4){
+        else if(count == 5){
           console.log('monfri')
-          this.availability[7] = value.availability[0];
-          this.availability[7].day = "mon-fri";
+          this.extra[0] = array[0];
+          this.extra[0].day = "monfri";
+          console.log(this.extra, this.availability, value.availability, array);
         }
         else{
           this.availability = value.availability;
         }
-        console.log(array);
+        
         console.log(this.availability);
 
         if(value.status == 'inactive') {

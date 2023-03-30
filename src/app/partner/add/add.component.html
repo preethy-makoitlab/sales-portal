@@ -135,7 +135,7 @@
                 <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
                 <div class="flex justify-end w-full">
                     <button *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [disabled]="!addCompanyForm.valid">Create and Close</button>
-                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" [disabled]="!addCompanyForm.valid" (click)="next()">Create Partner and Proceed to Add Subscription</button>
+                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" (click)="next()">Create Partner and Proceed to Add Subscription</button>
                 </div>
             </div>
         </form>
@@ -166,10 +166,10 @@
                     </div>
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
-                            <label class="form-label required">Subscription End Date</label>
+                            <label class="form-label required">Subscription Start Date</label>
                             <div class="flex flex-row justify-between gap-1 px-1 border rounded-md border-solid border-{#c4c4c4}">
                                 <!-- <input class="input small-text noborder" placeholder="DD / MM / YYYY" [(ngModel)]="partner.startDate" disabled/> -->
-                                <ngx-datepicker name="startdate" [(ngModel)]="partner.startDate" [options]="options" ngModel required></ngx-datepicker>
+                                <ngx-datepicker name="startdate" [(ngModel)]="partner.startDate" [options]="options" (click)="setEndDate()" ngModel required></ngx-datepicker>
                                 <img class="calendar-icon" src="../../../assets/icons/calendar.svg">
                             </div>
                         </div>
