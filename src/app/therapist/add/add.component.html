@@ -55,8 +55,17 @@
                 [(ngModel)]="therapist.contactNo" ngModel required [disabled]="viewForm" />
             </div>
           </div>
-          <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-            <div class="flex-auto">
+          <div class="flex flex-row items-center justify-between md:gap-4 lg:gap-4 sm:gap-2">
+            <div class="flex-auto w-1/2">
+              <label class="form-label required">Qualifications</label>
+              <select2 [data]="qualifications" [value]="qualificationString" multiple="true" (update)="updateQualification($event)"> </select2>
+            </div>
+            <div class="flex-auto w-1/2">
+              <label class="form-label required">Areas of Expertise</label>
+              <select2 [data]="expertise" multiple="true" [value]="areaOfExpertiseString" (update)="updateExpertise($event)"> </select2>
+            </div>
+            
+            <!-- <div class="flex-auto">
               <label class="form-label required">Qualifications</label>
               <app-tags-input [list]="[]" [placeholder]="getPlaceholder('Qualifications')"
                 (tags)="setQualifications($event)"></app-tags-input>
@@ -65,7 +74,7 @@
               <label class="form-label required">Areas of Expertise</label>
               <app-tags-input [list]="[]" [placeholder]="getPlaceholder('Areas of Expertise')"
                 (tags)="setAreasOfExpertise($event)"></app-tags-input>
-            </div>
+            </div> -->
           </div>
           <div class="divider"></div>
 

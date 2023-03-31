@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatepickerModule, DatepickerOptions } from 'ng2-datepicker';
 import { dateToddMMYYYY } from 'src/app/common/utils/utils';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 import { PartnerService } from 'src/app/services/partner.service';
 
 @Component({
@@ -14,11 +15,16 @@ export class AddComponent {
 
   gotonext: boolean = false;
   addCompanyForm!: FormGroup;
-  steppertitle1: string = "Partner Information"
-  steppertitle2: string = "Subsription"
+  steppertitle1: string = "Partner Information";
+  steppertitle2: string = "Subsription";
+  partnerId: string = "";
+  endDate!: Date;
+  partnerSector: any[] = [];
+  noOfSubscriptions: any[] = []
 
   constructor(private router: Router,
     private partnerService: PartnerService,
+    private masterdataService : MasterdataService,
     private formBuilder: FormBuilder) {
       this.addCompanyForm = this.formBuilder.group({
         companyname: ['', Validators.required],
@@ -57,11 +63,20 @@ export class AddComponent {
     isProfitable: false,
     spocDetails: this.spoc,
     status: "active",
+    // noOfSubscriptions: "",
+    // noOfSessions: "",
+    // planDuration: 0,
+    // startDate: "",
+    // endDate: ""
+  }
+
+  subscription: any = {
+    partnerId: "",
     noOfSubscriptions: "",
-    noOfSessions: "",
+    noOfSessions: 0,
     planDuration: 0,
-    startDate: "",
-    endDate: ""
+    subscriptionStart: "",
+    subscriptionEnd: ""
   }
 
   // date = new Date();
@@ -81,12 +96,31 @@ export class AddComponent {
     this.partnerService.createPartner(req).subscribe({
       next: (value) => {
         console.log(value);
-        // this.router.navigate(['/partner']);
+        this.partnerId = value.partnerId;
+        console.log(this.partnerId)
+        this.router.navigate(['/partner']);
       },
       error: (err) => {
         console.log(err);
       }
     })
+  }
+
+  submitAndSubscribe(form: any) {
+    console.log(form.value);
+    console.log(this.subscription);
+    this.subscription.partnerId = this.partnerId;
+    this.subscription.subscriptionEnd = this.endDate;
+    let req = this.subscription;
+    this.partnerService.createSubscription(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.router.navigate(['/partner']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })    
   }
 
   addSpoc() {
@@ -105,8 +139,9 @@ export class AddComponent {
     console.log(this.spoc);
   }
 
-  next() {
+  next(form: any) {
     this.gotonext = true;
+    this.submit(form);
   }
 
   previous() {
@@ -114,13 +149,46 @@ export class AddComponent {
   }
 
   setEndDate() {
-    if(this.partner.startDate) {
-      var start = new Date(this.partner.startDate);
+    if(this.subscription.subscriptionStart) {
+      var start = new Date(this.subscription.subscriptionStart);
       var end = new Date(start);
-      end.setFullYear(start.getFullYear() + this.partner.planDuration);
-      this.partner.endDate = dateToddMMYYYY(end);
+      end.setFullYear(start.getFullYear() + this.subscription.planDuration);
+      this.endDate = end;
+      this.subscription.subscriptionEnd = dateToddMMYYYY(end);
       console.log(start, end);
     }
+  }
+
+  loadMasterData() {
+    this.masterdataService.masterDataList().subscribe({
+      next: (masterdata) => {
+        console.log(masterdata);
+        masterdata.forEach((master: { category: string; masterData: any[]; }) => {
+          if(master.category == 'PartnerSectors'){
+            master.masterData.forEach(data => {
+              if(data.status == 'active'){
+                this.partnerSector.push(data.data);
+              }
+            })
+          }
+
+          if(master.category == 'NoOfSubscriptions'){
+            master.masterData.forEach(data => {
+              if(data.status == 'active'){
+                this.noOfSubscriptions.push(data.data);
+              }
+            })
+          }
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  ngOnInit(): void {
+    this.loadMasterData()
   }
 
 }

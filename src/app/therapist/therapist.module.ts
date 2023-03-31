@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { Select2Module } from 'ng-select2-component';
 // import { TagInputModule } from 'ngx-chips';
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { HttpClient } from '@angular/common/http';
     MatAutocompleteModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    Select2Module,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

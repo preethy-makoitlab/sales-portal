@@ -37,11 +37,9 @@
                             <label class="form-label required">Partner Sector</label>
                             <select class="select select-md title-select" name="companysector" [(ngModel)]="partner.companySector" ngModel required >
                                 <option value="" disabled selected>Select here</option>
-                                <option value="agriculture">Agriculture</option>
-                                <option value="airlines">Airlines</option>
-                                <option value="bank">Bank - Private</option>
-                                <option value="bpo">BPO/iTeS</option>
-                                <option value="carbonblack">Carbon Black</option>
+                                <option *ngFor="let option of partnerSector">
+                                    {{option}}
+                                </option>
                             </select>
                         </div>
                         <div class="flex-auto">
@@ -135,33 +133,31 @@
                 <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
                 <div class="flex justify-end w-full">
                     <button *ngIf="!gotonext" class="btn btn-primary btn-block enable-button" [disabled]="!addCompanyForm.valid">Create and Close</button>
-                    <button *ngIf="!gotonext" type="button" class="btn btn-primary btn-bigger" (click)="next()">Create Partner and Proceed to Add Subscription</button>
+                    <button *ngIf="!gotonext" class="btn btn-primary btn-bigger" [disabled]="!addCompanyForm.valid" (click)="next(addCompanyForm)">Create Partner and Proceed to Add Subscription</button>
                 </div>
             </div>
         </form>
 
-        <form #addSubscriptionForm="ngForm" (ngSubmit)="submit(addSubscriptionForm)">
+        <form #addSubscriptionForm="ngForm" (ngSubmit)="submitAndSubscribe(addSubscriptionForm)">
             <div [hidden]="!gotonext">
                 <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label required">Number of Subscriptions</label>
-                            <select class="select select-md title-select" name="subscriptionsnum" [(ngModel)]="partner.noOfSubscriptions" ngModel required>
+                            <select class="select select-md title-select" name="subscriptionsnum" [(ngModel)]="subscription.noOfSubscriptions" ngModel required>
                                 <option value="" disabled selected>Select here</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                                <option value="1000">1000</option>
-                                <option value="1500+">1500 and Above</option>
+                                <option *ngFor="let option of noOfSubscriptions">
+                                    {{option}}
+                                </option>
                             </select>
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Number of Therapy Sessions</label>
-                            <input class="input small-text" name="sessionsnum" placeholder="Enter no. of therapy sessions" [(ngModel)]="partner.noOfSessions" ngModel required/>
+                            <input type="number" class="input small-text" name="sessionsnum" placeholder="Enter no. of therapy sessions" [(ngModel)]="subscription.noOfSessions" ngModel required/>
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Plan Duration(yr)</label>
-                            <input type="number" class="input small-text" name="planduration" placeholder="Enter duration" [(ngModel)]="partner.planDuration" ngModel required/>
+                            <input type="number" class="input small-text" name="planduration" placeholder="Enter duration" [(ngModel)]="subscription.planDuration" ngModel required/>
                         </div>
                     </div>
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
@@ -169,14 +165,14 @@
                             <label class="form-label required">Subscription Start Date</label>
                             <div class="flex flex-row justify-between gap-1 px-1 border rounded-md border-solid border-{#c4c4c4}">
                                 <!-- <input class="input small-text noborder" placeholder="DD / MM / YYYY" [(ngModel)]="partner.startDate" disabled/> -->
-                                <ngx-datepicker name="startdate" [(ngModel)]="partner.startDate" [options]="options" (click)="setEndDate()" ngModel required></ngx-datepicker>
+                                <ngx-datepicker name="startdate" [(ngModel)]="subscription.subscriptionStart" [options]="options" (click)="setEndDate()" ngModel required></ngx-datepicker>
                                 <img class="calendar-icon" src="../../../assets/icons/calendar.svg">
                             </div>
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Subscription End Date</label>
                             <div class="flex flex-row justify-between gap-1 px-1 border rounded-md border-solid border-{#c4c4c4}">
-                                <input class="input small-text noborder" name="enddate" placeholder="DD / MM / YYYY" [(ngModel)]="partner.endDate" ngModel disabled/>
+                                <input class="input small-text noborder" name="enddate" placeholder="DD / MM / YYYY" [(ngModel)]="subscription.subscriptionEnd" ngModel disabled/>
                                 <img class="calendar-icon" src="../../../assets/icons/calendar.svg">
                             </div>
                         </div>

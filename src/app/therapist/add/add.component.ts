@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
+import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 @Component({
   selector: 'app-add',
@@ -88,6 +90,9 @@ export class AddComponent {
     }
   ]
 
+  qualifications: Select2Data = []
+  expertise: Select2Data = [];
+
   therapist: any = {
     u_id: "01",
     title: "",
@@ -95,9 +100,9 @@ export class AddComponent {
     lastName: "",
     email: "",
     contactNo: "",
-    qualification: [""],
+    qualification: this.qualifications,
     yearsOfExperience: "",
-    areaOfExpertise: [""],
+    areaOfExpertise: this.expertise,
     availability: this.availability,
     bio: "",
     isFlexibleWithTiming: false,
@@ -142,13 +147,12 @@ export class AddComponent {
   video: any;
   chat: any;
 
-  selectedTag: { category: string; } | undefined;
-  items = [];
-
-  itemsAsObjects = [];
+  qualificationString: string[] = [];
+  areaOfExpertiseString: string[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private therapistService: TherapistService,
+    private masterdataService: MasterdataService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
     this.addTherapistForm = this.formBuilder.group({
@@ -170,24 +174,14 @@ export class AddComponent {
     console.log(areasOfExpertise);
   }
 
-  autocompleteItems = [
-    { value: 3, display: 'Item3' },
-    { value: 4, display: 'Item4' },
-    { value: 5, display: 'Item5' },
-    { value: 6, display: 'Item6' },
-    { value: 7, display: 'Item7' },
-    { value: 8, display: 'Item8' },
-    { value: 9, display: 'Item9' },
-    { value: 10, display: 'Item10' },
-    { value: 11, display: 'Item11' },
-    { value: 12, display: 'Item12' },
-    { value: 13, display: 'Item13' },
-    { value: 14, display: 'Item14' }
-  ];
+  updateQualification(event: Select2UpdateEvent<any>) {
+    this.qualificationString = event.value;
+    console.log(this.qualificationString)
+  }
 
-
-  public onInputFocused(event: any) {
-    console.log('focused', event, this.itemsAsObjects);
+  updateExpertise(event: Select2UpdateEvent<any>) {
+    this.areaOfExpertiseString = event.value;
+    console.log(this.areaOfExpertiseString)
   }
 
   getPlaceholder(category: string) {
@@ -262,6 +256,20 @@ export class AddComponent {
 
     console.log(this.availability);
     this.therapist.availability = this.availability;
+
+    let tempQualifications: string[] = [];
+    (this.qualifications as any[]).forEach(data => {
+      tempQualifications.push(String(data.value));
+    })
+
+    let tempExpertise: string[] = [];
+    (this.expertise as any[]).forEach(data => {
+      tempExpertise.push(String(data.value));
+    })
+
+    this.therapist.areaOfExpertise = tempExpertise;
+    console.log(tempExpertise, tempQualifications);
+
     console.log(this.therapist);
   
     let req = this.therapist;
@@ -493,6 +501,42 @@ export class AddComponent {
 
   }
 
+  loadMasterData() {  
+    this.masterdataService.masterDataList().subscribe({
+      next: (masterdata) => {
+        console.log(masterdata);
+        masterdata.forEach((master: { category: string; masterData: any[]; }) => {
+          if(master.category == 'Qualifications'){
+            master.masterData.forEach(data => {
+              if(data.status == 'active'){
+                let obj = {
+                  value: data.data,
+                  label: data.data
+                }
+                this.qualifications.push(obj);
+              }
+            })
+          }
+
+          if(master.category == 'AreasOfExpertise'){
+            master.masterData.forEach(data => {
+              if(data.status == 'active'){
+                let obj = {
+                  value: data.data,
+                  label: data.data
+                }
+                this.expertise.push(obj);
+              }
+            })
+          }
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   ngOnInit(): void {
 
     if(this.activatedRoute.snapshot.params){
@@ -502,6 +546,8 @@ export class AddComponent {
        this.populate(value)
       }
     }
+
+    this.loadMasterData();
   }
 
 }
