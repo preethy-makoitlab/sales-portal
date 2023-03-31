@@ -90,8 +90,8 @@ export class AddComponent {
     }
   ]
 
-  qualifications: Select2Data = []
-  expertise: Select2Data = [];
+  qualificationString: string[] = [];
+  areaOfExpertiseString: string[] = [];
 
   therapist: any = {
     u_id: "01",
@@ -100,9 +100,9 @@ export class AddComponent {
     lastName: "",
     email: "",
     contactNo: "",
-    qualification: this.qualifications,
+    qualification: [],
     yearsOfExperience: "",
-    areaOfExpertise: this.expertise,
+    areaOfExpertise: [],
     availability: this.availability,
     bio: "",
     isFlexibleWithTiming: false,
@@ -147,8 +147,8 @@ export class AddComponent {
   video: any;
   chat: any;
 
-  qualificationString: string[] = [];
-  areaOfExpertiseString: string[] = [];
+  qualifications: Select2Data = []
+  expertise: Select2Data = [];
 
   constructor(private formBuilder: FormBuilder,
     private therapistService: TherapistService,
@@ -175,13 +175,11 @@ export class AddComponent {
   }
 
   updateQualification(event: Select2UpdateEvent<any>) {
-    this.qualificationString = event.value;
-    console.log(this.qualificationString)
+    this.therapist.qualification = event.value;
   }
 
   updateExpertise(event: Select2UpdateEvent<any>) {
-    this.areaOfExpertiseString = event.value;
-    console.log(this.areaOfExpertiseString)
+    this.therapist.areaOfExpertise = event.value;
   }
 
   getPlaceholder(category: string) {
@@ -256,20 +254,6 @@ export class AddComponent {
 
     console.log(this.availability);
     this.therapist.availability = this.availability;
-
-    let tempQualifications: string[] = [];
-    (this.qualifications as any[]).forEach(data => {
-      tempQualifications.push(String(data.value));
-    })
-
-    let tempExpertise: string[] = [];
-    (this.expertise as any[]).forEach(data => {
-      tempExpertise.push(String(data.value));
-    })
-
-    this.therapist.areaOfExpertise = tempExpertise;
-    console.log(tempExpertise, tempQualifications);
-
     console.log(this.therapist);
   
     let req = this.therapist;
@@ -489,7 +473,6 @@ export class AddComponent {
         }
         
         console.log(this.availability);
-
         if(value.status == 'inactive') {
           this.isDisabled = true;
         }
@@ -510,7 +493,7 @@ export class AddComponent {
             master.masterData.forEach(data => {
               if(data.status == 'active'){
                 let obj = {
-                  value: data.data,
+                  value: data.data.toString(),
                   label: data.data
                 }
                 this.qualifications.push(obj);
@@ -522,7 +505,7 @@ export class AddComponent {
             master.masterData.forEach(data => {
               if(data.status == 'active'){
                 let obj = {
-                  value: data.data,
+                  value: String(data.data),
                   label: data.data
                 }
                 this.expertise.push(obj);
