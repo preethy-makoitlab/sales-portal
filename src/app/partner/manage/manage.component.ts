@@ -46,7 +46,7 @@ export class ManageComponent {
           var partnerId = d.partnerId;
           var city = d.city;
           var state = d.state
-          var data = [[partnerName, partnerId], city, state, '', '', '', ''];
+          var data = [[partnerName, partnerId], city, state, '100 / 500', '10 / 50', ['03-04-2022', '03-04-2025'] , '03-04-2025'];
           partnerData.id = _id;
           partnerData.data = data;
           partnerData.isDisabled = d.status == 'inactive' ? true : false;
