@@ -1,17 +1,26 @@
 <nav class="menu bg-gray-2 p-4 rounded-md">
 	<section class="menu-section">
-		<img src="../../../assets/images/logo.svg" alt="image" class="horizontal-separator pb-2" [routerLink]="['/']">
+		<div *ngIf="!isCollapsed" class="flex justify-center">
+			<img src="../../../assets/images/logo.svg" alt="image" class="horizontal-separator mb-8 pb-2 w-3/5" [routerLink]="['/']">
+		</div>
+		<div *ngIf="isCollapsed" class="flex justify-center">
+			<img src="../../../assets/icons/anyo-icon.svg" alt="image" class="horizontal-separator mb-8 pb-2" [routerLink]="['/']">
+		</div>
+		<div>   
+			<img src="../../../assets/icons/collapse-icon.svg" [ngClass]="isCollapsed ? 'position-collapsed' : 'position-expanded'" (click)="collapse()"/>
+		</div>
+	
 		<ul class="menu-items">
 			<li class="menu-item" [routerLink]="['/']">
 				<img src="../../../assets/icons/dashboard.svg">
-				<span>Dashboard</span>
+				<span *ngIf="!isCollapsed">Dashboard</span>
 			</li>
 			<li>
 				<input type="checkbox" id="menu-1" class="menu-toggle" />
 				<label class="menu-item" for="menu-1">
 					<img src="../../../assets/icons/therapist.svg">
-					<span>Therapist</span>
-					<span class="menu-icon mr-0 ml-auto">
+					<span *ngIf="!isCollapsed">Therapist</span>
+					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 						</svg> -->
@@ -21,7 +30,7 @@
 					</span>
 				</label>
 				<div class="menu-item-collapse">
-					<div class="min-h-0">
+					<div *ngIf="!isCollapsed" class="min-h-0">
 						<label class="menu-item ml-6" [routerLink]="['/therapist']">Manage Therapists</label>
 						<label class="menu-item ml-6">Manage Appointments</label>
 					</div>
@@ -31,8 +40,8 @@
 				<input type="checkbox" id="menu-2" class="menu-toggle" />
 				<label class="menu-item" for="menu-2">
 					<img src="../../../assets/icons/listener.svg">
-					<span>Listeners</span>
-					<span class="menu-icon mr-0 ml-auto">
+					<span *ngIf="!isCollapsed">Listeners</span>
+					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 						</svg> -->
@@ -41,7 +50,7 @@
 						</svg>			
 					</span>
 				</label>
-				<div class="menu-item-collapse">
+				<div *ngIf="!isCollapsed" class="menu-item-collapse">
 					<div class="min-h-0">
 						<label class="menu-item ml-6">Manage Listeners</label>
 						<label class="menu-item ml-6">Manage Appointments</label>
@@ -52,8 +61,8 @@
 				<input type="checkbox" id="menu-3" class="menu-toggle" />
 				<label class="menu-item" for="menu-3">
 					<img src="../../../assets/icons/content.svg">
-					<span>Content Library</span>
-					<span class="menu-icon mr-0 ml-auto">
+					<span *ngIf="!isCollapsed">Content Library</span>
+					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 						</svg> -->
@@ -62,7 +71,7 @@
 						</svg>			
 					</span>
 				</label>
-				<div class="menu-item-collapse">
+				<div *ngIf="!isCollapsed" class="menu-item-collapse">
 					<div class="min-h-0">
 						<label class="menu-item ml-6">Manage Content</label>
 					</div>
@@ -72,8 +81,8 @@
 				<input type="checkbox" id="menu-4" class="menu-toggle" />
 				<label class="menu-item" for="menu-4">
 					<img src="../../../assets/icons/corporate.svg">
-					<span>Corporates</span>
-					<span class="menu-icon mr-0 ml-auto">
+					<span *ngIf="!isCollapsed">Partners</span>
+					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 						</svg> -->
@@ -82,9 +91,9 @@
 						</svg>			
 					</span>
 				</label>
-				<div class="menu-item-collapse">
+				<div *ngIf="!isCollapsed" class="menu-item-collapse">
 					<div class="min-h-0">
-						<label class="menu-item ml-6">Manage Users</label>
+						<label class="menu-item ml-6" [routerLink]="['/partner']">Manage Partners</label>
 					</div>
 				</div>
 			</li>
