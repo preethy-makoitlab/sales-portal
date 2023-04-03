@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatepickerModule, DatepickerOptions } from 'ng2-datepicker';
 import { dateToddMMYYYY } from 'src/app/common/utils/utils';
 import { MasterdataService } from 'src/app/services/masterdata.service';
 import { PartnerService } from 'src/app/services/partner.service';
+import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 
 @Component({
   selector: 'app-add',
@@ -19,12 +20,22 @@ export class AddComponent {
   steppertitle2: string = "Subsription";
   partnerId: string = "";
   endDate!: Date;
+  viewForm: boolean = false;
+  isDisabled: boolean = false;
+  editMode: boolean = false;
+  isSubscription: boolean = false;
+  isAlert: boolean = false;
+  alertHeaderDisable: string = "Partner Disable"
+  alertBodyDisable: string = "Please make sure that you want to disable the partner"
+  alertHeaderEnable: string = "Partner Enable"
+  alertBodyEnable: string = "Please make sure that you want to enable the partner"
   partnerSector: any[] = [];
   noOfSubscriptions: any[] = []
 
   constructor(private router: Router,
     private partnerService: PartnerService,
     private masterdataService : MasterdataService,
+    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
       this.addCompanyForm = this.formBuilder.group({
         companyname: ['', Validators.required],
@@ -85,7 +96,7 @@ export class AddComponent {
     calendarClass: 'datepicker-default',
     format: 'dd/MM/yyyy',
     scrollBarColor: '#010001',
-    placeholder: 'DD-MM-YYYY'
+    placeholder: 'DD-MM-YYYY',
   };
 
   
@@ -93,17 +104,31 @@ export class AddComponent {
     console.log(form.value);
     console.log(this.partner);
     let req = this.partner;
-    this.partnerService.createPartner(req).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.partnerId = value.partnerId;
-        console.log(this.partnerId)
-        this.router.navigate(['/partner']);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    if(this.editMode){
+      let _id = String(this.activatedRoute.snapshot.params['id']);
+      this.partnerService.updatePartner(_id, req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/partner']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.partnerService.createPartner(req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.partnerId = value.partnerId;
+          console.log(this.partnerId)
+          this.router.navigate(['/partner']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   submitAndSubscribe(form: any) {
@@ -148,6 +173,52 @@ export class AddComponent {
     this.gotonext = false;
   }
 
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
+  dialogShow() {
+    this.isAlert = !this.isAlert;
+  }
+
+  disablePartner() {
+    let req = {
+       'status' : 'inactive'
+    };
+    this.partner.status = 'inactive';
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.partnerService.updatePartner(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+
+  enablePartner() {
+    let req = {
+       'status' : 'active'
+    };
+    this.partner.status = 'active';
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.partnerService.updatePartner(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = false;
+  }
+
+
   setEndDate() {
     if(this.subscription.subscriptionStart) {
       var start = new Date(this.subscription.subscriptionStart);
@@ -157,6 +228,39 @@ export class AddComponent {
       this.subscription.subscriptionEnd = dateToddMMYYYY(end);
       console.log(start, end);
     }
+  }
+
+  fetchSubscription() {
+    this.gotonext = true; 
+    this.partnerService.getSubscription(this.partnerId).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.subscription = value;
+        this.subscription.subscriptionStart = new Date(value.subscriptionStart);
+        this.subscription.subscriptionEnd = isoToDDMMYYYY(value.subscriptionEnd);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  populate(_id: string) {
+    this.partnerService.getPartner(_id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.viewForm = true;
+        this.partner = value;
+        this.spoc = value.spocDetails;
+        this.partnerId = value.partnerId;
+        if(value.status == 'inactive') {
+          this.isDisabled = true;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   loadMasterData() {
@@ -188,6 +292,15 @@ export class AddComponent {
   }
 
   ngOnInit(): void {
+
+    if(this.activatedRoute.snapshot.params){
+      console.log(this.activatedRoute.snapshot.params);
+      let value = this.activatedRoute.snapshot.params['id'];
+      if(value){
+       this.populate(value)
+      }
+    }
+
     this.loadMasterData()
   }
 

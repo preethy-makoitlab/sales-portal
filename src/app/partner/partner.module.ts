@@ -10,12 +10,14 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
 import { DatepickerModule } from 'ng2-datepicker';
+import { AddMemberComponent } from './add-member/add-member.component';
 
 
 @NgModule({
   declarations: [
     AddComponent,
-    ManageComponent
+    ManageComponent,
+    AddMemberComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,60 @@
+<div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
+    <div class="flex flex-wrap w-1/4 justify-start">
+      <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+      <h1 class="header-text">Add Member</h1>
+    </div>
+</div>
+
+<div class="custom-card">
+    <div class="card-body">
+  
+        <form #addMemberForm="ngForm" (ngSubmit)="submit(addMemberForm)">
+                <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+
+                    <div class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/partner']">
+                            <div>
+                                <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                            </div>
+                            <div>
+                                <span class="">Add Bulk Members</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Name</label>
+                            <input class="input small-text" name="membername" placeholder="Enter Member Name" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Member Code</label>
+                            <input class="input small-text" name="membercode" placeholder="Enter Member Code" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Email ID</label>
+                            <input class="input small-text" name="email" placeholder="Enter e-mail" ngModel required/>
+                        </div>
+                    </div>
+        
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label">Department Name</label>
+                            <input class="input small-text" name="deptname" placeholder="Enter Dept Name" ngModel />
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label">Branch</label>
+                            <input class="input small-text" name="branch" placeholder="Enter Branch" ngModel />
+                        </div>
+                    </div>
+                </div>
+
+            <div class="flex justify-between mt-8">
+                <div class="flex justify-end w-full">
+                    <button type="button" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
+                    <button class="btn btn-primary btn-bigger" [disabled]="!addMemberForm.valid">Create Member</button>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
