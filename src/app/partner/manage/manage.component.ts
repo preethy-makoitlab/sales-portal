@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
 import { PartnerService } from 'src/app/services/partner.service';
+import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 
 @Component({
   selector: 'app-manage',
@@ -39,17 +40,21 @@ export class ManageComponent {
     this.partnerService.partnerList().subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { id: any; companyName: any; partnerId: any; city: any; state: any; status: string; }) => {
+        value.forEach((d: { partner: { id: any; companyName: any; partnerId: any; city: any; state: any; status: string; }; subscription: { noOfSubscriptions: string; noOfSessions: string; subscriptionStart: string; subscriptionEnd: string; }; }) => {
           var partnerData: any = {};
-          var _id = d.id;
-          var partnerName = d.companyName;
-          var partnerId = d.partnerId;
-          var city = d.city;
-          var state = d.state
-          var data = [[partnerName, partnerId], city, state, '100 / 500', '10 / 50', ['03-04-2022', '03-04-2025'] , '03-04-2025'];
+          var _id = d.partner.id;
+          var partnerName = d.partner.companyName;
+          var partnerId = d.partner.partnerId;
+          var city = d.partner.city;
+          var state = d.partner.state
+          var noSubscriptions = (d.subscription?.noOfSubscriptions ? "0 / " + d.subscription?.noOfSubscriptions : "");
+          var noSessions = (d.subscription?.noOfSessions ? "0 / " + d.subscription?.noOfSessions : ""); 
+          var startDate = (d.subscription?.subscriptionStart ? isoToDDMMYYYY(d.subscription?.subscriptionStart) : "");
+          var endDate = (d.subscription?.subscriptionEnd ? isoToDDMMYYYY(d.subscription?.subscriptionEnd) : ""); 
+          var data = [[partnerName, partnerId], city, state, noSubscriptions, noSessions, [startDate, endDate] , endDate];
           partnerData.id = _id;
           partnerData.data = data;
-          partnerData.isDisabled = d.status == 'inactive' ? true : false;
+          partnerData.isDisabled = d.partner.status == 'inactive' ? true : false;
           this.tableData.push(partnerData);
         })
       },

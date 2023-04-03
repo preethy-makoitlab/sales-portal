@@ -268,7 +268,7 @@ export class AddComponent {
           console.log(err);
         }
       })
-    }
+    }  
     else {
       this.therapistService.createTherapist(req).subscribe({
         next: (value) => {
