@@ -2,32 +2,27 @@
     <div class="flex flex-row md:gap-3 items-center">
         <div class="flex flex-row flex-nowrap md:gap-3 items-center">
             <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
-            <h1 class="header-text md:break-keep">Manage Therapist</h1>
+            <h1 class="header-text md:break-keep">Manage Members</h1>
         </div>
         <div>
             <img class="separator" src="../../../assets/icons/separator.svg">
         </div>
         <div>
-            <h1 class="sub-header-text">{{totalCount}} Therapists</h1>
-        </div>
-        <div>
-            <img class="separator" src="../../../assets/icons/separator.svg">
-        </div>
-        <div>
-            <h1 class="sub-header-text">{{activeCount}} Active Therapists</h1>
+            <h1 class="sub-header-text">{{totalCount}} Members</h1>
         </div>
     </div>
     
     <!-- <div>
         <app-search></app-search>
     </div> -->
-    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/therapist/add']">
+    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/partner/addmember/'+partnerId]">
         <div>
             <img class="add-icon" src="../../../assets/icons/add-icon.svg">
         </div>
         <div>
-            <span class="">Add new therapist</span>
+            <span class="">Add new member</span>
         </div>
     </div>
 </div>
-<app-table [fields]="fields" [data]="tableData" (open)="mark($event)"></app-table>
+<app-table [fields]="fields" [data]="tableData"></app-table>
+

@@ -189,4 +189,30 @@ export class PartnerService {
     );
   }
 
+  public updateSubscription(
+    id:  String,
+    body?: Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+
+    console.log(id, body);
+    
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.basePath}/subscriptions/${id}`,
+      {
+        body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
 }

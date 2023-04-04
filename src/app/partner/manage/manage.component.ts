@@ -51,7 +51,85 @@ export class ManageComponent {
           var noSessions = (d.subscription?.noOfSessions ? "0 / " + d.subscription?.noOfSessions : ""); 
           var startDate = (d.subscription?.subscriptionStart ? isoToDDMMYYYY(d.subscription?.subscriptionStart) : "");
           var endDate = (d.subscription?.subscriptionEnd ? isoToDDMMYYYY(d.subscription?.subscriptionEnd) : ""); 
-          var data = [[partnerName, partnerId], city, state, noSubscriptions, noSessions, [startDate, endDate] , endDate];
+          var data = [
+            {
+              data: [partnerName, partnerId],
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: city,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: state,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: noSubscriptions,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: noSessions,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: [startDate, endDate],
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: endDate,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'view-eye.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: true,
+              route: '/partner/add/',
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: false,
+              isButton: true,
+              buttonLabel: 'Manage',
+              route: '/partner/managemember/'+partnerId,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            }
+          ]
+          // var data = [[partnerName, partnerId], city, state, noSubscriptions, noSessions, [startDate, endDate] , endDate];
           partnerData.id = _id;
           partnerData.data = data;
           partnerData.isDisabled = d.partner.status == 'inactive' ? true : false;
