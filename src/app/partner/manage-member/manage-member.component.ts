@@ -25,6 +25,7 @@ export class ManageMemberComponent {
   };
   tableData: any[] = [];
   isAlert: boolean = false;
+  show: boolean = false;
   memberId!: String;
   alertHeaderDisable: string = "Member Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the member"
@@ -44,6 +45,7 @@ export class ManageMemberComponent {
         console.log(value);
         this.isAlert = false;
         var flag = true;
+        this.show = true;
         this.tableData.every((data, index) => {
           if(data.id == this.memberId){
             flag = false;
@@ -51,12 +53,17 @@ export class ManageMemberComponent {
           }
           return flag;
         })
+        setTimeout(() => {
+          const element = document.querySelector('.gradual-fade');
+          element!.classList.add('hide');
+        }, 2000);
         console.log(this.tableData);
       },
       error: (err) => {
         console.log(err);
       }
     })
+    this.show = false;
   }
 
   call(id: String) {
