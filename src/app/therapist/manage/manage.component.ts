@@ -49,7 +49,83 @@ export class ManageComponent {
           var sessions = 0;
           var patients = 0;
           var rating = d.rating;
-          var data = [name, email, lastSeen, sessions, patients, rating]
+          var data = [
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'default-user.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: name,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: email,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: lastSeen,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: sessions,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: patients,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: rating,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'view-eye.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: true,
+              route: '/therapist/add/',
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: true
+            }
+          ]
           therapistData.id = _id;
           therapistData.data = data;
           therapistData.isAvailable = d.isAvailable;
@@ -57,6 +133,22 @@ export class ManageComponent {
           this.tableData.push(therapistData)
           console.log(this.tableData);
           })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  mark(data: any){
+    console.log(data);
+    var id = data.id;
+    var req = {
+      isAvailable: data.isAvailable
+    }
+    this.therapistService.updateTherapist(id, req).subscribe({
+      next: (value) => {
+        console.log(value);
       },
       error: (err) => {
         console.log(err);

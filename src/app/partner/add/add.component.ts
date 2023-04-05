@@ -19,6 +19,7 @@ export class AddComponent {
   steppertitle1: string = "Partner Information";
   steppertitle2: string = "Subsription";
   partnerId: string = "";
+  subscriptionId: string = "";
   endDate!: Date;
   viewForm: boolean = false;
   isDisabled: boolean = false;
@@ -31,6 +32,7 @@ export class AddComponent {
   alertBodyEnable: string = "Please make sure that you want to enable the partner"
   partnerSector: any[] = [];
   noOfSubscriptions: any[] = []
+  showDisable: boolean = false;
 
   constructor(private router: Router,
     private partnerService: PartnerService,
@@ -74,11 +76,6 @@ export class AddComponent {
     isProfitable: false,
     spocDetails: this.spoc,
     status: "active",
-    // noOfSubscriptions: "",
-    // noOfSessions: "",
-    // planDuration: 0,
-    // startDate: "",
-    // endDate: ""
   }
 
   subscription: any = {
@@ -101,7 +98,7 @@ export class AddComponent {
 
   
   submit(form: any) {
-    console.log(form.value);
+    console.log(form?.value);
     console.log(this.partner);
     let req = this.partner;
     if(this.editMode){
@@ -109,7 +106,9 @@ export class AddComponent {
       this.partnerService.updatePartner(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          this.router.navigate(['/partner']);
+          if(!this.gotonext){
+            this.router.navigate(['/partner']);
+          }
         },
         error: (err) => {
           console.log(err);
@@ -137,15 +136,28 @@ export class AddComponent {
     this.subscription.partnerId = this.partnerId;
     this.subscription.subscriptionEnd = this.endDate;
     let req = this.subscription;
-    this.partnerService.createSubscription(req).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.router.navigate(['/partner']);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })    
+    if(this.editMode){
+      this.partnerService.updateSubscription(this.subscriptionId, req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/partner']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else {
+      this.partnerService.createSubscription(req).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/partner']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })    
+    }
   }
 
   addSpoc() {
@@ -191,6 +203,7 @@ export class AddComponent {
     this.partnerService.updatePartner(_id, req).subscribe({
       next: (value) => {
         console.log(value);
+        this.router.navigate(['/partner']);
       },
       error: (err) => {
         console.log(err);
@@ -209,6 +222,7 @@ export class AddComponent {
     this.partnerService.updatePartner(_id, req).subscribe({
       next: (value) => {
         console.log(value);
+        this.router.navigate(['/partner']);
       },
       error: (err) => {
         console.log(err);
@@ -232,10 +246,12 @@ export class AddComponent {
 
   fetchSubscription() {
     this.gotonext = true; 
+    this.submit(null);
     this.partnerService.getSubscription(this.partnerId).subscribe({
       next: (value) => {
         console.log(value);
         this.subscription = value;
+        this.subscriptionId = value.id;
         this.subscription.subscriptionStart = new Date(value.subscriptionStart);
         this.subscription.subscriptionEnd = isoToDDMMYYYY(value.subscriptionEnd);
       },
@@ -250,6 +266,7 @@ export class AddComponent {
       next: (value) => {
         console.log(value);
         this.viewForm = true;
+        this.showDisable = true;
         this.partner = value;
         this.spoc = value.spocDetails;
         this.partnerId = value.partnerId;

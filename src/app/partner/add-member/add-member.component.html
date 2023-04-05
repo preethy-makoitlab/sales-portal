@@ -25,26 +25,26 @@
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label required">Name</label>
-                            <input class="input small-text" name="membername" placeholder="Enter Member Name" ngModel required/>
+                            <input class="input small-text" name="membername" placeholder="Enter Member Name" [(ngModel)]="member.name" ngModel required/>
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Member Code</label>
-                            <input class="input small-text" name="membercode" placeholder="Enter Member Code" ngModel required/>
+                            <input class="input small-text" name="membercode" placeholder="Enter Member Code" [(ngModel)]="member.memberId" ngModel required/>
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Email ID</label>
-                            <input class="input small-text" name="email" placeholder="Enter e-mail" ngModel required/>
+                            <input class="input small-text" name="email" placeholder="Enter e-mail" [(ngModel)]="member.email" ngModel required/>
                         </div>
                     </div>
         
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label">Department Name</label>
-                            <input class="input small-text" name="deptname" placeholder="Enter Dept Name" ngModel />
+                            <input class="input small-text" name="deptname" placeholder="Enter Dept Name" [(ngModel)]="member.department" ngModel />
                         </div>
                         <div class="flex-auto">
                             <label class="form-label">Branch</label>
-                            <input class="input small-text" name="branch" placeholder="Enter Branch" ngModel />
+                            <input class="input small-text" name="branch" placeholder="Enter Branch" [(ngModel)]="member.branch" ngModel />
                         </div>
                     </div>
                 </div>
