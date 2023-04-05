@@ -17,7 +17,11 @@ export class ManageComponent {
   
   totalCount: number = 0;
   activeCount: number = 0;
-  fields: any[] = ['', 'Therapist', 'EmailID', 'Last Active On', 'No of Sessions', 'No of Patients', 'Rating']
+  fields: any[] = ['', 'Therapist', 'EmailID', 'Last Active On', 'No of Sessions', 'No of Patients', 'Rating'];
+  actionField: Object = {
+    label: 'Actions',
+    colspan: '2'
+  };
   tableData: any[] = [];
 
   getCount() {
@@ -129,7 +133,7 @@ export class ManageComponent {
           therapistData.id = _id;
           therapistData.data = data;
           therapistData.isAvailable = d.isAvailable;
-          therapistData.isDisabled = d.status === Status.inactive ? true : false;
+          therapistData.isDisabled = d.status === Status.Inactive ? true : false;
           this.tableData.push(therapistData)
           console.log(this.tableData);
           })

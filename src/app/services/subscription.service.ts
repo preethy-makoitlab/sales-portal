@@ -4,77 +4,16 @@ import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
 import { environment } from '../../environments/environment.local';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class MemberService {
+export class SubscriptionService {
 
   protected basePath = environment.serviceUrl;
   constructor(protected httpClient: HttpClient) { }
 
-  public memberCount(
-    partnerId?: String,
-    observe: any = 'body',
-    numberOfRecords?: number,
-    page?: number,
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-    if (numberOfRecords !== undefined && numberOfRecords !== null) {
-      queryParameters = queryParameters.set(
-        'numberOfRecords',
-        <any>numberOfRecords
-      );
-    }
-    if (page !== undefined && page !== null) {
-      queryParameters = queryParameters.set('page', <any>page);
-    } 
-  
-    return this.httpClient.request<Object>(
-      'get',
-      `${this.basePath}/members/count/${partnerId}`,
-      {
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  public memberList(
-    partnerId: String,
-    observe: any = 'body',
-    numberOfRecords?: number,
-    page?: number,
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-    if (numberOfRecords !== undefined && numberOfRecords !== null) {
-      queryParameters = queryParameters.set(
-        'numberOfRecords',
-        <any>numberOfRecords
-      );
-    }
-    if (page !== undefined && page !== null) {
-      queryParameters = queryParameters.set('page', <any>page);
-    } 
-  
-    return this.httpClient.request<Object>(
-      'get',
-      `${this.basePath}/members/${partnerId}`,
-      {
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  public createMember(
+  public createSubscription(
     body?: Object,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -86,7 +25,7 @@ export class MemberService {
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.basePath}/members`,
+      `${this.basePath}/subscriptions`,
       {
         body: body,
         params: queryParameters,
@@ -96,7 +35,29 @@ export class MemberService {
     );
   }
 
-  public updateMember(
+  public getSubscription(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(id);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/subscriptions/partnerId/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public updateSubscription(
     id:  String,
     body?: Object,
     observe: any = 'body',
@@ -111,8 +72,8 @@ export class MemberService {
     console.log(id, body);
     
     return this.httpClient.request<Object>(
-      'patch',
-      `${this.basePath}/members/${id}`,
+      'post',
+      `${this.basePath}/subscriptions/${id}`,
       {
         body: body,
         params: queryParameters,

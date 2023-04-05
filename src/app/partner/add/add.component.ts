@@ -5,7 +5,9 @@ import { DatepickerModule, DatepickerOptions } from 'ng2-datepicker';
 import { dateToddMMYYYY } from 'src/app/common/utils/utils';
 import { MasterdataService } from 'src/app/services/masterdata.service';
 import { PartnerService } from 'src/app/services/partner.service';
+import { SubscriptionService } from 'src/app/services/subscription.service';
 import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
+import { Status } from 'src/app/stores/types';
 
 @Component({
   selector: 'app-add',
@@ -36,6 +38,7 @@ export class AddComponent {
 
   constructor(private router: Router,
     private partnerService: PartnerService,
+    private subscriptionService: SubscriptionService,
     private masterdataService : MasterdataService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
@@ -75,7 +78,7 @@ export class AddComponent {
     isListed: false,
     isProfitable: false,
     spocDetails: this.spoc,
-    status: "active",
+    // status: "active",
   }
 
   subscription: any = {
@@ -121,7 +124,9 @@ export class AddComponent {
           console.log(value);
           this.partnerId = value.partnerId;
           console.log(this.partnerId)
-          this.router.navigate(['/partner']);
+          if(!this.gotonext){
+            this.router.navigate(['/partner']);
+          }
         },
         error: (err) => {
           console.log(err);
@@ -137,7 +142,7 @@ export class AddComponent {
     this.subscription.subscriptionEnd = this.endDate;
     let req = this.subscription;
     if(this.editMode){
-      this.partnerService.updateSubscription(this.subscriptionId, req).subscribe({
+      this.subscriptionService.updateSubscription(this.subscriptionId, req).subscribe({
         next: (value) => {
           console.log(value);
           this.router.navigate(['/partner']);
@@ -148,7 +153,7 @@ export class AddComponent {
       })
     }
     else {
-      this.partnerService.createSubscription(req).subscribe({
+      this.subscriptionService.createSubscription(req).subscribe({
         next: (value) => {
           console.log(value);
           this.router.navigate(['/partner']);
@@ -158,6 +163,10 @@ export class AddComponent {
         }
       })    
     }
+  }
+
+  redirect(link: string) {
+    window.open('http://'+link, '_blank');
   }
 
   addSpoc() {
@@ -196,9 +205,9 @@ export class AddComponent {
 
   disablePartner() {
     let req = {
-       'status' : 'inactive'
+       'status' : Status.Inactive
     };
-    this.partner.status = 'inactive';
+    this.partner.status = Status.Inactive;
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.partnerService.updatePartner(_id, req).subscribe({
       next: (value) => {
@@ -215,9 +224,9 @@ export class AddComponent {
 
   enablePartner() {
     let req = {
-       'status' : 'active'
+       'status' : Status.Active
     };
-    this.partner.status = 'active';
+    this.partner.status = Status.Active;
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.partnerService.updatePartner(_id, req).subscribe({
       next: (value) => {
@@ -247,7 +256,7 @@ export class AddComponent {
   fetchSubscription() {
     this.gotonext = true; 
     this.submit(null);
-    this.partnerService.getSubscription(this.partnerId).subscribe({
+    this.subscriptionService.getSubscription(this.partnerId).subscribe({
       next: (value) => {
         console.log(value);
         this.subscription = value;
@@ -270,7 +279,7 @@ export class AddComponent {
         this.partner = value;
         this.spoc = value.spocDetails;
         this.partnerId = value.partnerId;
-        if(value.status == 'inactive') {
+        if(value.status == Status.Inactive) {
           this.isDisabled = true;
         }
       },
@@ -287,7 +296,7 @@ export class AddComponent {
         masterdata.forEach((master: { category: string; masterData: any[]; }) => {
           if(master.category == 'PartnerSectors'){
             master.masterData.forEach(data => {
-              if(data.status == 'active'){
+              if(data.status == Status.Active){
                 this.partnerSector.push(data.data);
               }
             })
@@ -295,7 +304,7 @@ export class AddComponent {
 
           if(master.category == 'NoOfSubscriptions'){
             master.masterData.forEach(data => {
-              if(data.status == 'active'){
+              if(data.status == Status.Active){
                 this.noOfSubscriptions.push(data.data);
               }
             })

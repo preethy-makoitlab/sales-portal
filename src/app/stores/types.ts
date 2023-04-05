@@ -4,6 +4,6 @@ export enum Titles {
 }
 
 export enum Status {
-  'active' = 'active',
-  'inactive' = 'inactive'
+  'Active' = 'active',
+  'Inactive' = 'inactive'
 }

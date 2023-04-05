@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TherapistService } from 'src/app/services/therapist.service';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { MasterdataService } from 'src/app/services/masterdata.service';
+import { Status } from 'src/app/stores/types';
 
 @Component({
   selector: 'app-add',
@@ -107,17 +108,12 @@ export class AddComponent {
     bio: "",
     isFlexibleWithTiming: false,
     isAvailable: false,
-    status: "active",
+    // status: "active",
     preferredModesOfTherapy: [],
     picture: "default",
-    availableFrom: "2023-03-24T03:33:11.796Z",
-    createdAt: "2023-03-24T03:33:11.796Z",
-    createdBy: "admin",
-    lastModifiedAt: "2023-03-24T03:33:11.796Z",
-    lastModifiedBy: "admin",
+    availableFrom: new Date(),
     lastSeen: new Date().toISOString(),
     rating: 0,
-    additionalProp1: {}
   }
 
   gotonext: boolean = false;
@@ -374,10 +370,10 @@ export class AddComponent {
 
   disableTherapist() {
     let req = {
-       'status' : 'inactive', 
+       'status' : Status.Inactive, 
        'isAvailable' : false
     };
-    this.therapist.status = 'inactive';
+    this.therapist.status = Status.Inactive;
     this.therapist.isAvailable = false;   
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.therapistService.updateTherapist(_id, req).subscribe({
@@ -394,10 +390,10 @@ export class AddComponent {
 
   enableTherapist() {
     let req = {
-       'status' : 'active', 
+       'status' : Status.Active, 
        'isAvailable' : true
     };
-    this.therapist.status = 'active';
+    this.therapist.status = Status.Active;
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.therapistService.updateTherapist(_id, req).subscribe({
       next: (value) => {

@@ -24,5 +24,8 @@
         </div>
     </div>
 </div>
-<app-table [fields]="fields" [data]="tableData"></app-table>
+<div *ngIf="isAlert">
+    <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()" (isDisable)="disableMember()"></app-alert-box>
+</div>
+<app-table [fields]="fields" [actionField]="actionField" [data]="tableData" (call)="call($event)"></app-table>
 
