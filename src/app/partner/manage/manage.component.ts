@@ -12,7 +12,11 @@ export class ManageComponent {
 
   totalCount: number = 0;
   activeCount: number = 0;
-  fields: any[] = ['Partner', 'City', 'State', 'No of Passes', 'No of Therapy Sessions', 'Plan Status', 'Expiry Date']
+  fields: any[] = ['Partner', 'City', 'State', 'No of Passes', 'No of Therapy Sessions', 'Plan Status', 'Expiry Date'];
+  actionField: Object = {
+    label: 'Actions',
+    colspan: '2'
+  };
   tableData: any[] = [];
 
   constructor(private translate: AnyoTranslateService,

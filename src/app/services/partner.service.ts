@@ -97,28 +97,6 @@ export class PartnerService {
     );
   }
 
-  public createSubscription(
-    body?: Object,
-    observe: any = 'body',
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-    
-  
-    return this.httpClient.request<Object>(
-      'post',
-      `${this.basePath}/subscriptions`,
-      {
-        body: body,
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
   public getPartner(
     id?:  Object,
     observe: any = 'body',
@@ -133,28 +111,6 @@ export class PartnerService {
     return this.httpClient.request<Object>(
       'get',
       `${this.basePath}/partners/${String(id)}`,
-      {
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  public getSubscription(
-    id?:  Object,
-    observe: any = 'body',
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-    
-    console.log(id);
-  
-    return this.httpClient.request<Object>(
-      'get',
-      `${this.basePath}/subscriptions/partnerId/${String(id)}`,
       {
         params: queryParameters,
         observe: observe,
@@ -180,32 +136,6 @@ export class PartnerService {
     return this.httpClient.request<Object>(
       'post',
       `${this.basePath}/partners/updateById/${id}`,
-      {
-        body: body,
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  public updateSubscription(
-    id:  String,
-    body?: Object,
-    observe: any = 'body',
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-
-    queryParameters = queryParameters.set('id',String(id));
-
-    console.log(id, body);
-    
-    return this.httpClient.request<Object>(
-      'post',
-      `${this.basePath}/subscriptions/${id}`,
       {
         body: body,
         params: queryParameters,

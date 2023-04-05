@@ -136,7 +136,7 @@ export class TherapistService {
     
     return this.httpClient.request<Object>(
       'post',
-      `${this.basePath}/therapists/update${id}`,
+      `${this.basePath}/therapists/update/${id}`,
       {
         body: body,
         params: queryParameters,

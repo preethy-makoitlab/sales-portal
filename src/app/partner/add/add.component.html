@@ -70,8 +70,13 @@
                         </div>
                         <div class="flex-auto">
                         <label class="form-label required">Website Link</label>
-                        <input class="input small-text" name="weblink" placeholder="Enter website link" [(ngModel)]="partner.websiteLink" ngModel required [disabled]="viewForm"/>
-                        </div>     
+                        <div class="flex flex-row">
+                            <input class="input small-text" name="weblink" placeholder="Enter website link" [(ngModel)]="partner.websiteLink" ngModel required [disabled]="viewForm"/>
+                            <div class="btn btn-block link-button" (click)="redirect(partner.websiteLink)">
+                                <img src="../../../assets/icons/link.svg">
+                            </div>
+                        </div>
+                    </div>
                     </div>
         
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
