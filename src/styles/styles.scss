@@ -88,6 +88,8 @@ tbody {
     background-color: $background-primary;
     font-size: $ft-size-regular;
     font-weight: $ft-medium;
+    box-shadow: none;
+    padding: 0;
 }
 
 .header-text {
@@ -105,7 +107,7 @@ tbody {
 
 .sub-text {
     color: #707EAE;
-    font-size: $ft-size-xs;
+    font-size: $ft-size-small;
     font-weight: $ft-normal;
 }
 
@@ -139,7 +141,7 @@ tbody {
 
 .custom-card {
     background: $clr-bg-primary;
-    border-radius: 16px;
+    border-radius: $border-radius-xl;
     width: 80%;
     height: 80%;
 }
@@ -152,6 +154,20 @@ tbody {
     background: $clr-text-secondary;
 }
 
+.info-section {
+    background-color: $clr-text-secondary;
+    border-radius: $border-radius-regular;
+    color: $clr-text-quarternary;
+}
+
+.large-text {
+    font-size: $ft-size-large;
+}
+
+.xs-text {
+    font-size: $ft-size-xs;
+}
+
 .custom-btn-primary {
     background: $clr-btn-primary;
     border: none;
@@ -159,7 +175,7 @@ tbody {
     text-align: center;
     font-size: $ft-size-regular;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: $border-radius-regular;
 }
 
 .instruction {
@@ -198,7 +214,7 @@ tbody {
 .input {
     border: 1px solid #E8E8E8;
     max-width: 100%;
-    border-radius: 6px !important;
+    border-radius: $border-radius-regular !important;
     color: $clr-text-input;
     &.small-text {
         font-size: $ft-size-small;
@@ -222,7 +238,7 @@ input:-internal-autofill-selected {
 .select {
     border: $border-secondary;
     max-width: 100%;
-    border-radius: 6px !important;
+    border-radius: $border-radius-regular !important;
     color: $clr-text-input;
     &.small-text {
         font-size: $ft-size-small;
@@ -237,7 +253,7 @@ input:-internal-autofill-selected {
     background-color: $background-primary;
     border: $border-secondary;
     max-width: 100%;
-    border-radius: 6px !important;
+    border-radius: $border-radius-regular !important;
     color: $clr-text-input;
 }
 
@@ -271,7 +287,7 @@ input:-internal-autofill-selected {
 }
 
 .form-label {
-    font-size: $ft-size-xs;
+    font-size: $ft-size-small;
     font-weight: $ft-medium;
     color: $clr-text-secondary;
     justify-content: start;
@@ -293,7 +309,7 @@ input:-internal-autofill-selected {
 .inputwithicon {
     display: flex;
     align-items: center;
-    border-radius: 8px;
+    border-radius: $border-radius-medium;
     justify-content: space-between;
     margin-left: 2rem;
     background-color: $background-primary;
@@ -318,7 +334,7 @@ input:-internal-autofill-selected {
     background: #F9F9F9;
     border: 1px solid #EEEEEE;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: $border-radius-large;
     margin-left: 5.7rem;
     margin-top: 8px;
     z-index: 9999;
