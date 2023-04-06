@@ -1,8 +1,8 @@
 export const environment = {
-    production: false,
-     serviceUrl: 'http://localhost:3001',  
-  
-    serviceUrl2: 'http://localhost',
-    serviceUrl3: 'http://localhost',
-  
-  };
+  production: false,
+   serviceUrl: 'https://anyo-api.intellikast.in/',  
+
+  serviceUrl2: 'https://anyo-auth-api.intellikast.in/',
+  serviceUrl3: 'http://localhost',
+
+};
