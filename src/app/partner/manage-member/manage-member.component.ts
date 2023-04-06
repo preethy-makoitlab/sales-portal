@@ -152,7 +152,7 @@ export class ManageMemberComponent {
                 isButton: false,
                 isEditable: false,
                 isClickable: true,
-                route: '',
+                route: '/partner/addmember/',
                 isCheckbox: false
               },
               {

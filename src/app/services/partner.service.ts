@@ -134,11 +134,11 @@ export class PartnerService {
     console.log(id, body);
     
     return this.httpClient.request<Object>(
-      'post',
-      `${this.basePath}/partners/updateById/${id}`,
+      'patch',
+      `${this.basePath}/partners/${String(id)}`,
       {
         body: body,
-        params: queryParameters,
+        // params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }
