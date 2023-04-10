@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,7 @@ import { SharedModule } from './common/shared.module';
 import { MenuComponent } from './components/menu/menu.component';
 import { PartnerModule } from './partner/partner.module';
 import { DatepickerModule } from 'ng2-datepicker';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DatepickerModule } from 'ng2-datepicker';
       }
     })
   ],
-  providers: [],
+  providers: [    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

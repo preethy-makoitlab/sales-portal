@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
-import { environment } from '../../environments/environment.local';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.dev';
+import { environment } from 'src/environments/environment';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
 
 
