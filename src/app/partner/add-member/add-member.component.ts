@@ -46,6 +46,11 @@ export class AddMemberComponent {
     this.isAlert = !this.isAlert;
   }
 
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
   disableMember() {
     let req = {
        'status' : Status.Inactive

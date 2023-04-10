@@ -25,7 +25,7 @@
                             <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable" (closeAlert)="dialogShow()" (isDisable)="enableMember()"></app-alert-box>
                             </div>
                         <div class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                            <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/partner']">
+                            <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
                                 <div>
                                     <img class="add-icon" src="../../../assets/icons/add-icon.svg">
                                 </div>
@@ -81,7 +81,8 @@
             <div class="flex justify-between mt-8">
                 <div class="flex justify-end w-full">
                     <button type="button" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
-                    <button class="btn btn-primary btn-bigger" [disabled]="!addMemberForm.valid">Create Member</button>
+                    <button *ngIf="!viewForm && !editMode" class="btn btn-primary btn-bigger" [disabled]="!addMemberForm.valid">Create Member</button>
+                    <button *ngIf="editMode" class="btn btn-primary btn-bigger" [disabled]="!addMemberForm.valid">Edit Member</button>
                 </div>
             </div>
         </form>

@@ -90,7 +90,6 @@ export class ManageMemberComponent {
         value.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
             var memberData: any = {};
             var _id = d.id;
-            var partnerId = d.partnerId;
             var name = d.name;
             var email = d.email;
             var dept = d.department;
