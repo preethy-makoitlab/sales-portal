@@ -1,0 +1,70 @@
+<div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
+    <div class="flex flex-wrap w-1/4 justify-start">
+      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg">
+      <h1 class="header-text">Add Member</h1>
+    </div>
+</div>
+
+<div class="custom-card">
+    <div class="card-body">
+        <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+            <div class="flex flex-row items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <img src="../../../assets/icons/download.svg"/>
+                <h6 class="text-base cursor-pointer">Download sample template</h6>
+            </div>
+
+            <div class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <ol class="flex-col steps">
+                    <li class="step step-primary step-done overflow-hidden">
+                        <div class="step-circle">1</div>
+                        <div class="flex flex-col ml-4">
+                            <h3>Setup</h3>
+                            <div class="grow basis-1/2 clickable" (click)="openFileExplorer($event)">
+                                <div class="flex p-6 border-dashed rounded-md upload-pic">
+                                    <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                                    <div class="flex flex-col items-center">
+                                    <p>Browse to select file</p>
+                                    <p class="text-xs">Upload jpg/png Max 5MB*</p>
+                                    </div>
+                                    <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls, .csv" #fileInput style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- <img [src]="excelIcon" alt="Excel Icon" *ngIf="excelIcon"> -->
+                    <!-- <img class="line" src="../../../assets/icons/horizontal-line.svg"/> -->
+                    <li class="step step-primary step-done overflow-hidden">
+                        <div [ngClass]="isUploaded == false ? 'step-circle disabled' : 'step-circle'">2</div>
+                        <div class="flex flex-col ml-4">
+                            <h3 [ngClass]="isUploaded == false ? 'disabled' : ''">Validation</h3>
+                            <div class="grow basis-1/2 clickable">
+                                <div class="flex p-6 border-dashed rounded-md upload-pic">
+                                    <div class="flex flex-col items-start">
+                                        <div class="flex flex-row items-center gap-4">
+                                            <div *ngIf="!isValidate">
+                                                <progress class="progress" value="0" max="100"></progress>
+                                            </div>
+                                            <div *ngIf="isValidate">
+                                                <progress class="progress"></progress>
+                                            </div>
+                                            <button class="btn btn-primary btn-block enable-button" [disabled]="!isUploaded" (click)="validate()">Validate</button>
+                                        </div>
+                                        
+                                        <p [ngClass]="isUploaded == false ? 'disabled mt-2 text-sm' : 'mt-2 text-sm'">Field values will be validated</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+
+        <div class="flex justify-end mt-2">
+            <button class="btn btn-primary btn-block">Submit</button>
+        </div>
+
+    </div>
+</div>
+

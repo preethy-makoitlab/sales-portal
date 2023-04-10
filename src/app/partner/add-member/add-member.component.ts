@@ -139,7 +139,7 @@ export class AddMemberComponent {
       console.log(this.activatedRoute.snapshot.params);
       let value = this.activatedRoute.snapshot.params['id'];
       var pattern: RegExp = /(A-Z)(a-z){2}/;
-      if(value && pattern.test(value)){
+      if(value && !pattern.test(value)){
        this.member.partnerId = value;
        this.populate(value);
       }
