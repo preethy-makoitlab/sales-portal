@@ -7,7 +7,6 @@ import { UserStore } from './user.store';
 import { User } from './user.model';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
-import { IsNullOrEmpty } from 'src/app/common/utils/utils';
 import { environment } from 'src/environments/environment';
 
 
@@ -87,9 +86,9 @@ export class UserStateService {
     let user:any = this.userQuery.getEntity(this.authService.getUserId()||'');
     if(user){
     let dName = user.firstName;
-    if (!IsNullOrEmpty(user.middleName)) {
+    if (!this.authService.IsNullOrEmpty(user.middleName)) {
       dName = `${dName} ${user.middleName}`;
-    } else if (!IsNullOrEmpty(user.lastName)) {
+    } else if (!this.authService.IsNullOrEmpty(user.lastName)) {
       dName = `${dName} ${user.lastName}`;
     }
     return dName;
