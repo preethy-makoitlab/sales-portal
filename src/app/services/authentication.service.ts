@@ -3,10 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CookieService } from "ngx-cookie-service";
 import { environment } from 'src/environments/environment';
-import { CustomResponse } from '../common/models/CustomResponse';
-import { UserStateService } from '../State/User/userstate.service';
 import { Router } from '@angular/router';
-import { IsNullOrEmpty } from '../common/utils/utils';
+import { CustomResponse } from '../models/constants';
 
 
 @Injectable({
@@ -27,6 +25,9 @@ export class AuthenticationService {
     // this.configuration.accessToken = this.cookieService.get('accessToken'); 
     // this.configuration.refreshToken = this.cookieService.get('refreshToken'); 
     // console.log(this.configuration);
+  }
+    IsNullOrEmpty<T>(obj: string) {
+    return obj === null || obj === undefined || obj.length === 0 || obj.trim() === '';
   }
   public getUserId() {
     return localStorage.getItem('zbxshjsn') ;
@@ -146,7 +147,7 @@ public isJsonMime(mime: string): boolean {
   
           let headers = this.defaultHeaders;
           // authentication (bearerAuth) required
-          if (!IsNullOrEmpty(token)) {
+          if (!this.IsNullOrEmpty(token)) {
 
            // if (this.configuration.accessToken) {
 
