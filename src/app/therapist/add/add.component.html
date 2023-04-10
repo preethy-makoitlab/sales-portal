@@ -1,7 +1,11 @@
 <div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
-  <div class="flex flex-wrap w-1/4 justify-start">
-    <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+  <div class="flex flex-wrap w-1/4 justify-start" *ngIf="!viewForm && !editMode">
+    <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/therapist']">
     <h1 class="header-text">{{ 'titles.addTherapist' | translate }}</h1>
+  </div>
+  <div class="flex flex-wrap w-1/4 justify-start" *ngIf="viewForm || editMode">
+    <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/therapist']">
+    <h1 class="header-text">{{ therapist.firstName }} {{ therapist.lastName }}</h1>
   </div>
   <div *ngIf="viewForm" class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
     <div>
@@ -30,6 +34,7 @@
                 <option value="" disabled selected>Title</option>
                 <option>Mr</option>
                 <option>Ms</option>
+                <option>Mrs</option>
             </select>
           </div>
           <div class="divider"></div>
@@ -90,7 +95,7 @@
               <div>
                 <label class="form-label required">About Therapist</label>
                 <textarea class="textarea" name="about" placeholder="Enter short description here"
-                  [(ngModel)]="therapist.bio" ngModel required [disabled]="viewForm"></textarea>
+                  [(ngModel)]="therapist.bio" ngModel required [disabled]="viewForm" maxlength="400"></textarea>
               </div>
             </div>
             <div class="vertical-separator"></div>

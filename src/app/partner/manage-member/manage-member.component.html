@@ -1,7 +1,7 @@
 <div class="flex flex-row justify-between items-center mb-3">
     <div class="flex flex-row md:gap-3 items-center">
         <div class="flex flex-row flex-nowrap md:gap-3 items-center">
-            <img class="left-arrow" src="../../../assets/icons/left-arrow.svg">
+            <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/partner']">
             <h1 class="header-text md:break-keep">Manage Members</h1>
         </div>
         <div>
@@ -26,6 +26,35 @@
 </div>
 <div *ngIf="isAlert">
     <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()" (isDisable)="disableMember()"></app-alert-box>
+</div>
+<div class="flex flex-row gap-2 mb-3 w-3/5 invisible md:visible">
+    <div class="info-section flex-1 p-2">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-col">
+                <div class="large-text">10001</div>
+                <div class="xs-text">Subscriptions</div>
+            </div>
+            <div><img src="../../../assets/icons/subscription-icon.svg"></div>
+        </div>
+    </div>
+    <div class="info-section flex-1 p-2">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-col">
+                <div class="large-text">10001</div>
+                <div class="xs-text">Available Subscriptions</div>
+            </div>
+            <div><img src="../../../assets/icons/subscription-icon.svg"></div>
+        </div>
+    </div>
+    <div class="info-section flex-1 p-2">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-col">
+                <div class="large-text">10001</div>
+                <div class="xs-text">Acive Members</div>
+            </div>
+            <div><img src="../../../assets/icons/members-icon.svg"></div>
+        </div>
+    </div>
 </div>
 <div class="flex gradual-fade" *ngIf="show">
     <app-success-alert></app-success-alert>
