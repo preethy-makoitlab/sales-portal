@@ -87,9 +87,10 @@ export class ManageMemberComponent {
     this.memberService.memberList(this.partnerId).subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { id: any; name: any; email: any; department: any; branch: any; status: string; }) => {
+        value.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
             var memberData: any = {};
             var _id = d.id;
+            var partnerId = d.partnerId;
             var name = d.name;
             var email = d.email;
             var dept = d.department;
@@ -152,7 +153,7 @@ export class ManageMemberComponent {
                 isButton: false,
                 isEditable: false,
                 isClickable: true,
-                route: '',
+                route: '/partner/addmember/',
                 isCheckbox: false
               },
               {
