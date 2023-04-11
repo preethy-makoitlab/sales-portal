@@ -15,23 +15,25 @@ export class BulkUploadComponent {
   maxSize: number = 5 * 1024 * 1024;
   isLarge: boolean = false;
   partnerId: string = "";
+  formData = new FormData();
+  totalRows!: number;
+  isInvalid: boolean = false;
+  invalidRows: any[] = [];
+  invalidCount!: number;
+  errorPercent!: number;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private memberService: MemberService) {}
   
-  openFileExplorer(event: any) {
-    this.fileInput.nativeElement.click();
+  sendFile(event: any) {
+    this.formData = new FormData();
     const file: File = event.target?.files[0];
     if(file && file.size < this.maxSize){
-      // const fileArray: any[] = [];
-      const formData = new FormData();
-      formData.append('file', file);
-      // fileArray.push('file', file, file.name, file.size);
-      // console.log(formData);
+      this.formData.append('file', file);
+      console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.bulkUpload(formData);
     }
     else if(file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -44,12 +46,30 @@ export class BulkUploadComponent {
 
   validate() {
     this.isValidate = true;
+    this.bulkUpload(this.formData);
+  }
+
+  openFileExplorer() {
+    this.fileInput.nativeElement.click();
   }
 
   bulkUpload(file: any) {
     this.memberService.bulkUpload(this.partnerId, file).subscribe({
       next: (value) => {
         console.log(value);
+        this.totalRows = value.totalRows;
+        if(value.invalidRows.length > 0) {
+          this.isInvalid = true;
+          this.invalidCount = value.invalidRows.length;
+          this.invalidRows = value.invalidRows;
+          let set = new Set();
+          value.invalidRows.forEach((row: { rowNo: Iterable<unknown> | null | undefined; }) => {
+            set.add(row.rowNo);
+          })
+          let count = set.size;
+          this.errorPercent = 100 - ( count / this.totalRows) * 100;
+          console.log(this.errorPercent, count, this.totalRows);
+        }
       },
       error: (err) => {
         console.log(err);
