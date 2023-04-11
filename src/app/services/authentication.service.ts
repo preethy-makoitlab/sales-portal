@@ -122,7 +122,7 @@ public isJsonMime(mime: string): boolean {
         const consumes: string[] = [
         ];
   
-        return this.httpClient.request<any>('post', `${this.authPath}/api/auth/refreshtoken`,
+        return this.httpClient.request<any>('post', `${this.authPath}/auth/refreshtoken`,
             {
                 body:request,
                 headers: headers,
@@ -180,7 +180,7 @@ public isJsonMime(mime: string): boolean {
           const consumes: string[] = [
           ];
   
-          return this.httpClient.request<CustomResponse>('post', `${this.authPath}auth/token-validate`,
+          return this.httpClient.request<CustomResponse>('post', `${this.authPath}/auth/token-validate`,
               {
                   headers: headers,
                   observe: observe,
