@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-bulk-upload',
@@ -10,22 +11,26 @@ export class BulkUploadComponent {
   @ViewChild('fileInput') fileInput: any;
   isUploaded: boolean = false;
   isValidate: boolean = false;
-  excelIcon: string = "";
+  maxSize: number = 5 * 1024 * 1024;
+  isLarge: boolean = false;
+  partnerId: string = "";
 
+  constructor(private router: Router,
+    private activatedRoute: ActivatedRoute) {}
+  
   openFileExplorer(event: any) {
     this.fileInput.nativeElement.click();
     const file: File = event.target?.files[0];
-    if(file){
+    if(file && file.size < this.maxSize){
       const fileArray: any[] = [];
       fileArray.push('file', file, file.name, file.size);
       console.log(fileArray);
       this.isUploaded = true;
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.excelIcon = e.target.result;
-      };
-      reader.readAsDataURL(file);
+      this.isLarge = false;
+    }
+    else if(file && file.size > this.maxSize) {
+      this.isLarge = true;
+      this.isUploaded = true;
     }
     else{
       this.isUploaded = false;
@@ -34,6 +39,16 @@ export class BulkUploadComponent {
 
   validate() {
     this.isValidate = true;
+  }
+
+  ngOnInit(): void {
+    if(this.activatedRoute.snapshot.params){
+      console.log(this.activatedRoute.snapshot.params);
+      let value = this.activatedRoute.snapshot.params['id'];
+      if(value){
+       this.partnerId = value;
+      }
+    }
   }
 
 }

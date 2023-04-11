@@ -31,6 +31,11 @@
     color: #D8D8D8;
 }
 
+.list {
+    list-style-type: decimal;
+    margin-left: 20px;
+}
+
 @import 'src/styles/constants.scss';
 
 .add-therapist-flexbox {
