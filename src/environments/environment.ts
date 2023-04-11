@@ -4,7 +4,7 @@ export const environment = {
     serviceUrl2: 'https://anyo-auth-api.intellikast.in/',
     // serviceUrl: 'http://localhost:3001/',  
     // serviceUrl2: 'http://localhost:3000/',
-    app:"admin-portal"
-  
+    app:"admin-portal",
+    authPageUrl: 'https://anyo-auth.intellikast.in/'
   
   };

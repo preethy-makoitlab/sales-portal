@@ -3,6 +3,7 @@ import { AnyoTranslateService } from './services/anyo-translate.service';
 import { UserStateService } from './State/User/userstate.service';
 import { AuthenticationService } from './services/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent  implements OnInit{
 
       if(!this.auth.getUserId()){
         if(!token){      
-          window.location.href = "http://localhost:4200";
+          window.location.href = environment.authPageUrl;
           console.log(token);
 
           //+"/login/"+environment.app;
