@@ -26,7 +26,7 @@
                                         <div *ngIf="!isUploaded">
                                             <p>Browse to select file</p>
                                             <p class="text-xs">Upload jpg/png Max 5MB*</p>
-                                            <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls, .csv" #fileInput style="display:none">
+                                            <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls" #fileInput style="display:none">
                                         </div>
                                         <div *ngIf="isUploaded && !isLarge">
                                             <p>File upload successful</p>

@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
@@ -137,6 +137,34 @@ export class MemberService {
       `${this.basePath}/members/${id}`,
       {
         body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public bulkUpload(
+    id:  String,
+    file: Blob,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+    console.log(id, file);
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.basePath}/members/files/${String(id)}`,
+      {
+        body: file,
+        headers: new HttpHeaders({
+          'enctype': 'multipart/form-data'
+        }),
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,

@@ -5,6 +5,7 @@ import { MainLayoutComponent } from './components/main-layout/main-layout.compon
 import { VideostreamComponent } from './components/videostream/videostream.component';
 import { PartnerRoutingModule } from './partner/partner-routing.module';
 import { TherapistRoutingModule } from './therapist/therapist-routing.module';
+import { ContentRoutingModule } from './content/content-routing.module';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'partner',
         loadChildren: () => PartnerRoutingModule
+      },
+      {
+        path: 'content',
+        loadChildren: () => ContentRoutingModule
       },
     ]
   },
