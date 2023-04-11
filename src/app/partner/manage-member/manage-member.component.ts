@@ -87,7 +87,7 @@ export class ManageMemberComponent {
     this.memberService.memberList(this.partnerId).subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { id: any; name: any; email: any; department: any; branch: any; status: string; }) => {
+        value.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
             var memberData: any = {};
             var _id = d.id;
             var name = d.name;

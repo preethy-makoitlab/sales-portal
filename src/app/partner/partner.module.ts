@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatepickerModule } from 'ng2-datepicker';
 import { AddMemberComponent } from './add-member/add-member.component';
 import { ManageMemberComponent } from './manage-member/manage-member.component';
+import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ManageMemberComponent } from './manage-member/manage-member.component';
     AddComponent,
     ManageComponent,
     AddMemberComponent,
-    ManageMemberComponent
+    ManageMemberComponent,
+    BulkUploadComponent
   ],
   imports: [
     CommonModule,

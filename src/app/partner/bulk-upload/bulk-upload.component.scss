@@ -1,3 +1,41 @@
+.step:not(:last-child):after {
+    content: none
+}
+
+.line {
+    width: 1px;
+}
+
+.upload-pic {
+    border: 1.4px dashed #E8E8E8;
+}
+
+.step{
+    align-items: flex-start;
+}
+
+.progress {
+    width: 50rem
+}
+
+.step-circle.disabled {
+    background-color: #D8D8D8;
+    --tw-border-opacity: 1;
+    --tw-bg-opacity: 1;
+    --tw-text-opacity: 1;
+    border-color: #D8D8D8;
+    color: #FFFFFF;
+}
+
+.disabled {
+    color: #D8D8D8;
+}
+
+.list {
+    list-style-type: decimal;
+    margin-left: 20px;
+}
+
 @import 'src/styles/constants.scss';
 
 .add-therapist-flexbox {
