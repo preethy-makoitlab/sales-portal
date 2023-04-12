@@ -3,7 +3,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 // import { EmailRequest, LoginRequest, OtpRequest, ResetPasswordRequest } from 'app/models/common-models';
 import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
-import { environment } from '../../environments/environment.local';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

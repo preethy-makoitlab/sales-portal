@@ -7,13 +7,12 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class MasterdataService {
-
+export class CategoryService {
   protected basePath = environment.serviceUrl;
   constructor(protected httpClient: HttpClient) { }
 
-  public masterDataList(
-    body?: Object ,
+  public getCategory(
+    body?: Object,
     observe: any = 'body',
     numberOfRecords?: number,
     page?: number,
@@ -34,7 +33,7 @@ export class MasterdataService {
   
     return this.httpClient.request<Object>(
       'get',
-      `${this.basePath}/masterdata`,
+      `${this.basePath}/categories`,
       {
         body: body,
         params: queryParameters,
@@ -43,5 +42,6 @@ export class MasterdataService {
       }
     );
   }
+
 
 }

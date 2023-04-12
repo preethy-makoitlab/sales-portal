@@ -17,3 +17,8 @@ export enum ApiType{
     patch = 'patch',
     put = 'put'
 }
+export  interface CustomResponse{ 
+    status?: number;
+    error?: string;
+    data?: any;
+}

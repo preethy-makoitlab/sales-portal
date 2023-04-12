@@ -7,41 +7,33 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class MasterdataService {
-
+export class ContentService {
   protected basePath = environment.serviceUrl;
   constructor(protected httpClient: HttpClient) { }
 
-  public masterDataList(
-    body?: Object ,
+  public practiceNameCheck(
+    body?:  string,
     observe: any = 'body',
-    numberOfRecords?: number,
-    page?: number,
     reportProgress: boolean = false
   ): Observable<any> {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-    if (numberOfRecords !== undefined && numberOfRecords !== null) {
-      queryParameters = queryParameters.set(
-        'numberOfRecords',
-        <any>numberOfRecords
-      );
-    }
-    if (page !== undefined && page !== null) {
-      queryParameters = queryParameters.set('page', <any>page);
-    } 
-  
+
+    queryParameters = queryParameters.set('practiceName',String(body));
+
+    
     return this.httpClient.request<Object>(
       'get',
-      `${this.basePath}/masterdata`,
+      `${this.basePath}/contents/isValidPracticeName/${String(body)}`,
       {
         body: body,
-        params: queryParameters,
+        // params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }
     );
   }
+
 
 }
