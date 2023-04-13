@@ -82,18 +82,13 @@ export class UserStateService {
     localStorage.setItem('login', status+'');
   }
 
-  getUserName(){
-    let user:any = this.userQuery.getEntity(this.authService.getUserId()||'');
-    if(user){
-    let dName = user.firstName;
-    if (!this.authService.IsNullOrEmpty(user.middleName)) {
-      dName = `${dName} ${user.middleName}`;
-    } else if (!this.authService.IsNullOrEmpty(user.lastName)) {
-      dName = `${dName} ${user.lastName}`;
-    }
-    return dName;
+  async getUserName(){
+    let user:any = await this.getUser();
+    console.log(user);
+  if(user && user.name){
+    return user.name
   }
-  return '';
+  return "User";
   }
   getUserRole():string{
     let user:any = this.userQuery.getEntity(this.authService.getUserId()||'');
