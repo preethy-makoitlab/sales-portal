@@ -8,7 +8,7 @@
 <div class="custom-card">
     <div class="card-body">
         <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-            <div class="flex flex-row items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+            <div class="flex flex-row items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" (click)="downloadTemplate()">
                 <img src="../../../assets/icons/download.svg"/>
                 <h6 class="text-base cursor-pointer">Download sample template</h6>
             </div>
@@ -19,24 +19,24 @@
                         <div class="step-circle">1</div>
                         <div class="flex flex-col ml-4">
                             <h3>Setup</h3>
-                            <div class="grow basis-1/2 clickable" (click)="openFileExplorer($event)">
+                            <div class="grow basis-1/2 clickable" (click)="openFileExplorer()">
                                 <div class="flex p-6 border-dashed rounded-md upload-pic">
                                     <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
                                     <div class="flex flex-col items-center">
                                         <div *ngIf="!isUploaded">
                                             <p>Browse to select file</p>
-                                            <p class="text-xs">Upload jpg/png Max 5MB*</p>
-                                            <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls, .csv" #fileInput style="display:none">
+                                            <p class="text-xs">Upload xlsx Max 5MB*</p>
+                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput style="display:none">
                                         </div>
                                         <div *ngIf="isUploaded && !isLarge">
                                             <p>File upload successful</p>
                                             <p class="text-xs">Validate your file below</p>
-                                            <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls, .csv" #fileInput style="display:none">
+                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput style="display:none">
                                         </div>
                                         <div *ngIf="isUploaded && isLarge">
                                             <p>File upload failed</p>
                                             <p class="text-xs">File size exceeded 5MB</p>
-                                            <input type="file" (change)="openFileExplorer($event)" accept=".xlxs, .xls, .csv" #fileInput style="display:none">
+                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput style="display:none">
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                                 <progress class="progress" value="0" max="100"></progress>
                                             </div>
                                             <div *ngIf="isValidate">
-                                                <progress class="progress"></progress>
+                                                <progress class="progress" value={{errorPercent}} max="100"></progress>
                                             </div>
                                             <button class="btn btn-primary btn-block enable-button" [disabled]="!isUploaded" (click)="validate()">Validate</button>
                                         </div>
@@ -64,13 +64,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="isValidate">
-                                <p class="flex flex-row gap-4"><img src="../../../assets/icons/success-tick.svg"/>R4-Rows imported successfully</p>
-                                <p class="flex flex-row gap-4"><img src="../../../assets/icons/warning.svg"/>Validation has found below 2 errors -</p>
-                                    <ol class="flex flex-col list">
-                                        <li>Row: Sheet has empty</li>
-                                        <li>Sheet does not have field mapped</li>
+                            <div class="mt-4" *ngIf="isValidate">
+                                <p class="flex flex-row gap-4 text-sm"><img src="../../../assets/icons/success-tick.svg"/>{{totalRows}} Rows imported successfully</p>
+                                <div *ngIf="isInvalid">
+                                    <p class="flex flex-row gap-4 text-sm"><img src="../../../assets/icons/warning.svg"/>Validation has found below {{invalidCount}} errors -</p>
+                                    <ol *ngFor="let row of invalidRows; let i = index" class="flex flex-col">
+                                        <li class="text-sm">{{i+1}}. In Row {{row.rowNo}} , field {{row.fieldName}} - {{row.description}}</li>
                                     </ol>
+                                </div>
+                                <div *ngIf="!isInvalid">
+                                    <p class="flex flex-row gap-4 text-sm"><img src="../../../assets/icons/success-tick.svg"/>Validation complete. No errors.</p>
+                                </div>
+                                
                             </div>
                         </div>
                     </li>
@@ -80,7 +85,7 @@
         </div>
 
         <div class="flex justify-end mt-2">
-            <button class="btn btn-primary btn-block">Submit</button>
+            <button type="button" class="btn btn-primary btn-block" [routerLink]="['/partner/managemember', partnerId]">Submit</button>
         </div>
 
     </div>

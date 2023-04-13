@@ -1,0 +1,142 @@
+<div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
+    <div class="flex flex-wrap w-1/4 justify-start">
+      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/partner/managemember']">
+      <h1 class="header-text">Upload New Content</h1>
+    </div>
+</div>
+
+<div class="custom-card">
+    <div class="card-body">
+  
+        <form #addContentForm="ngForm" (ngSubmit)="submit(addContentForm)">
+                <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Pick Category</label>
+                            <!-- <select class="select select-md title-select" name="category" [(ngModel)]="content.category" ngModel required>
+                                <option value="" disabled selected>Select here</option>
+                                <option *ngFor="let option of noOfSubscriptions">
+                                    {{option}}
+                                </option>
+                            </select> -->
+                            <input class="input small-text" list="categoryList" name="category" id="category" placeholder="Select category" [(ngModel)]="content.category" (change)="fetch()" ngModel required>
+                                <datalist id="categoryList">
+                                    <option *ngFor="let option of categoryArray" [value]="option.category">
+                                        {{option.category}}
+                                    </option>
+                                </datalist>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Genre</label>
+                            <input class="input small-text" name="genre" [(ngModel)]="content.genre" placeholder="Enter Genre" ngModel required disabled/>
+                        </div>
+                        <div class="flex-auto">
+                            <label class="form-label required">Emotion Purpose</label>
+                            <input class="input small-text" name="emotion" [(ngModel)]="content.emotion" placeholder="Enter emotion purpose" ngModel disabled/>
+                        </div>
+                    </div>
+        
+                    <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Energy Purpose</label>
+                            <input class="input small-text" name="energy" [(ngModel)]="content.energy" placeholder="Enter energy purpose" ngModel disabled/>
+                        </div>
+                        <div class="flex-auto"> 
+                            <label class="form-label required">Practice Name</label>
+                            <app-input-with-icon [placeholder]="placeholder" [src]="icon" (inputString)="onKey($event)"></app-input-with-icon>
+                            <div *ngIf="isOriginal == false && clicked" class="flex justify-end gap-2 items-center">
+                                <img src="../../../assets/icons/verify-cross.svg" />
+                                <p>Already taken</p>
+                            </div>
+                            <div *ngIf="isOriginal && clicked" class="flex justify-end gap-2 items-center">
+                                <img src="../../../assets/icons/verify-tick.svg" />
+                                <p class="text-sm">Verified</p>
+                            </div>
+                            <!-- <div class="flex">
+                                <input class="input small-text" name="practicename" placeholder="Enter Practice Name" [(ngModel)]="content.practiceName" ngModel required/>
+                                <img class="cursor-pointer" src="../../../assets/icons/verify-tick.svg"/>
+                            </div> -->
+                        </div>
+                        <div class="flex-auto">
+                            <div class="grow basis-1/2 clickable" (click)="openFileExplorer()">
+                                <label class="form-label required">Upload Thumbnail</label>
+                                <div class="flex p-6 border-dashed rounded-md upload-pic">
+                                  <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                                    <div class="flex flex-col items-center">
+                                        <div *ngIf="!isUploaded">
+                                            <p>Browse to select file</p>
+                                            <p class="text-xs">Upload jpg/png Max 5MB*</p>
+                                            <input type="file" (change)="uploadFile($event)" accept=".jpg, .png," #fileInput style="display:none">
+                                        </div>
+                                        <div *ngIf="isUploaded && !isLarge">
+                                            <p>File upload successful</p>
+                                            <p class="text-xs">Click to re-upload</p>
+                                            <input type="file" (change)="uploadFile($event)" accept=".jpg, .png" #fileInput style="display:none">
+                                        </div>
+                                        <div *ngIf="isUploaded && isLarge">
+                                            <p>File upload failed</p>
+                                            <p class="text-xs">File size exceeded 5MB</p>
+                                            <input type="file" (change)="uploadFile($event)" accept=".jpg, .png" #fileInput style="display:none">
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="flex-auto w-1/4">
+                        <label class="form-label required">No.of modules</label>
+                        <input type="number" class="input small-text" name="modules" placeholder="Enter no. of modules" [(ngModel)]="modulesNo" (change)="addModule()" ngModel required/>
+                    </div>
+
+                    <div *ngFor="let item of content.modules; index as index" class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex-auto">
+                            <label class="form-label required">Module name</label>
+                            <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name" [(ngModel)]="content.modules[index].moduleName" ngModel required/>
+                        </div>
+                        <div class="flex-auto">
+                            <div class="grow basis-1/2 clickable" (click)="open(index)">
+                                <label class="form-label required">Upload File</label>
+                                <div class="flex p-6 border-dashed rounded-md upload-pic">
+                                  <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                                  <div class="flex flex-col items-center">
+                                    <div *ngIf="!statusArray[index].isUploaded">
+                                        <p>Browse to select file</p>
+                                        <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
+                                        <input type="file" (change)="uploadModule($event, index)" accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput [(ngModel)]="content.modules[index].file" style="display:none">
+                                    </div>
+                                    <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
+                                        <p>File upload successful</p>
+                                        <p class="text-xs">Click to re-upload</p>
+                                        <input type="file" (change)="uploadModule($event, index)" accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput [(ngModel)]="content.modules[index].file" style="display:none">
+                                    </div>
+                                    <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
+                                        <p>File upload failed</p>
+                                        <p class="text-xs">File size exceeded 5MB</p>
+                                        <input type="file" (change)="uploadModule($event, index)" accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput [(ngModel)]="content.modules[index].file" style="display:none">
+                                    </div>
+                                </div>
+                                  <!-- <div class="flex flex-col items-center">
+                                    <p>Browse to select file</p>
+                                    <p class="text-xs">Upload jpg/pdf Max 5MB*</p>
+                                  </div>
+                                  <input type="file" accept=".jpg, .png, .pdf" name="fileupload{{index}}" #fileInput [(ngModel)]="content.modules[index].file" style="display:none" ngModel> -->
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            <div class="flex justify-between mt-8">
+                <div class="flex justify-end w-full">
+                    <button type="button" class="btn btn-primary btn-block enable-button" [routerLink]="['/partner']">Cancel</button>
+                    <button class="btn btn-primary btn-bigger" [disabled]="!isOriginal || !addContentForm.valid">Save Content</button> 
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>

@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class MemberService {
 
   protected basePath = environment.serviceUrl;
+  protected exportBasePath = environment.contentServiceUrl;
   constructor(protected httpClient: HttpClient) { }
 
   public memberCount(
@@ -135,6 +136,57 @@ export class MemberService {
     return this.httpClient.request<Object>(
       'patch',
       `${this.basePath}/members/${id}`,
+      {
+        body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public bulkUpload(
+    id:  String,
+    file: Blob,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+    console.log(id, file);
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.basePath}/members/files/${String(id)}`,
+      {
+        body: file,
+        headers: new HttpHeaders({
+          'enctype': 'multipart/form-data'
+        }),
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public downloadSampleTemplate(
+    body?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.exportBasePath}/download/bulk-upload-template`,
       {
         body: body,
         params: queryParameters,
