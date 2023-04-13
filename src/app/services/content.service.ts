@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class ContentService {
   protected basePath = environment.serviceUrl;
+  protected uploadBasePath = environment.contentServiceUrl;
   constructor(protected httpClient: HttpClient) { }
 
   public practiceNameCheck(
@@ -34,6 +35,33 @@ export class ContentService {
       }
     );
   }
+
+  public uploadFile(
+    file?:  Blob,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.uploadBasePath}/files/upload`,
+      {
+        body: file,
+        headers: new HttpHeaders({
+          'enctype': 'multipart/form-data'
+        }),
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
 
 
 }

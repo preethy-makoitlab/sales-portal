@@ -77,6 +77,17 @@ export class BulkUploadComponent {
     })
   }
 
+  downloadTemplate() {
+    this.memberService.downloadSampleTemplate().subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   ngOnInit(): void {
     if(this.activatedRoute.snapshot.params){
       console.log(this.activatedRoute.snapshot.params);

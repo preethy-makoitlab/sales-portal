@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ContentService } from 'src/app/services/content.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,7 +22,8 @@ export class AddComponent {
   }
 
   @ViewChild('fileInput') fileInput: any;
-  modulesArray: any[] = [];
+  @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
+  statusArray: any[] = [];
   categoryArray: any[] = [];
   modulesNo!: number;
   placeholder: string = "Enter Practice Name";
@@ -30,11 +31,16 @@ export class AddComponent {
   isOriginal!: boolean;
   clicked: boolean = false;
   addContentForm!: FormGroup;
+  formData = new FormData();
+  maxSize: number = 5 * 1024 * 1024;
+  isLarge: boolean = false;
+  isUploaded: boolean = false;
 
   constructor(private router: Router,
     private contentService: ContentService,
     private formBuilder: FormBuilder,
-    private categoryService: CategoryService) {
+    private categoryService: CategoryService,
+    private cdr: ChangeDetectorRef) {
       this.addContentForm = this.formBuilder.group({
         category: ['', Validators.required],
         genre: ['', Validators.required],
@@ -43,6 +49,22 @@ export class AddComponent {
 
   openFileExplorer() {
     this.fileInput.nativeElement.click();
+  }
+
+  open(index: number) {
+    this.cdr.detectChanges();
+    const fileInput = this.moduleInputs.toArray()[index];
+    if(fileInput) {
+      console.log(fileInput);
+      fileInput.nativeElement.click();
+    }
+    else{
+      console.log("undefined");
+    }
+    // console.log(this.moduleInputs);
+    // this.moduleInputs.forEach(instance => {
+    //   console.log(instance);
+    // })
   }
 
   submit(form: any) {
@@ -72,6 +94,16 @@ export class AddComponent {
 
   addModule(){
     console.log(this.modulesNo);
+    for(let i=0 ; i < this.modulesNo; i++) {
+      this.statusArray.push(
+        {
+          isUploaded: false,
+          isLarge: false
+        }
+      );
+    }
+    console.log(this.statusArray);
+    this.cdr.detectChanges();
     if(this.content.modules.length > this.modulesNo){
       for(let i= this.content.modules.length; i > this.modulesNo; i--){
         this.content.modules.pop();
@@ -89,6 +121,62 @@ export class AddComponent {
       }
     }
     console.log(this.content.modules);
+  }
+
+  uploadFile(event: any) {
+    this.formData = new FormData();
+    const file: File = event.target?.files[0];
+    if(file && file.size < this.maxSize){
+      this.formData.append('image', file);
+      console.log(file);
+      this.isUploaded = true;
+      this.isLarge = false;
+      this.callUploadApi(this.formData);
+    }
+    else if(file && file.size > this.maxSize) {
+      this.isLarge = true;
+      this.isUploaded = true;
+    }
+    else{
+      this.isUploaded = false;
+    }
+  }
+
+  uploadModule(event: any, index: number) {
+    this.formData = new FormData();
+    const file: File = event.target?.files[0];
+    if(file && file.size < this.maxSize){
+      this.formData.append('file', file);
+      console.log(file);
+      this.statusArray[index] = {
+        isUploaded: true,
+        isLarge: false
+      };
+      this.callUploadApi(this.formData);
+    }
+    else if(file && file.size > this.maxSize) {
+      this.statusArray[index] = {
+        isUploaded: true,
+        isLarge: true
+      };
+    }
+    else{
+      this.statusArray[index] = {
+        isUploaded: false,
+        isLarge: false
+      };
+    }
+  }
+
+  callUploadApi(file: any) {
+    this.contentService.uploadFile(file).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   fetch() {
