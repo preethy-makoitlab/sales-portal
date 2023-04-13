@@ -246,7 +246,7 @@ export class AddComponent {
     if(this.subscription.subscriptionStart) {
       var start = new Date(this.subscription.subscriptionStart);
       var end = new Date(start);
-      end.setFullYear(start.getFullYear() + this.subscription.planDuration);
+      end.setMonth(start.getMonth() + this.subscription.planDuration);
       this.endDate = end;
       this.subscription.subscriptionEnd = dateToddMMYYYY(end);
       console.log(start, end);
