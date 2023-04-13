@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class MemberService {
 
   protected basePath = environment.serviceUrl;
+  protected exportBasePath = environment.contentServiceUrl;
   constructor(protected httpClient: HttpClient) { }
 
   public memberCount(
@@ -165,6 +166,29 @@ export class MemberService {
         headers: new HttpHeaders({
           'enctype': 'multipart/form-data'
         }),
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public downloadSampleTemplate(
+    body?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.exportBasePath}/download/bulk-upload-template`,
+      {
+        body: body,
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,

@@ -25,7 +25,7 @@ export class AppComponent  implements OnInit{
 
       if(!this.auth.getUserId()){
         if(!token){      
-          window.location.href = environment.authPageUrl;
+          // window.location.href = environment.authPageUrl;
           console.log(token);
 
           //+"/login/"+environment.app;
