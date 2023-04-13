@@ -37,7 +37,7 @@ export class ContentService {
   }
 
   public uploadFile(
-    file?:  Blob,
+    file?:  any,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {

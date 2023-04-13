@@ -169,7 +169,9 @@ export class AddComponent {
   }
 
   callUploadApi(file: any) {
-    this.contentService.uploadFile(file).subscribe({
+    let formData = new FormData();
+    formData.append('file',file);
+    this.contentService.uploadFile(formData).subscribe({
       next: (value) => {
         console.log(value);
       },
