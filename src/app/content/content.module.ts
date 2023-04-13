@@ -8,11 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { ManageComponent } from './manage/manage.component';
 
 
 @NgModule({
   declarations: [
-    AddComponent
+    AddComponent,
+    ManageComponent
   ],
   imports: [
     CommonModule,

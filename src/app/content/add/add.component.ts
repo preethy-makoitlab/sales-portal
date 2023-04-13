@@ -78,7 +78,7 @@ export class AddComponent {
     this.contentService.createContent(this.content).subscribe({
       next: (value) => {
         console.log(value);
-        // this.router.navigate(['/partner/']);
+        this.router.navigate(['/content']);
       },
       error: (err) => {
         console.log(err);
