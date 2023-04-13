@@ -39,20 +39,20 @@ export class AddComponent {
   constructor(private router: Router,
     private partnerService: PartnerService,
     private subscriptionService: SubscriptionService,
-    private masterdataService : MasterdataService,
+    private masterdataService: MasterdataService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
-      this.addCompanyForm = this.formBuilder.group({
-        companyname: ['', Validators.required],
-        companybranch: ['', Validators.required],
-        partnertype: ['', Validators.required],
-        companysector: ['', Validators.required],
-        weblink: ['', Validators.required],
-        address: ['', Validators.required],
-        city: ['', Validators.required],
-        state: ['', Validators.required]
-      });
-    }
+    this.addCompanyForm = this.formBuilder.group({
+      companyname: ['', Validators.required],
+      companybranch: ['', Validators.required],
+      partnertype: ['', Validators.required],
+      companysector: ['', Validators.required],
+      weblink: ['', Validators.required],
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required]
+    });
+  }
 
   spoc: any = [
     {
@@ -84,7 +84,7 @@ export class AddComponent {
   subscription: any = {
     partnerId: "",
     noOfSubscriptions: "",
-    noOfSessions: 0,
+    noOfTherapySessions: 0,
     planDuration: 0,
     subscriptionStart: "",
     subscriptionEnd: ""
@@ -99,17 +99,17 @@ export class AddComponent {
     placeholder: 'DD-MM-YYYY',
   };
 
-  
+
   submit(form: any) {
     console.log(form?.value);
     console.log(this.partner);
     let req = this.partner;
-    if(this.editMode){
+    if (this.editMode) {
       let _id = String(this.activatedRoute.snapshot.params['id']);
       this.partnerService.updatePartner(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          if(!this.gotonext){
+          if (!this.gotonext) {
             this.router.navigate(['/partner']);
           }
         },
@@ -118,13 +118,13 @@ export class AddComponent {
         }
       })
     }
-    else{
+    else {
       this.partnerService.createPartner(req).subscribe({
         next: (value) => {
           console.log(value);
           this.partnerId = value.partnerId;
           console.log(this.partnerId)
-          if(!this.gotonext){
+          if (!this.gotonext) {
             this.router.navigate(['/partner']);
           }
         },
@@ -141,7 +141,7 @@ export class AddComponent {
     this.subscription.partnerId = this.partnerId;
     this.subscription.subscriptionEnd = this.endDate;
     let req = this.subscription;
-    if(this.editMode){
+    if (this.editMode) {
       this.subscriptionService.updateSubscription(this.subscriptionId, req).subscribe({
         next: (value) => {
           console.log(value);
@@ -161,12 +161,12 @@ export class AddComponent {
         error: (err) => {
           console.log(err);
         }
-      })    
+      })
     }
   }
 
   redirect(link: string) {
-    window.open('http://'+link, '_blank');
+    window.open('http://' + link, '_blank');
   }
 
   addSpoc() {
@@ -205,7 +205,7 @@ export class AddComponent {
 
   disablePartner() {
     let req = {
-       'status' : Status.Inactive
+      'status': Status.Inactive
     };
     this.partner.status = Status.Inactive;
     let _id = String(this.activatedRoute.snapshot.params['id']);
@@ -224,7 +224,7 @@ export class AddComponent {
 
   enablePartner() {
     let req = {
-       'status' : Status.Active
+      'status': Status.Active
     };
     this.partner.status = Status.Active;
     let _id = String(this.activatedRoute.snapshot.params['id']);
@@ -243,7 +243,7 @@ export class AddComponent {
 
 
   setEndDate() {
-    if(this.subscription.subscriptionStart) {
+    if (this.subscription.subscriptionStart) {
       var start = new Date(this.subscription.subscriptionStart);
       var end = new Date(start);
       end.setMonth(start.getMonth() + this.subscription.planDuration);
@@ -254,7 +254,7 @@ export class AddComponent {
   }
 
   fetchSubscription() {
-    this.gotonext = true; 
+    this.gotonext = true;
     this.submit(null);
     this.subscriptionService.getSubscription(this.partnerId).subscribe({
       next: (value) => {
@@ -279,7 +279,7 @@ export class AddComponent {
         this.partner = value;
         this.spoc = value.spocDetails;
         this.partnerId = value.partnerId;
-        if(value.status == Status.Inactive) {
+        if (value.status == Status.Inactive) {
           this.isDisabled = true;
         }
       },
@@ -294,17 +294,17 @@ export class AddComponent {
       next: (masterdata) => {
         console.log(masterdata);
         masterdata.forEach((master: { category: string; masterData: any[]; }) => {
-          if(master.category == 'PartnerSectors'){
+          if (master.category == 'PartnerSectors') {
             master.masterData.forEach(data => {
-              if(data.status == Status.Active){
+              if (data.status == Status.Active) {
                 this.partnerSector.push(data.data);
               }
             })
           }
 
-          if(master.category == 'NoOfSubscriptions'){
+          if (master.category == 'NoOfSubscriptions') {
             master.masterData.forEach(data => {
-              if(data.status == Status.Active){
+              if (data.status == Status.Active) {
                 this.noOfSubscriptions.push(data.data);
               }
             })
@@ -319,11 +319,11 @@ export class AddComponent {
 
   ngOnInit(): void {
 
-    if(this.activatedRoute.snapshot.params){
+    if (this.activatedRoute.snapshot.params) {
       console.log(this.activatedRoute.snapshot.params);
       let value = this.activatedRoute.snapshot.params['id'];
-      if(value){
-       this.populate(value)
+      if (value) {
+        this.populate(value)
       }
     }
 

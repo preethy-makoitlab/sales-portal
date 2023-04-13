@@ -37,7 +37,6 @@ export class AddMemberComponent {
     partnerId: "",
     name: "",
     email: "",
-    memberId: "",
     department: "",
     branch: ""
   }
@@ -62,7 +61,7 @@ export class AddMemberComponent {
         this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
       },
       error: (err) => {
-        console.log(err);
+        alert("error deleting member");
       }
     })
     this.isAlert = false;
@@ -80,7 +79,7 @@ export class AddMemberComponent {
         this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
       },
       error: (err) => {
-        console.log(err);
+        alert("error enabling member");
       }
     })
     this.isAlert = false;
@@ -99,6 +98,7 @@ export class AddMemberComponent {
           this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
+          alert("error updating member");
           console.log(err);
         }
       })
@@ -110,6 +110,7 @@ export class AddMemberComponent {
           this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
+          alert("error creating member");
           console.log(err);
         }
       })
@@ -128,6 +129,7 @@ export class AddMemberComponent {
         }
       },
       error: (err) => {
+        alert("error getting member details");
         console.log(err);
       }
     })

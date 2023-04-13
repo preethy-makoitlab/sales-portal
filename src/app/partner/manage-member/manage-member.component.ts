@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
 import { MemberService } from 'src/app/services/member.service';
-import { Status } from 'src/app/stores/types';
-
+import { ISubscriptionCount, Status } from 'src/app/stores/types';
+import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 @Component({
   selector: 'app-manage-member',
   templateUrl: './manage-member.component.html',
@@ -18,6 +18,8 @@ export class ManageMemberComponent {
   totalCount: number = 0;
   activeCount: number = 0;
   partnerId!: string;
+  subscriptionCount: ISubscriptionCount = { total: 0 };
+
   fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
   actionField: Object = {
     label: 'Actions',
@@ -86,15 +88,16 @@ export class ManageMemberComponent {
   listMembers() {
     this.memberService.memberList(this.partnerId).subscribe({
       next: (value) => {
+        this.subscriptionCount = value?.subscriptionCount;
         console.log(value);
-        value.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
+        value?.members?.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
           var memberData: any = {};
           var _id = d.id;
           var name = d.name;
           var email = d.email;
           var dept = d.department;
           var branch = d.branch;
-          var lastActive = '03-04-2022';
+          var lastActive = isoToDDMMYYYY(new Date().toISOString());
           var data = [
             {
               data: null,
@@ -165,17 +168,17 @@ export class ManageMemberComponent {
               route: '',
               isCheckbox: false
             },
-            {
-              data: null,
-              isImage: false,
-              isButton: true,
-              buttonLabel: 'Resend Invite',
-              buttonIcon: 'paper-plane.svg',
-              route: '',
-              isEditable: false,
-              isClickable: true,
-              isCheckbox: false
-            }
+            // {
+            //   data: null,
+            //   isImage: false,
+            //   isButton: true,
+            //   buttonLabel: 'Resend Invite',
+            //   buttonIcon: 'paper-plane.svg',
+            //   route: '',
+            //   isEditable: false,
+            //   isClickable: true,
+            //   isCheckbox: false
+            // }
           ]
           memberData.id = _id;
           memberData.data = data;
