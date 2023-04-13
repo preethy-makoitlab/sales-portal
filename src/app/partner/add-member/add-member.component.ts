@@ -17,8 +17,8 @@ export class AddMemberComponent {
   isDisabled: boolean = false;
   editMode: boolean = false;
   isAlert: boolean = false;
-  alertHeaderDisable: string = "Member Disable"
-  alertBodyDisable: string = "Please make sure that you want to disable the member"
+  alertHeaderDisable: string = "Member Delete"
+  alertBodyDisable: string = "Please make sure that you want to delete the member"
   alertHeaderEnable: string = "Member Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the member"
 
@@ -26,11 +26,11 @@ export class AddMemberComponent {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private memberService: MemberService) {
-      this.addMemberForm = this.formBuilder.group({
-        membername: ['', Validators.required],
-        membercode: ['', Validators.required],
-        email: ['', Validators.required]
-      });
+    this.addMemberForm = this.formBuilder.group({
+      membername: ['', Validators.required],
+      membercode: ['', Validators.required],
+      email: ['', Validators.required]
+    });
   }
 
   member: any = {
@@ -53,13 +53,13 @@ export class AddMemberComponent {
 
   disableMember() {
     let req = {
-       'status' : Status.Inactive
+      'status': Status.Inactive
     };
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.memberService.updateMember(_id, req).subscribe({
       next: (value) => {
         console.log(value);
-        this.router.navigate(['/partner/managemember/'+this.member.partnerId]);
+        this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
       },
       error: (err) => {
         console.log(err);
@@ -71,13 +71,13 @@ export class AddMemberComponent {
 
   enableMember() {
     let req = {
-       'status' : Status.Active
+      'status': Status.Active
     };
     let _id = String(this.activatedRoute.snapshot.params['id']);
     this.memberService.updateMember(_id, req).subscribe({
       next: (value) => {
         console.log(value);
-        this.router.navigate(['/partner/managemember/'+this.member.partnerId]);
+        this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
       },
       error: (err) => {
         console.log(err);
@@ -91,12 +91,12 @@ export class AddMemberComponent {
     console.log(form.value);
     console.log(this.member);
     let req = this.member;
-    if(this.editMode) {
+    if (this.editMode) {
       let _id = String(this.activatedRoute.snapshot.params['id']);
       this.memberService.updateMember(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          this.router.navigate(['/partner/managemember/'+this.member.partnerId]);
+          this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
           console.log(err);
@@ -107,7 +107,7 @@ export class AddMemberComponent {
       this.memberService.createMember(req).subscribe({
         next: (value) => {
           console.log(value);
-          this.router.navigate(['/partner/managemember/'+this.member.partnerId]);
+          this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
           console.log(err);
@@ -123,7 +123,7 @@ export class AddMemberComponent {
         this.viewForm = true;
         this.showDisable = true;
         this.member = value;
-        if(value.status == Status.Inactive) {
+        if (value.status == Status.Inactive) {
           this.isDisabled = true;
         }
       },
@@ -132,18 +132,23 @@ export class AddMemberComponent {
       }
     })
   }
-  
+
 
   ngOnInit(): void {
-    if(this.activatedRoute.snapshot.params){
-      console.log(this.activatedRoute.snapshot.params);
+    if (this.activatedRoute.snapshot.params) {
       let value = this.activatedRoute.snapshot.params['id'];
       var pattern: RegExp = /(A-Z)(a-z){2}/;
-      if(value && !pattern.test(value)){
-       this.member.partnerId = value;
-       this.populate(value);
+      if (value.indexOf('PR-') > -1) {
+        this.member.partnerId = value;
       }
+      else {
+        this.populate(value);
+      }
+      // if (value && !pattern.test(value)) {
+      // }
+      // else if (value && !pattern.test(value)) {
+      // }
     }
   }
-  
+
 }
