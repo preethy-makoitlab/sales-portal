@@ -18,11 +18,12 @@ export class AddComponent {
     energy: "",
     practiceName: "",
     thumbnail:"",
-    modules: []
+    module: []
   }
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
+  selectedCategory: any;
   statusArray: any[] = [];
   categoryArray: any[] = [];
   modulesNo!: number;
@@ -69,7 +70,20 @@ export class AddComponent {
 
   submit(form: any) {
     console.log(form.value);
+    this.content.category = this.selectedCategory.id;
+    delete this.content.genre;
+    delete this.content.emotion;
+    delete this.content.energy;
     console.log(this.content);
+    this.contentService.createContent(this.content).subscribe({
+      next: (value) => {
+        console.log(value);
+        // this.router.navigate(['/partner/']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   onKey(name: any){
@@ -104,23 +118,23 @@ export class AddComponent {
     }
     console.log(this.statusArray);
     this.cdr.detectChanges();
-    if(this.content.modules.length > this.modulesNo){
-      for(let i= this.content.modules.length; i > this.modulesNo; i--){
-        this.content.modules.pop();
+    if(this.content.module.length > this.modulesNo){
+      for(let i= this.content.module.length; i > this.modulesNo; i--){
+        this.content.module.pop();
       }
     }
     else{
-      for(let i= this.content.modules.length; i < this.modulesNo; i++){
+      for(let i= this.content.module.length; i < this.modulesNo; i++){
         let module = {
           moduleId: i+1,
           moduleName: "",
           file: "",
           thumbnail: ""
         }
-        this.content.modules.push(module);
+        this.content.module.push(module);
       }
     }
-    console.log(this.content.modules);
+    console.log(this.content.module);
   }
 
   uploadFile(event: any) {
@@ -181,8 +195,10 @@ export class AddComponent {
 
   fetch() {
     var flag = true;
+    console.log(this.content);
     this.categoryArray.every(cat => {
       if(cat.category == this.content.category) {
+        this.selectedCategory = cat;
         this.content.genre = cat.genre;
         this.content.emotion = cat.emotionPurpose || "";
         this.content.energy = cat.energyPurpose || "";

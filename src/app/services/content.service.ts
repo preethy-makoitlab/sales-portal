@@ -62,6 +62,26 @@ export class ContentService {
     );
   }
 
-
+  public createContent(
+    body?: Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.basePath}/contents/create`,
+      {
+        body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
 
 }
