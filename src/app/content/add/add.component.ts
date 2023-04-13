@@ -141,7 +141,7 @@ export class AddComponent {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if(file && file.size < this.maxSize){
-      this.formData.append('image', file);
+      this.formData.append('file', file);
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
@@ -183,9 +183,10 @@ export class AddComponent {
   }
 
   callUploadApi(file: any) {
-    let formData = new FormData();
-    formData.append('file',file);
-    this.contentService.uploadFile(formData).subscribe({
+    // let formData = new FormData();
+    // let fileToserver: File = file.target?.files[0];
+    // formData.append('file',fileToserver);
+    this.contentService.uploadFile(file).subscribe({
       next: (value) => {
         console.log(value);
       },
