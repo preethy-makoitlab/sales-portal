@@ -22,7 +22,7 @@ export class BulkUploadComponent {
   invalidCount!: number;
   errorPercent!: number;
 
-  constructor(private router: Router,
+  constructor(
     private activatedRoute: ActivatedRoute,
     private memberService: MemberService) {}
   
