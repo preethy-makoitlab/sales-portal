@@ -231,6 +231,11 @@ export class AddComponent {
 
   ngOnInit(): void {
     this.loadCategories();
+    const input = document.getElementById('category');
+    input?.addEventListener('click', function () {
+      this.focus();
+    });
+
   }
 
 }
