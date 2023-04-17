@@ -12,6 +12,7 @@ import { CategoryService } from 'src/app/services/category.service';
 export class AddComponent {
 
   content: any = {
+    id:"",
     category: "",
     genre: "",
     emotion: "",
@@ -94,6 +95,7 @@ export class AddComponent {
         console.log(value);
         if (value.isValid) {
           this.isOriginal = true;
+          this.content.id = value.id;
           this.content.practiceName = name;
         }
         else {
@@ -186,7 +188,7 @@ export class AddComponent {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile(file).subscribe({
+    this.contentService.uploadFile("test","1", file).subscribe({
       next: (value) => {
         console.log(value);
       },
