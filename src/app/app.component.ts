@@ -18,6 +18,11 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     if (true) {
       let token = this.cookieService.get("accessToken");
+      if(!token){
+        this.auth.clearUserData();
+       window.location.href = environment.authPageUrl;
+
+      }
       token = token.replace(/['"]+/g, '');
             let user = null;
 
