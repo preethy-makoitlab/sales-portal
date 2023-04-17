@@ -11,6 +11,15 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class AddComponent {
 
+  module: any = [
+    {
+      moduleId: 1,
+      moduleName: "",
+      file: "",
+      thumbnail: ""
+    }
+  ]
+
   content: any = {
     category: "",
     genre: "",
@@ -18,13 +27,18 @@ export class AddComponent {
     energy: "",
     practiceName: "",
     thumbnail: "",
-    module: []
+    module: this.module
   }
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
   selectedCategory: any;
-  statusArray: any[] = [];
+  statusArray: any[] = [
+    {
+      isUploaded: false,
+      isLarge: false
+    }
+  ];
   categoryArray: any[] = [];
   modulesNo!: number;
   placeholder: string = "Enter Practice Name";
@@ -78,7 +92,7 @@ export class AddComponent {
     this.contentService.createContent(this.content).subscribe({
       next: (value) => {
         console.log(value);
-        this.router.navigate(['/']);
+        this.router.navigate(['/content']);
       },
       error: (err) => {
         console.log(err);
@@ -106,36 +120,60 @@ export class AddComponent {
     })
   }
 
+  // addModule() {
+  //   console.log(this.modulesNo);
+  //   for (let i = 0; i < this.modulesNo; i++) {
+  //     this.statusArray.push(
+  //       {
+  //         isUploaded: false,
+  //         isLarge: false
+  //       }
+  //     );
+  //   }
+  //   console.log(this.statusArray);
+  //   this.cdr.detectChanges();
+  //   if (this.content.module.length > this.modulesNo) {
+  //     for (let i = this.content.module.length; i > this.modulesNo; i--) {
+  //       this.content.module.pop();
+  //     }
+  //   }
+  //   else {
+  //     for (let i = this.content.module.length; i < this.modulesNo; i++) {
+  //       let module = {
+  //         moduleId: i + 1,
+  //         moduleName: "",
+  //         file: "",
+  //         thumbnail: ""
+  //       }
+  //       this.content.module.push(module);
+  //     }
+  //   }
+  //   console.log(this.content.module);
+  // }
+
   addModule() {
-    console.log(this.modulesNo);
-    for (let i = 0; i < this.modulesNo; i++) {
-      this.statusArray.push(
-        {
-          isUploaded: false,
-          isLarge: false
-        }
-      );
-    }
-    console.log(this.statusArray);
-    this.cdr.detectChanges();
-    if (this.content.module.length > this.modulesNo) {
-      for (let i = this.content.module.length; i > this.modulesNo; i--) {
-        this.content.module.pop();
+    this.statusArray.push(
+      {
+        isUploaded: false,
+        isLarge: false
       }
+    );
+    let module = {
+              moduleId: this.module.length + 1,
+              moduleName: "",
+              file: "",
+              thumbnail: ""
     }
-    else {
-      for (let i = this.content.module.length; i < this.modulesNo; i++) {
-        let module = {
-          moduleId: i + 1,
-          moduleName: "",
-          file: "",
-          thumbnail: ""
-        }
-        this.content.module.push(module);
-      }
-    }
-    console.log(this.content.module);
+    this.module.push(module);
+    console.log(this.content.module, this.statusArray);
   }
+
+  removeModule(index: number) {
+    this.module.splice(index, 1);
+    this.statusArray.splice(index, 1);
+    console.log(this.content.module, this.statusArray);
+  }
+
 
   uploadFile(event: any) {
     this.formData = new FormData();
