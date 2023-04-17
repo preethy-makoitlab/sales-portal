@@ -10,13 +10,48 @@
     <div class="card-body">
 
         <form #addContentForm="ngForm" (ngSubmit)="submit(addContentForm)">
+            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2 mb-4">
+
+                <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
+                    <div *ngIf="showDisable && !isDisabled" class="flex justify-end">
+                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow()">Delete</button>
+                    </div>
+                    <div *ngIf="showDisable && isDisabled" class="flex justify-end">
+                        <button type="button" class="btn btn-primary enable-button"
+                            (click)="dialogShow()">Enable</button>
+                    </div>
+                    <div *ngIf="isAlert && !isDisabled">
+                        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                            (closeAlert)="dialogShow()" (isDisable)="disableContent()"></app-alert-box>
+                    </div>
+                    <div *ngIf="isAlert && isDisabled">
+                        <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
+                            (closeAlert)="dialogShow()" (isDisable)="enableContent()"></app-alert-box>
+                    </div>
+                    <div *ngIf="viewForm" class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+                            <div>
+                                <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                            </div>
+                            <div>
+                                <span class="">Edit Content</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1"
+                        [routerLink]="['/content']">
+                        Discard
+                    </div>
+                </div>
+                
+            </div>
             <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                     <div class="flex-auto">
                         <label class="form-label required">Pick Category</label>
                         <select class="select select-md title-select" name="category" [(ngModel)]="content.category"
-                            ngModel (change)="fetch()" required>
+                            ngModel (change)="fetch()" [disabled]="viewForm" required>
                             <option value="" disabled selected>Select</option>
                             <option *ngFor="let option of categoryArray" [value]="option.category">
                                 {{option.category}}
@@ -37,7 +72,7 @@
                             placeholder="Enter Genre" ngModel required disabled />
                     </div>
                     <div class="flex-auto">
-                        <label class="form-label required">Emotion Purpose</label>
+                        <label class="form-label">Emotion Purpose</label>
                         <input class="input small-text" name="emotion" [(ngModel)]="content.emotion"
                             placeholder="Enter emotion purpose" ngModel disabled />
                     </div>
@@ -45,14 +80,14 @@
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                     <div class="flex-auto">
-                        <label class="form-label required">Energy Purpose</label>
+                        <label class="form-label">Energy Purpose</label>
                         <input class="input small-text" name="energy" [(ngModel)]="content.energy"
                             placeholder="Enter energy purpose" ngModel disabled />
                     </div>
                     <div class="flex-auto">
                         <label class="form-label required">Practice Name</label>
                         <app-input-with-icon [placeholder]="placeholder" [src]="icon"
-                            (inputString)="onKey($event)"></app-input-with-icon>
+                            (inputString)="onKey($event)" [isDisabled]="viewForm"></app-input-with-icon>
                         <div *ngIf="isOriginal == false && clicked" class="flex justify-end gap-2 items-center">
                             <img src="../../../assets/icons/verify-cross.svg" />
                             <p>Already taken</p>
@@ -67,7 +102,7 @@
                             </div> -->
                     </div>
                     <div class="flex-auto">
-                        <div class="grow basis-1/2 clickable" (click)="openFileExplorer()">
+                        <div class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
                             <label class="form-label">Upload Thumbnail</label>
                             <div class="flex p-6 border-dashed rounded-md upload-pic">
                                 <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
@@ -98,107 +133,85 @@
 
                 <div class="divider"></div>
 
-                <label class="form-label required">Modules</label>
-                    <div *ngFor="let item of content.module; index as index" class="flex w-full">
-                        <div class="flex w-full justify-start items-start gap-2">
-                            <div
-                                class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-4 border-2 border-solid rounded-lg border-{#E8E8E8}">
-                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-                                    <!-- <div class="flex-auto">
-                                        <label class="form-label required">Module ID</label>
-                                        <input class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                            [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" />
-                                    </div> -->
-                                    <div class="flex-auto">
-                                        <label class="form-label required">Module Index</label>
-                                        <input class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                            [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" />
-                                        <label class="form-label required">Module name</label>
-                                        <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
-                                            [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" />
-                                    </div>
-                                    <div class="flex-auto">
-                                        <div class="grow basis-1/2 clickable" (click)="open(index)">
-                                            <label class="form-label required">Upload File</label>
-                                            <div class="flex p-6 border-dashed rounded-md upload-pic">
-                                                <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
-                                                <div class="flex flex-col items-center">
-                                                    <div *ngIf="!statusArray[index].isUploaded">
-                                                        <p>Browse to select file</p>
-                                                        <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
-                                                        <input type="file" (change)="uploadModule($event, index)"
-                                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                                    </div>
-                                                    <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
-                                                        <p>File upload successful</p>
-                                                        <p class="text-xs">Click to re-upload</p>
-                                                        <input type="file" (change)="uploadModule($event, index)"
-                                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                                    </div>
-                                                    <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
-                                                        <p>File upload failed</p>
-                                                        <p class="text-xs">File size exceeded 5MB</p>
-                                                        <input type="file" (change)="uploadModule($event, index)"
-                                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                                    </div>
+                <div class="flex justify-between">
+                    <label class="form-label required">Modules</label>
+                    <div *ngIf="viewForm || editMode" class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="addModule()">
+                            <div>
+                                <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                            </div>
+                            <div>
+                                <span class="">Add module</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngFor="let item of content.module; index as index" class="flex w-full">
+                    <div class="flex w-full justify-center items-start gap-2">
+                        <div
+                            class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-4 border-2 border-solid rounded-lg border-{#E8E8E8}">
+                            <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                <div class="flex-auto">
+                                    <label class="form-label required">Module Index</label>
+                                    <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
+                                        [(ngModel)]="content.module[index].moduleIndex" ngModel [required]="index == 0" [disabled]="viewForm" />
+                                    <label class="form-label required">Module name</label>
+                                    <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
+                                        [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
+                                </div>
+                                <div class="flex-auto">
+                                    <div class="grow basis-1/2 clickable" (click)="open(index)">
+                                        <label class="form-label required">Upload File</label>
+                                        <div class="flex p-6 border-dashed rounded-md upload-pic">
+                                            <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                                            <div class="flex flex-col items-center">
+                                                <div *ngIf="!statusArray[index].isUploaded">
+                                                    <p>Browse to select file</p>
+                                                    <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
+                                                    <input type="file" (change)="uploadModule($event, index)"
+                                                        accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
+                                                        [(ngModel)]="content.module[index].file" style="display:none">
+                                                </div>
+                                                <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
+                                                    <p>File upload successful</p>
+                                                    <p class="text-xs">Click to re-upload</p>
+                                                    <input type="file" (change)="uploadModule($event, index)"
+                                                        accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
+                                                        [(ngModel)]="content.module[index].file" style="display:none">
+                                                </div>
+                                                <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
+                                                    <p>File upload failed</p>
+                                                    <p class="text-xs">File size exceeded 5MB</p>
+                                                    <input type="file" (change)="uploadModule($event, index)"
+                                                        accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
+                                                        [(ngModel)]="content.module[index].file" style="display:none">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <img src="../../../assets/icons/spoc-add.svg" class="cursor-pointer" (click)="addModule()">
-                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="removeModule(index)">
                         </div>
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="removeModule(index)">
                     </div>
+                </div>
 
-                <!-- <div class="flex-auto w-1/4">
-                    <label class="form-label required">No.of modules</label>
-                    <input type="number" class="input small-text" name="modules" placeholder="Enter no. of modules"
-                        [(ngModel)]="modulesNo" (change)="addModule()" ngModel required />
-                </div> -->
-                <!-- <div *ngFor="let item of content.module; index as index" 
-                    class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">Module name</label>
-                        <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
-                            [(ngModel)]="content.module[index].moduleName" ngModel required />
-                    </div>
-                    <div class="flex-auto">
-                        <div class="grow basis-1/2 clickable" (click)="open(index)">
-                            <label class="form-label required">Upload File</label>
-                            <div class="flex p-6 border-dashed rounded-md upload-pic">
-                                <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
-                                <div class="flex flex-col items-center">
-                                    <div *ngIf="!statusArray[index].isUploaded">
-                                        <p>Browse to select file</p>
-                                        <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
-                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                    </div>
-                                    <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
-                                        <p>File upload successful</p>
-                                        <p class="text-xs">Click to re-upload</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
-                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                    </div>
-                                    <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
-                                        <p>File upload failed</p>
-                                        <p class="text-xs">File size exceeded 5MB</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
-                                            accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
-                                            [(ngModel)]="content.module[index].file" style="display:none">
-                                    </div>
-                                </div>
-                            </div>
+                <div class="flex items-center justify-around flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" *ngIf="viewForm || editMode">
+                    <div class="flex w-fit" *ngFor="let item of [1,2]; index as index">
+                        <div class="flex-auto">
+                            <video #video width="500px" height="500px" controls>
+                                <source [src]="" type="video/mp4">
+                            </video>
+                            <label class="form-label required mt-1">Module Index</label>
+                            <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
+                                [(ngModel)]="content.module[index].moduleIndex" ngModel [required]="index == 0" [disabled]="viewForm" />
+                            <label class="form-label required mt-1">Module name</label>
+                            <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
+                                [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
             </div>
 

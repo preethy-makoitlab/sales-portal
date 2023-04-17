@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
 import { environment } from '../../environments/environment';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +38,8 @@ export class ContentService {
   }
 
   public uploadFile(
+    id:string,
+    index:string,
     file?:  any,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -49,7 +52,7 @@ export class ContentService {
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.uploadBasePath}/files/upload`,
+      `${this.uploadBasePath}/files/upload/`,
       {
         body: file,
         headers: new HttpHeaders({

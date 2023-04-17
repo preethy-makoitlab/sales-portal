@@ -13,7 +13,7 @@ export class AddComponent {
 
   module: any = [
     {
-      moduleId: 1,
+      moduleIndex: "",
       moduleName: "",
       file: "",
       thumbnail: ""
@@ -21,6 +21,7 @@ export class AddComponent {
   ]
 
   content: any = {
+    id:"",
     category: "",
     genre: "",
     emotion: "",
@@ -50,6 +51,15 @@ export class AddComponent {
   maxSize: number = 5 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
+  viewForm: boolean = true; //
+  isDisabled: boolean = false;
+  editMode: boolean = false;
+  showDisable: boolean = true; //
+  isAlert: boolean = false;
+  alertHeaderDisable: string = "Content Deletion"
+  alertBodyDisable: string = "Please make sure that you want to delete the content"
+  alertHeaderEnable: string = "Content Enable"
+  alertBodyEnable: string = "Please make sure that you want to enable the content"
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -64,6 +74,15 @@ export class AddComponent {
 
   openFileExplorer() {
     this.fileInput.nativeElement.click();
+  }
+
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
+  dialogShow() {
+    this.isAlert = !this.isAlert;
   }
 
   open(index: number) {
@@ -81,6 +100,17 @@ export class AddComponent {
     //   console.log(instance);
     // })
   }
+
+  disableContent() {
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+
+  enableContent() {
+    this.isAlert = false;
+    this.isDisabled = false;
+  }
+
 
   submit(form: any) {
     console.log(form.value);
@@ -108,7 +138,10 @@ export class AddComponent {
         console.log(value);
         if (value.isValid) {
           this.isOriginal = true;
+          this.content.id = value.id;
           this.content.practiceName = name;
+          // this.content = Object.assign(value ,this.content);
+          console.log("Final",this.content);
         }
         else {
           this.isOriginal = false;
@@ -159,7 +192,7 @@ export class AddComponent {
       }
     );
     let module = {
-              moduleId: this.module.length + 1,
+              moduleIndex: "",
               moduleName: "",
               file: "",
               thumbnail: ""
@@ -224,7 +257,7 @@ export class AddComponent {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile(file).subscribe({
+    this.contentService.uploadFile("test","1", file).subscribe({
       next: (value) => {
         console.log(value);
       },
