@@ -174,7 +174,6 @@ export class MemberService {
   }
 
   public downloadSampleTemplate(
-    body?:  Object,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
@@ -184,15 +183,16 @@ export class MemberService {
     
     console.log(queryParameters);
   
-    return this.httpClient.request<Object>(
+    return this.httpClient.request(
       'get',
       `${this.exportBasePath}/download/bulk-upload-template`,
       {
-        body: body,
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
-      }
+        responseType:'blob'
+      },
+      
     );
   }
 

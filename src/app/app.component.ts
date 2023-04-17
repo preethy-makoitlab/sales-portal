@@ -19,9 +19,7 @@ export class AppComponent  implements OnInit{
     if(true){
       let token = this.cookieService.get("accessToken");
       token = token.replace(/['"]+/g, '');
-      console.log(token);
-
-      let user = null;
+            let user = null;
 
       if(!this.auth.getUserId()){
         if(!token){      
