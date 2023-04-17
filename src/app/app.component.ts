@@ -10,25 +10,25 @@ import { environment } from 'src/environments/environment';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent  implements OnInit{
+export class AppComponent implements OnInit {
   title = 'Anyo - Portal';
 
-  constructor( private translate: AnyoTranslateService,private userState:UserStateService,private auth:AuthenticationService,private cookieService:CookieService) {
+  constructor(private translate: AnyoTranslateService, private userState: UserStateService, private auth: AuthenticationService, private cookieService: CookieService) {
   }
   async ngOnInit() {
-    if(true){
+    if (true) {
       let token = this.cookieService.get("accessToken");
       token = token.replace(/['"]+/g, '');
             let user = null;
 
-      if(!this.auth.getUserId()){
-        if(!token){      
+      if (!this.auth.getUserId()) {
+        if (!token) {
           // window.location.href = environment.authPageUrl;
           console.log(token);
 
           //+"/login/"+environment.app;
 
-      }
+        }
         user = await this.userState.fetchUser(token);
         console.log(user);
 
@@ -36,16 +36,16 @@ export class AppComponent  implements OnInit{
         console.log(this.auth.getUserId());
 
         this.userState.addUser(user);
-        console.log("USER",user);
+        console.log("USER", user);
 
-      }else{
+      } else {
         user = await this.userState.getUser();
-        console.log("USER",user);
+        console.log("USER", user);
 
 
       }
     }
 
   }
-  
+
 }

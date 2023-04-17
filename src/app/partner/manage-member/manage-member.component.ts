@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
 import { MemberService } from 'src/app/services/member.service';
-import { Status } from 'src/app/stores/types';
-
+import { ISubscriptionCount, Status } from 'src/app/stores/types';
+import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 @Component({
   selector: 'app-manage-member',
   templateUrl: './manage-member.component.html',
@@ -13,11 +13,13 @@ export class ManageMemberComponent {
 
   constructor(private translate: AnyoTranslateService,
     private activatedRoute: ActivatedRoute,
-    private memberService: MemberService) {}
-  
+    private memberService: MemberService) { }
+
   totalCount: number = 0;
   activeCount: number = 0;
   partnerId!: string;
+  subscriptionCount: ISubscriptionCount = { total: 0 };
+
   fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
   actionField: Object = {
     label: 'Actions',
@@ -27,8 +29,8 @@ export class ManageMemberComponent {
   isAlert: boolean = false;
   show: boolean = false;
   memberId!: String;
-  alertHeaderDisable: string = "Member Disable"
-  alertBodyDisable: string = "Please make sure that you want to disable the member"
+  alertHeaderDisable: string = "Member Delete"
+  alertBodyDisable: string = "Please make sure that you want to delete the member"
   alertHeaderEnable: string = "Member Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the member"
 
@@ -38,7 +40,7 @@ export class ManageMemberComponent {
 
   disableMember() {
     let req = {
-       'status' : Status.Inactive
+      'status': Status.Inactive
     };
     this.memberService.updateMember(this.memberId, req).subscribe({
       next: (value) => {
@@ -47,7 +49,7 @@ export class ManageMemberComponent {
         var flag = true;
         this.show = true;
         this.tableData.every((data, index) => {
-          if(data.id == this.memberId){
+          if (data.id == this.memberId) {
             flag = false;
             this.tableData.splice(index, 1);
           }
@@ -86,100 +88,101 @@ export class ManageMemberComponent {
   listMembers() {
     this.memberService.memberList(this.partnerId).subscribe({
       next: (value) => {
+        this.subscriptionCount = value?.subscriptionCount;
         console.log(value);
-        value.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
-            var memberData: any = {};
-            var _id = d.id;
-            var name = d.name;
-            var email = d.email;
-            var dept = d.department;
-            var branch = d.branch;
-            var lastActive = '03-04-2022'; 
-            var data = [
-              {
-                data: null,
-                isImage: true,
-                imageFile: 'default-user.svg',
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: name,
-                isImage: false,
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: email,
-                isImage: false,
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: dept,
-                isImage: false,
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: branch,
-                isImage: false,
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: lastActive,
-                isImage: false,
-                isButton: false,
-                isEditable: false,
-                isClickable: false,
-                isCheckbox: false
-              },
-              {
-                data: null,
-                isImage: true,
-                imageFile: 'view-eye.svg',
-                isButton: false,
-                isEditable: false,
-                isClickable: true,
-                route: '/partner/addmember/',
-                isCheckbox: false
-              },
-              {
-                data: null,
-                isImage: true,
-                imageFile: 'delete-member.svg',
-                isButton: false,
-                isEditable: false,
-                isClickable: true,
-                route: '',
-                isCheckbox: false
-              },
-              {
-                data: null,
-                isImage: false,
-                isButton: true,
-                buttonLabel: 'Resend Invite',
-                buttonIcon: 'paper-plane.svg',
-                route: '',
-                isEditable: false,
-                isClickable: true,
-                isCheckbox: false
-              }
-            ]
-            memberData.id = _id;
-            memberData.data = data;
-            this.tableData.push(memberData);
+        value?.members?.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
+          var memberData: any = {};
+          var _id = d.id;
+          var name = d.name;
+          var email = d.email;
+          var dept = d.department;
+          var branch = d.branch;
+          var lastActive = isoToDDMMYYYY(new Date().toISOString());
+          var data = [
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'default-user.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: name,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: email,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: dept,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: branch,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: lastActive,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'view-eye.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: true,
+              route: '/partner/addmember/',
+              isCheckbox: false
+            },
+            {
+              data: null,
+              isImage: true,
+              imageFile: 'delete-member.svg',
+              isButton: false,
+              isEditable: false,
+              isClickable: true,
+              route: '',
+              isCheckbox: false
+            },
+            // {
+            //   data: null,
+            //   isImage: false,
+            //   isButton: true,
+            //   buttonLabel: 'Resend Invite',
+            //   buttonIcon: 'paper-plane.svg',
+            //   route: '',
+            //   isEditable: false,
+            //   isClickable: true,
+            //   isCheckbox: false
+            // }
+          ]
+          memberData.id = _id;
+          memberData.data = data;
+          this.tableData.push(memberData);
         })
       },
       error: (err) => {
@@ -189,11 +192,11 @@ export class ManageMemberComponent {
   }
 
   ngOnInit(): void {
-    if(this.activatedRoute.snapshot.params){
+    if (this.activatedRoute.snapshot.params) {
       console.log(this.activatedRoute.snapshot.params);
       let value = this.activatedRoute.snapshot.params['id'];
-      if(value){
-       this.partnerId = value;
+      if (value) {
+        this.partnerId = value;
       }
     }
     this.getCount();

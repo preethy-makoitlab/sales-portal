@@ -14,41 +14,45 @@ export class BulkUploadComponent {
 
   @ViewChild('fileInput') fileInput: any;
   isUploaded: boolean = false;
-  isValidate: boolean = false;
+  isValidated: boolean = false;
   maxSize: number = 5 * 1024 * 1024;
   isLarge: boolean = false;
   partnerId: string = "";
   formData = new FormData();
-  totalRows!: number;
+  totalRows: number = 0;
   isInvalid: boolean = false;
   invalidRows: any[] = [];
-  invalidCount!: number;
-  errorPercent!: number;
+  invalidCount: number = 0;
+  errorPercent: number = 0;
+  validCount: number = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private memberService: MemberService) {}
-  
+    private memberService: MemberService) { }
+
   sendFile(event: any) {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
-    if(file && file.size < this.maxSize){
+    if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
     }
-    else if(file && file.size > this.maxSize) {
+    else if (file && file.size > this.maxSize) {
       this.isLarge = true;
       this.isUploaded = true;
     }
-    else{
+    else {
       this.isUploaded = false;
+    }
+    if (this.isUploaded) {
+      this.validate()
     }
   }
 
   validate() {
-    this.isValidate = true;
+    // this.isValidated = true;
     this.bulkUpload(this.formData);
   }
 
@@ -60,17 +64,19 @@ export class BulkUploadComponent {
     this.memberService.bulkUpload(this.partnerId, file).subscribe({
       next: (value) => {
         console.log(value);
+        this.isValidated = true;
         this.totalRows = value.totalRows;
-        if(value.invalidRows.length > 0) {
+        if (value.invalidRows.length > 0) {
           this.isInvalid = true;
           this.invalidCount = value.invalidRows.length;
           this.invalidRows = value.invalidRows;
+          this.validCount = this.totalRows - this.invalidCount;
           let set = new Set();
           value.invalidRows.forEach((row: { rowNo: Iterable<unknown> | null | undefined; }) => {
             set.add(row.rowNo);
           })
           let count = set.size;
-          this.errorPercent = 100 - ( count / this.totalRows) * 100;
+          this.errorPercent = 100 - (count / this.totalRows) * 100;
           console.log(this.errorPercent, count, this.totalRows);
         }
       },
@@ -109,11 +115,11 @@ export class BulkUploadComponent {
   }
 
   ngOnInit(): void {
-    if(this.activatedRoute.snapshot.params){
+    if (this.activatedRoute.snapshot.params) {
       console.log(this.activatedRoute.snapshot.params);
       let value = this.activatedRoute.snapshot.params['id'];
-      if(value){
-       this.partnerId = value;
+      if (value) {
+        this.partnerId = value;
       }
     }
   }
