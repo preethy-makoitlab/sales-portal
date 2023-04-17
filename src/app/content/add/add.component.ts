@@ -51,10 +51,10 @@ export class AddComponent {
   maxSize: number = 5 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
-  viewForm: boolean = true; //
+  viewForm: boolean = false; //
   isDisabled: boolean = false;
   editMode: boolean = false;
-  showDisable: boolean = true; //
+  showDisable: boolean = false; //
   isAlert: boolean = false;
   alertHeaderDisable: string = "Content Deletion"
   alertBodyDisable: string = "Please make sure that you want to delete the content"
