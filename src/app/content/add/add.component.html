@@ -112,6 +112,12 @@
                             [(ngModel)]="content.module[index].moduleName" ngModel required />
                     </div>
                     <div class="flex-auto">
+                        <label class="form-label required">Module Index</label>
+
+                        <input class="input small-text" name="moduleindex{{index}}" placeholder="Enter Module Index"
+                        [(ngModel)]="content.module[index].moduleId" ngModel required />
+                    </div>
+                    <div class="flex-auto">
                         <div class="grow basis-1/2 clickable" (click)="open(index)">
                             <label class="form-label required">Upload File</label>
                             <div class="flex p-6 border-dashed rounded-md upload-pic">
@@ -120,21 +126,21 @@
                                     <div *ngIf="!statusArray[index].isUploaded">
                                         <p>Browse to select file</p>
                                         <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
+                                        <input type="file" (change)="uploadModule($event, content.id, index)"
                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                             [(ngModel)]="content.module[index].file" style="display:none">
                                     </div>
                                     <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
                                         <p>File upload successful</p>
                                         <p class="text-xs">Click to re-upload</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
+                                        <input type="file" (change)="uploadModule($event, content.id, index)"
                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                             [(ngModel)]="content.module[index].file" style="display:none">
                                     </div>
                                     <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
                                         <p>File upload failed</p>
                                         <p class="text-xs">File size exceeded 5MB</p>
-                                        <input type="file" (change)="uploadModule($event, index)"
+                                        <input type="file" (change)="uploadModule($event, content.id, index)"
                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                             [(ngModel)]="content.module[index].file" style="display:none">
                                     </div>
