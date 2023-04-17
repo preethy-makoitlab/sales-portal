@@ -97,6 +97,8 @@ export class AddComponent {
           this.isOriginal = true;
           this.content.id = value.id;
           this.content.practiceName = name;
+          this.content = Object.assign(value ,this.content);
+          console.log("Final",this.content);
         }
         else {
           this.isOriginal = false;
