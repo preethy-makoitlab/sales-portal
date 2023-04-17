@@ -75,6 +75,11 @@ export class AddComponent {
     delete this.content.genre;
     delete this.content.emotion;
     delete this.content.energy;
+    this.content.module.forEach((ctl:any) =>{
+      if(ctl.file){
+        delete ctl.file;
+      }
+    })
     console.log(this.content);
     this.contentService.createContent(this.content).subscribe({
       next: (value) => {
@@ -132,7 +137,6 @@ export class AddComponent {
         let module = {
           moduleId: i + 1,
           moduleName: "",
-          file: "",
           thumbnail: ""
         }
         this.content.module.push(module);
@@ -149,7 +153,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData);
+      this.callUploadApi(this.formData,this.content.id);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -160,7 +164,7 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any, index: number) {
+  uploadModule(event: any,id:string, index: any) {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if (file && file.size < this.maxSize) {
@@ -170,7 +174,7 @@ export class AddComponent {
         isUploaded: true,
         isLarge: false
       };
-      this.callUploadApi(this.formData);
+      this.callUploadApi(this.formData,id,index);
     }
     else if (file && file.size > this.maxSize) {
       this.statusArray[index] = {
@@ -186,12 +190,19 @@ export class AddComponent {
     }
   }
 
-  callUploadApi(file: any) {
+  callUploadApi(file: any,id:string,index?:string) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile("test","1", file).subscribe({
+    this.contentService.uploadFile(id,"content",index ,file).subscribe({
       next: (value) => {
+        if(index !== null ||index !== undefined){
+          console.log(value,this.content.module[Number(index)]);
+          this.content.module[Number(index)].thumbnail = value.url;
+
+        }else{
+          this.content.thumbnail = value.url;
+        }
         console.log(value);
       },
       error: (err) => {
