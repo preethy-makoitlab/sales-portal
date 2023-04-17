@@ -8,19 +8,63 @@
             <img class="separator" src="../../../assets/icons/separator.svg">
         </div>
         <div>
-            <h1 class="sub-header-text">0 Content</h1>
+            <h1 class="sub-header-text">{{totalCount}} Content</h1>
         </div>
     </div>
     
-    <!-- <div>
-        <app-search></app-search>
-    </div> -->
     <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/content/add']">
         <div>
             <img class="add-icon" src="../../../assets/icons/add-icon.svg">
         </div>
         <div>
             <span class="">Upload New Content</span>
+        </div>
+    </div>
+</div>
+<div class="custom-card">
+    <div class="card-body">
+        <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+            <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <div class="flex-auto">
+                    <!-- <label class="form-label required">Pick Category</label> -->
+                    <select class="select select-md title-select" name="category" [(ngModel)]="category"
+                        ngModel (change)="fetch()" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option *ngFor="let option of categoryArray" [value]="option.category">
+                            {{option.category}}
+                        </option>
+                    </select>
+                </div>
+                <div class="flex-auto">
+                    <!-- <label class="form-label required">Genre</label> -->
+                    <input class="input small-text" name="genre" [(ngModel)]="genre"
+                        placeholder="Enter Genre" ngModel required disabled />
+                </div>
+                <div class="flex-auto">
+                    <!-- <label class="form-label required">Practice Name</label> -->
+                    <input class="input small-text" name="name" [(ngModel)]="practiceName"
+                        placeholder="Enter Practice Name" ngModel required />
+                </div>
+                <div class="flex-auto items-end">
+                    <button class="btn btn-primary btn-bigger">Filter</button>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <div class="card card-image-cover">
+                    <img src="https://source.unsplash.com/random/300x200" alt="" />
+                    <div class="card-body">
+                        <p class="text-content2">Emotion management</p>
+                        <div class="flex justify-between">
+                            <p>Ratings</p>
+                            <div class="flex">
+                                <img src="../../../assets/icons/delete-spoc.svg"/>
+                                <img src="../../../assets/icons/delete-spoc.svg"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -56,7 +56,7 @@
 }
 
 .upload-pic {
-    border: 1.4px dashed #E8E8E8;;
+    border: 1.4px dashed #E8E8E8;
 }
 
 .text-xs {
@@ -81,7 +81,7 @@ tag {
 
 .example-chip-list {
     width: 100%;
-  }
+}
 
 ::placeholder {
     color: $clr-text-placeholder;
@@ -108,7 +108,7 @@ tag {
     border-radius: 0px;
 }
 
-.checkbox:checked{
+.checkbox:checked {
     background-color: #15154C;
     border: 1px solid #15154C;
 }
@@ -143,9 +143,13 @@ tag {
     border-radius: 200px;
     border-width: 0px;
     --switch-bg-checked: #219653;
-  }
+}
 
 .btn-error {
     background-color: #c62828;
     border-radius: 6px;
+}
+
+.input:disabled {
+    opacity: unset;
 }
