@@ -10,6 +10,20 @@
     margin-right: 10px;
 }
 
+.card {
+    background-color: $clr-btn-primary;
+    box-shadow: 0px 0px 13px rgba(21, 21, 76, 0.18);
+    max-width: 100%;
+}
+
+.card-body {
+    padding: 0.5rem;
+}
+
+.card p {
+    color: $background-primary;
+}
+
 .custom-card {
     width: 100%;
     height: fit-content;
@@ -134,10 +148,6 @@ tag {
     color: #15154C;
     border: 2px solid #15154C;
 }
-
-.small {
-    width: 10rem;
-} 
 
 .switch {
     --switch-bg: #E1E1FD;

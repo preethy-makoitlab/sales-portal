@@ -11,6 +11,15 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class AddComponent {
 
+  module: any = [
+    {
+      moduleIndex: "",
+      moduleName: "",
+      file: "",
+      thumbnail: ""
+    }
+  ]
+
   content: any = {
     id:"",
     category: "",
@@ -19,13 +28,18 @@ export class AddComponent {
     energy: "",
     practiceName: "",
     thumbnail: "",
-    module: []
+    module: this.module
   }
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
   selectedCategory: any;
-  statusArray: any[] = [];
+  statusArray: any[] = [
+    {
+      isUploaded: false,
+      isLarge: false
+    }
+  ];
   categoryArray: any[] = [];
   modulesNo!: number;
   placeholder: string = "Enter Practice Name";
@@ -37,6 +51,15 @@ export class AddComponent {
   maxSize: number = 5 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
+  viewForm: boolean = false; //
+  isDisabled: boolean = false;
+  editMode: boolean = false;
+  showDisable: boolean = false; //
+  isAlert: boolean = false;
+  alertHeaderDisable: string = "Content Deletion"
+  alertBodyDisable: string = "Please make sure that you want to delete the content"
+  alertHeaderEnable: string = "Content Enable"
+  alertBodyEnable: string = "Please make sure that you want to enable the content"
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -51,6 +74,15 @@ export class AddComponent {
 
   openFileExplorer() {
     this.fileInput.nativeElement.click();
+  }
+
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
+  dialogShow() {
+    this.isAlert = !this.isAlert;
   }
 
   open(index: number) {
@@ -69,6 +101,17 @@ export class AddComponent {
     // })
   }
 
+  disableContent() {
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+
+  enableContent() {
+    this.isAlert = false;
+    this.isDisabled = false;
+  }
+
+
   submit(form: any) {
     console.log(form.value);
     this.content.category = this.selectedCategory.id;
@@ -84,7 +127,7 @@ export class AddComponent {
     this.contentService.createContent(this.content).subscribe({
       next: (value) => {
         console.log(value);
-        this.router.navigate(['/']);
+        this.router.navigate(['/content']);
       },
       error: (err) => {
         console.log(err);
@@ -115,6 +158,37 @@ export class AddComponent {
     })
   }
 
+  // addModule() {
+  //   console.log(this.modulesNo);
+  //   for (let i = 0; i < this.modulesNo; i++) {
+  //     this.statusArray.push(
+  //       {
+  //         isUploaded: false,
+  //         isLarge: false
+  //       }
+  //     );
+  //   }
+  //   console.log(this.statusArray);
+  //   this.cdr.detectChanges();
+  //   if (this.content.module.length > this.modulesNo) {
+  //     for (let i = this.content.module.length; i > this.modulesNo; i--) {
+  //       this.content.module.pop();
+  //     }
+  //   }
+  //   else {
+  //     for (let i = this.content.module.length; i < this.modulesNo; i++) {
+  //       let module = {
+  //         moduleId: i + 1,
+  //         moduleName: "",
+  //         file: "",
+  //         thumbnail: ""
+  //       }
+  //       this.content.module.push(module);
+  //     }
+  //   }
+  //   console.log(this.content.module);
+  // }
+
   addModule() {
     console.log(this.modulesNo);
     for (let i = 0; i < this.modulesNo; i++) {
@@ -144,6 +218,7 @@ export class AddComponent {
     }
     console.log(this.content.module);
   }
+
 
   uploadFile(event: any) {
     this.formData = new FormData();
