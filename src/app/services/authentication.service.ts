@@ -36,8 +36,10 @@ export class AuthenticationService {
     // remove user from local storage to log user out
         localStorage.clear();
         this.cookieService.deleteAll();      
-        this.cookieService.delete('accessToken','/',window.location.hostname);
-        this.cookieService.delete('refreshToken', '/',window.location.hostname);
+        console.log(window.location.hostname);
+        //window.location.hostname
+        this.cookieService.delete('accessToken','/',environment.domain);
+        this.cookieService.delete('refreshToken', '/',environment.domain);
         this.router.navigate(['']);
 
 
