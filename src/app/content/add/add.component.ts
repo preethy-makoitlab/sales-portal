@@ -157,6 +157,9 @@ export class AddComponent {
       }
     })
   }
+  removeModule(index:any){
+
+  }
 
   // addModule() {
   //   console.log(this.modulesNo);
