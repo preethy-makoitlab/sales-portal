@@ -13,10 +13,10 @@ export class AddComponent {
 
   module: any = [
     {
-      moduleIndex: "",
+      moduleId: "",
       moduleName: "",
       file: "",
-      thumbnail: ""
+      url: ""
     }
   ]
 
@@ -118,6 +118,11 @@ export class AddComponent {
     delete this.content.genre;
     delete this.content.emotion;
     delete this.content.energy;
+    this.content.module.forEach((ctl:any) =>{
+      if(ctl.file){
+        delete ctl.file;
+      }
+    })
     console.log(this.content);
     this.contentService.createContent(this.content).subscribe({
       next: (value) => {
@@ -192,13 +197,12 @@ export class AddComponent {
       }
     );
     let module = {
-              moduleIndex: "",
+      moduleId: "",
               moduleName: "",
               file: "",
-              thumbnail: ""
+              url: ""
     }
     this.module.push(module);
-    console.log(this.content.module, this.statusArray);
   }
 
   removeModule(index: number) {
@@ -216,7 +220,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData);
+      this.callUploadApi(this.formData,this.content.id);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -227,38 +231,51 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any, index: number) {
+  uploadModule(event: any,id:string, index: any) {
+
+     index = Number(index);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: true,
         isLarge: false
       };
-      this.callUploadApi(this.formData);
+      this.callUploadApi(this.formData,id,index);
     }
     else if (file && file.size > this.maxSize) {
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: true,
         isLarge: true
       };
     }
     else {
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: false,
         isLarge: false
       };
     }
   }
 
-  callUploadApi(file: any) {
+  callUploadApi(file: any,id:string,index?:string) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile("test","1", file).subscribe({
+    this.contentService.uploadFile(id,"content",index ,file).subscribe({
       next: (value) => {
+        console.log(value,index,this.content.module);
+        if(index){
+          this.content.module.forEach((module:any) => {
+          if(Number(module.moduleId) === Number(index)){
+             module.url = value.url;
+          }
+        });
+
+        }else{
+          this.content.thumbnail = value.url;
+        }
         console.log(value);
       },
       error: (err) => {

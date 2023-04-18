@@ -39,7 +39,8 @@ export class ContentService {
 
   public uploadFile(
     id:string,
-    index:string,
+    category:string,
+    index?:string,
     file?:  any,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -49,10 +50,12 @@ export class ContentService {
     });
     
     console.log(queryParameters);
+    queryParameters = queryParameters.set('index',String(index));
+
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.uploadBasePath}/files/upload/`,
+      `${this.uploadBasePath}/files/upload/`+id+'/'+category,
       {
         body: file,
         headers: new HttpHeaders({
