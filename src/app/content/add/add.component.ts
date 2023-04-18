@@ -13,10 +13,10 @@ export class AddComponent {
 
   module: any = [
     {
-      moduleIndex: "",
+      moduleId: "",
       moduleName: "",
       file: "",
-      thumbnail: ""
+      url: ""
     }
   ]
 
@@ -158,7 +158,6 @@ export class AddComponent {
     })
   }
 
-
   // addModule() {
   //   console.log(this.modulesNo);
   //   for (let i = 0; i < this.modulesNo; i++) {
@@ -191,33 +190,25 @@ export class AddComponent {
   // }
 
   addModule() {
-    console.log(this.modulesNo);
-    for (let i = 0; i < this.modulesNo; i++) {
-      this.statusArray.push(
-        {
-          isUploaded: false,
-          isLarge: false
-        }
-      );
-    }
-    console.log(this.statusArray);
-    this.cdr.detectChanges();
-    if (this.content.module.length > this.modulesNo) {
-      for (let i = this.content.module.length; i > this.modulesNo; i--) {
-        this.content.module.pop();
+    this.statusArray.push(
+      {
+        isUploaded: false,
+        isLarge: false
       }
+    );
+    let module = {
+      moduleId: "",
+              moduleName: "",
+              file: "",
+              url: ""
     }
-    else {
-      for (let i = this.content.module.length; i < this.modulesNo; i++) {
-        let module = {
-          moduleId: i + 1,
-          moduleName: "",
-          url: ""
-        }
-        this.content.module.push(module);
-      }
-    }
-    console.log(this.content.module);
+    this.module.push(module);
+  }
+
+  removeModule(index: number) {
+    this.module.splice(index, 1);
+    this.statusArray.splice(index, 1);
+    console.log(this.content.module, this.statusArray);
   }
 
 
