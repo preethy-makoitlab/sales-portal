@@ -50,8 +50,8 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-center flex-wrap md:gap-10 lg:gap-10 sm:gap-2 gap-2">
-                <div class="card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
+            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-center flex-wrap md:gap-10 lg:gap-10 sm:gap-2 gap-2">
+                <div *ngFor="let item of [1,2,3,4]" class="card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
                     <img src="../../../assets/icons/dummy.svg" alt="" />
                     <!-- <img class="w-4" src="../../../assets/icons/play-button.svg" alt="" /> -->
                     <div class="card-body">
@@ -65,49 +65,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
-                    <img src="../../../assets/icons/dummy.svg" alt="" />
-                    <div class="card-body">
-                        <p class="text-content2">Emotion management</p>
-                        <div class="flex justify-between">
-                            <img src="../../../assets/icons/rating-stars.svg">
-                            <div class="flex gap-2">
-                                <img src="../../../assets/icons/delete-content.svg">
-                                <img src="../../../assets/icons/edit-content.svg"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
-                    <img src="../../../assets/icons/dummy.svg" alt="" />
-                    <div class="card-body">
-                        <p class="text-content2">Emotion management</p>
-                        <div class="flex justify-between">
-                            <img src="../../../assets/icons/rating-stars.svg">
-                            <div class="flex gap-2">
-                                <img src="../../../assets/icons/delete-content.svg">
-                                <img src="../../../assets/icons/edit-content.svg"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
-                    <img src="../../../assets/icons/dummy.svg" alt="" />
-                    <div class="card-body">
-                        <p class="text-content2">Emotion management</p>
-                        <div class="flex justify-between">
-                            <img src="../../../assets/icons/rating-stars.svg">
-                            <div class="flex gap-2">
-                                <img src="../../../assets/icons/delete-content.svg">
-                                <img src="../../../assets/icons/edit-content.svg"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
         </div>
     </div>
