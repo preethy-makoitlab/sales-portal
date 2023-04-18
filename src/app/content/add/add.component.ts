@@ -137,7 +137,7 @@ export class AddComponent {
         let module = {
           moduleId: i + 1,
           moduleName: "",
-          thumbnail: ""
+          url: ""
         }
         this.content.module.push(module);
       }
@@ -165,25 +165,27 @@ export class AddComponent {
   }
 
   uploadModule(event: any,id:string, index: any) {
+
+     index = Number(index);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: true,
         isLarge: false
       };
       this.callUploadApi(this.formData,id,index);
     }
     else if (file && file.size > this.maxSize) {
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: true,
         isLarge: true
       };
     }
     else {
-      this.statusArray[index] = {
+      this.statusArray[index -1] = {
         isUploaded: false,
         isLarge: false
       };
@@ -196,9 +198,13 @@ export class AddComponent {
     // formData.append('file',fileToserver);
     this.contentService.uploadFile(id,"content",index ,file).subscribe({
       next: (value) => {
-        if(index !== null ||index !== undefined){
-          console.log(value,this.content.module[Number(index)]);
-          this.content.module[Number(index)].thumbnail = value.url;
+        console.log(value,index,this.content.module);
+        if(index){
+          this.content.module.forEach((module:any) => {
+          if(Number(module.moduleId) === Number(index)){
+             module.url = value.url;
+          }
+        });
 
         }else{
           this.content.thumbnail = value.url;
