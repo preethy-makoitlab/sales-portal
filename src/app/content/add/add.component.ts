@@ -60,6 +60,7 @@ export class AddComponent {
   alertBodyDisable: string = "Please make sure that you want to delete the content"
   alertHeaderEnable: string = "Content Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the content"
+  isReUpload: boolean = false;
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -155,6 +156,10 @@ export class AddComponent {
     }
   }
 
+  reUpload() {
+    this.isReUpload = true;
+  }
+
   onKey(name: any) {
     this.clicked = true;
     console.log(name);
@@ -178,37 +183,6 @@ export class AddComponent {
     })
   }
 
-  // addModule() {
-  //   console.log(this.modulesNo);
-  //   for (let i = 0; i < this.modulesNo; i++) {
-  //     this.statusArray.push(
-  //       {
-  //         isUploaded: false,
-  //         isLarge: false
-  //       }
-  //     );
-  //   }
-  //   console.log(this.statusArray);
-  //   this.cdr.detectChanges();
-  //   if (this.content.module.length > this.modulesNo) {
-  //     for (let i = this.content.module.length; i > this.modulesNo; i--) {
-  //       this.content.module.pop();
-  //     }
-  //   }
-  //   else {
-  //     for (let i = this.content.module.length; i < this.modulesNo; i++) {
-  //       let module = {
-  //         moduleId: i + 1,
-  //         moduleName: "",
-  //         file: "",
-  //         thumbnail: ""
-  //       }
-  //       this.content.module.push(module);
-  //     }
-  //   }
-  //   console.log(this.content.module);
-  // }
-
   addModule() {
     if(this.editMode){
       this.statusArray = [];
@@ -226,7 +200,7 @@ export class AddComponent {
               url: ""
     }
     this.module.push(module);
-    console.log(this.content.module, this.module);
+    console.log(this.content.module, this.module, this.statusArray);
   }
 
   removeModule(index: number) {
@@ -255,53 +229,53 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any,id:string, index: any) {
+  uploadModule(event: any,id:string, moduleIndex: any, index: any) {
 
-     index = Number(index);
+    moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
-      this.statusArray[index -1] = {
+      this.statusArray[index] = {
         isUploaded: true,
         isLarge: false
       };
       console.log(id, index);
-      this.callUploadApi(this.formData,id,index);
+      this.callUploadApi(this.formData,id,moduleIndex);
     }
     else if (file && file.size > this.maxSize) {
-      this.statusArray[index -1] = {
+      this.statusArray[index] = {
         isUploaded: true,
         isLarge: true
       };
     }
     else {
-      this.statusArray[index -1] = {
+      this.statusArray[index] = {
         isUploaded: false,
         isLarge: false
       };
     }
   }
 
-  callUploadApi(file: any,id:string,index?:string) {
+  callUploadApi(file: any,id:string,moduleIndex?:string) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile(id,"content",index ,file).subscribe({
+    this.contentService.uploadFile(id,"content",moduleIndex ,file).subscribe({
       next: (value) => {
-        console.log(value,index,this.content.module);
-        if(index){
+        console.log(value,moduleIndex,this.content.module);
+        if(moduleIndex){
           if(this.editMode) {
             this.module.forEach((mod:any) => {
-              if(Number(mod.moduleId) === Number(index)){
+              if(Number(mod.moduleId) === Number(moduleIndex)){
                  mod.url = value.url;
               }
             });
           }
           else{
             this.content.module.forEach((module:any) => {
-              if(Number(module.moduleId) === Number(index)){
+              if(Number(module.moduleId) === Number(moduleIndex)){
                  module.url = value.url;
               }
             });
