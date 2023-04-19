@@ -12,14 +12,17 @@ export class ManageComponent {
 
   totalCount: number = 0;
   activeCount: number = 0;
+  contentData: any[] = [];
   category: string = "";
   genre: string = "";
   practiceName: string = "";
   categoryArray: any[] = [];
+  deepCopyCategoryArray: any[] = [];
+  genreArray: any[] = [];
   placeholder: string = "Enter Practice Name";
   icon: string = "../../../assets/icons/success-tick.svg";
-  pageNo: number = 1;
-  pageSize: number = 10;
+  pageNo: number = 0;
+  pageSize: number = 4;
   contentLength!: number;
 
   constructor(private router: Router,
@@ -27,17 +30,14 @@ export class ManageComponent {
     private categoryService: CategoryService) {}
 
   fetch() {
-    var flag = true;
-    this.categoryArray.every(cat => {
-      if (cat.category == this.category) {
-        this.genre = cat.genre;
-        flag = false;
+    console.log(this.genre)
+    let categoryArray: any[]= [];
+    this.deepCopyCategoryArray.forEach(cat => {
+      if (cat.genreId == this.genre) {
+        categoryArray.push(cat);
       }
-      return flag;
     })
-    if (flag) {
-      this.genre = "";
-    }
+    this.categoryArray = categoryArray;
   }
 
   onKey(name: any) {
@@ -45,11 +45,40 @@ export class ManageComponent {
     this.practiceName = name;
   }
 
+  listContent() {
+    this.contentService.contentList(null, this.pageNo, this.pageSize).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.totalCount = value.count;
+        this.contentLength = value.data.length;
+        this.contentData = value.data;
+        console.log(this.contentData, this.contentLength);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   loadCategories() {
     this.categoryService.getCategory().subscribe({
       next: (value) => {
         console.log(value);
         this.categoryArray = value;
+        this.deepCopyCategoryArray  = JSON.parse(JSON.stringify(value));
+        this.categoryArray.forEach(cat => {
+          let obj = {
+            id: cat.genreId, 
+            genre: cat.genre
+          }
+          var flag = true;
+          if(this.genreArray.some(gen => gen.id === obj.id)) {
+            flag = false;
+          }
+          if(flag){
+            this.genreArray.push(obj);
+          }
+        })
       },
       error: (err) => {
         console.log(err);
@@ -59,11 +88,16 @@ export class ManageComponent {
 
   onScroll() {
     console.log("scrolled");
-    if(this.contentLength) {
+    if(this.contentLength < this.totalCount) {
       this.pageNo += 1;
-      this.contentService.infiniteScroll(this.pageNo, this.pageSize).subscribe({
+      this.contentService.contentList(null, this.pageNo, this.pageSize).subscribe({
         next: (value) => {
           console.log(value);
+          value.data.forEach((content: any) => {
+            this.contentData.push(content);
+          })
+          this.contentLength = this.contentData.length;
+          console.log(this.contentData, this.contentLength);
         },
         error: (err) => {
           console.log(err);
@@ -72,8 +106,26 @@ export class ManageComponent {
     }
   }
 
+  filter() {
+    console.log(this.genre, this.category, this.practiceName);
+    let filter = {
+      genre: this.genre || null,
+      category: this.category || null,
+      practiceName: this.practiceName || null
+    }
+    this.contentService.contentList(filter, this.pageNo, this.pageSize).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.contentData = value.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
 
   ngOnInit(): void {
+    this.listContent();
     this.loadCategories();
     const input = document.getElementById('category');
     input?.addEventListener('click', function () {

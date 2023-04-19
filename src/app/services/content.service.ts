@@ -90,22 +90,33 @@ export class ContentService {
     );
   }
 
-  public infiniteScroll(
-    pageNo:  number,
-    pageSize: number,
+  public contentList(
+    filter?: Object | null,
+    page?: number,
+    numberOfRecords?: number,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-
-    queryParameters = queryParameters.set('pageNo',pageNo);
-    queryParameters = queryParameters.set('pageSize',pageSize);
+    if(filter !== undefined) {
+      queryParameters = queryParameters.set('filter', <any>filter);
+    }
+    if (numberOfRecords !== undefined && numberOfRecords !== null) {
+      queryParameters = queryParameters.set(
+        'limit',
+        <any>numberOfRecords
+      );
+    }
+    if (page !== undefined && page !== null) {
+      queryParameters = queryParameters.set('page', <any>page);
+    } 
     
+  
     return this.httpClient.request<Object>(
       'get',
-      `${this.basePath}/contents/`,
+      `${this.basePath}/contents`,
       {
         params: queryParameters,
         observe: observe,
