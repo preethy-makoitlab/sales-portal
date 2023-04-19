@@ -18,6 +18,9 @@ export class ManageComponent {
   categoryArray: any[] = [];
   placeholder: string = "Enter Practice Name";
   icon: string = "../../../assets/icons/success-tick.svg";
+  pageNo: number = 1;
+  pageSize: number = 10;
+  contentLength!: number;
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -53,6 +56,22 @@ export class ManageComponent {
       }
     })
   }
+
+  onScroll() {
+    console.log("scrolled");
+    if(this.contentLength) {
+      this.pageNo += 1;
+      this.contentService.infiniteScroll(this.pageNo, this.pageSize).subscribe({
+        next: (value) => {
+          console.log(value);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+  }
+
 
   ngOnInit(): void {
     this.loadCategories();

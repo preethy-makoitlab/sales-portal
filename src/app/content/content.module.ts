@@ -9,6 +9,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
 import { ManageComponent } from './manage/manage.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ManageComponent } from './manage/manage.component';
         deps: [HttpClient]
       }
     }),
+    InfiniteScrollModule
   ]
 })
 export class ContentModule { }
