@@ -125,4 +125,52 @@ export class ContentService {
     );
   }
 
+  public getContent(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public updateContent(
+    id:  String,
+    body?: Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+
+    console.log(id, body);
+    
+    return this.httpClient.request<Object>(
+      'patch',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        body: body,
+        // params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChild, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ContentService } from 'src/app/services/content.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -65,6 +65,7 @@ export class AddComponent {
     private contentService: ContentService,
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
+    private activatedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef) {
     this.addContentForm = this.formBuilder.group({
       category: ['', Validators.required],
@@ -118,21 +119,40 @@ export class AddComponent {
     delete this.content.genre;
     delete this.content.emotion;
     delete this.content.energy;
+    if(this.editMode){
+      this.module.forEach((mod: any) => {
+        this.content.module.push(mod);
+      })
+    }
     this.content.module.forEach((ctl:any) =>{
       if(ctl.file){
         delete ctl.file;
       }
     })
     console.log(this.content);
-    this.contentService.createContent(this.content).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.router.navigate(['/content']);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    if(this.editMode) {
+      let _id = String(this.activatedRoute.snapshot.params['id']);
+      this.contentService.updateContent(_id, this.content).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/content']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.contentService.createContent(this.content).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/content']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
   }
 
   onKey(name: any) {
@@ -190,6 +210,9 @@ export class AddComponent {
   // }
 
   addModule() {
+    if(this.editMode){
+      this.statusArray = [];
+    }
     this.statusArray.push(
       {
         isUploaded: false,
@@ -203,12 +226,13 @@ export class AddComponent {
               url: ""
     }
     this.module.push(module);
+    console.log(this.content.module, this.module);
   }
 
   removeModule(index: number) {
     this.module.splice(index, 1);
     this.statusArray.splice(index, 1);
-    console.log(this.content.module, this.statusArray);
+    console.log(this.content.module, this.module, this.statusArray);
   }
 
 
@@ -243,6 +267,7 @@ export class AddComponent {
         isUploaded: true,
         isLarge: false
       };
+      console.log(id, index);
       this.callUploadApi(this.formData,id,index);
     }
     else if (file && file.size > this.maxSize) {
@@ -267,11 +292,20 @@ export class AddComponent {
       next: (value) => {
         console.log(value,index,this.content.module);
         if(index){
-          this.content.module.forEach((module:any) => {
-          if(Number(module.moduleId) === Number(index)){
-             module.url = value.url;
+          if(this.editMode) {
+            this.module.forEach((mod:any) => {
+              if(Number(mod.moduleId) === Number(index)){
+                 mod.url = value.url;
+              }
+            });
           }
-        });
+          else{
+            this.content.module.forEach((module:any) => {
+              if(Number(module.moduleId) === Number(index)){
+                 module.url = value.url;
+              }
+            });
+          }
 
         }else{
           this.content.thumbnail = value.url;
@@ -288,8 +322,9 @@ export class AddComponent {
     var flag = true;
     console.log(this.content);
     this.categoryArray.every(cat => {
-      if (cat.category == this.content.category) {
+      if (cat.category == this.content.category || cat.id == this.content.category) {
         this.selectedCategory = cat;
+        this.content.category = cat.category;
         this.content.genre = cat.genre;
         this.content.emotion = cat.emotionPurpose || "";
         this.content.energy = cat.energyPurpose || "";
@@ -305,11 +340,60 @@ export class AddComponent {
     }
   }
 
-  loadCategories() {
+  loadCategories(id: string, mode: string) {
     this.categoryService.getCategory().subscribe({
       next: (value) => {
         console.log(value);
         this.categoryArray = value;
+        if(id){
+          this.populate(id, mode);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  populate(id: string, mode: string) {
+    console.log(id);
+    this.contentService.getContent(id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.content = value;
+        // var flag = true;
+        // this.categoryArray.every(cat => {
+        //   if(value.category == cat.id) {
+        //     flag = false;
+        //     this.content.category = cat.category;
+        //     this.content.genre = cat.genre;
+        //     this.content.emotion = cat.emotionPurpose || "";
+        //     this.content.energy = cat.energyPurpose || "";
+        //   }
+        //   return flag;
+        // })
+        this.fetch();
+        // this.content.module.forEach(() => {
+        //   this.statusArray = [];
+        //   this.statusArray.push(
+        //     {
+        //       isUploaded: true,
+        //       isLarge: false
+        //     }
+        //   )
+        // })
+        this.module = [];
+        console.log(this.content, this.module);
+        this.isOriginal = true;
+        if(mode == "view"){
+          this.viewForm = true;
+          this.showDisable = true;
+        }
+        else{
+          this.viewForm = false;
+          this.showDisable = true;
+          this.editMode = true;
+        }        
       },
       error: (err) => {
         console.log(err);
@@ -318,11 +402,23 @@ export class AddComponent {
   }
 
   ngOnInit(): void {
-    this.loadCategories();
+    // this.loadCategories();
     const input = document.getElementById('category');
     input?.addEventListener('click', function () {
       this.focus();
     });
+    if (this.activatedRoute.snapshot.params) {
+      var pathname = window.location.pathname.split('/');
+      let value = this.activatedRoute.snapshot.params['id'];
+      // console.log(this.categoryArray);
+      if (value) {
+        this.loadCategories(value, pathname[2]);
+        // this.populate(value, pathname[2]);
+      }
+    }
+    else{
+      this.loadCategories('', '');
+    }
 
   }
 
