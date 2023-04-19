@@ -101,7 +101,7 @@
                                 <img class="cursor-pointer" src="../../../assets/icons/verify-tick.svg"/>
                             </div> -->
                     </div>
-                    <div class="flex-auto">
+                    <div *ngIf="isOriginal" class="flex-auto">
                         <div class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
                             <label class="form-label">Upload Thumbnail</label>
                             <div class="flex p-6 border-dashed rounded-md upload-pic">
