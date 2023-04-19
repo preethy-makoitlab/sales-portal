@@ -101,7 +101,7 @@ export class ContentService {
       encoder: new CustomHttpUrlEncodingCodec(),
     });
     if(filter !== undefined) {
-      queryParameters = queryParameters.set('filter', <any>filter);
+      queryParameters = queryParameters.set('filter', JSON.stringify(filter));
     }
     if (numberOfRecords !== undefined && numberOfRecords !== null) {
       queryParameters = queryParameters.set(
