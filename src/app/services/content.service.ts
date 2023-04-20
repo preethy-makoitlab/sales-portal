@@ -217,4 +217,26 @@ export class ContentService {
     );
   }
 
+  public deleteContentFiles(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.uploadBasePath}/deletecontent/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
 }

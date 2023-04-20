@@ -16,7 +16,8 @@ export class AddComponent {
       moduleId: "",
       moduleName: "",
       file: "",
-      url: ""
+      url: "",
+      type:""
     }
   ]
 
@@ -131,9 +132,11 @@ export class AddComponent {
 
   deleteContent() {
     let _id = String(this.activatedRoute.snapshot.params['id']);
+    console.log("YESS",_id);
     this.contentService.deleteContent(_id).subscribe({
       next: (value) => {
         console.log(value);
+        this.contentService.deleteContentFiles(_id);
         this.router.navigate(['/content']);
       },
       error: (err) => {
@@ -227,7 +230,8 @@ export class AddComponent {
       moduleId: "",
               moduleName: "",
               file: "",
-              url: ""
+              url: "",
+              type:""
     }
     this.module.push(module);
     console.log(this.content.module, this.module, this.statusArray);
@@ -272,6 +276,7 @@ export class AddComponent {
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
+    this.module[moduleIndex].type = file.type;
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
