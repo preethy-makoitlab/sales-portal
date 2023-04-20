@@ -61,8 +61,8 @@
                         <div class="flex justify-between">
                             <img src="../../../assets/icons/rating-stars.svg">
                             <div class="flex gap-2">
-                                <img src="../../../assets/icons/delete-content.svg">
-                                <img src="../../../assets/icons/edit-content.svg"/>
+                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg">
+                                <img class="cursor-pointer" src="../../../assets/icons/edit-content.svg" [routerLink]="['/content/edit/', data.id]"/>
                             </div>
                         </div>
                     </div>
