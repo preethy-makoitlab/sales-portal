@@ -57,10 +57,11 @@ export class AddComponent {
   showDisable: boolean = false; //
   isAlert: boolean = false;
   alertHeaderDisable: string = "Content Deletion"
-  alertBodyDisable: string = "Please make sure that you want to delete the content"
+  alertBodyDisable: string = "Please make sure that you want to delete the content permananently"
   alertHeaderEnable: string = "Content Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the content"
   isReUpload: boolean = false;
+  totalDelete: boolean = false;
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -83,8 +84,14 @@ export class AddComponent {
     this.editMode = true;
   }
 
-  dialogShow() {
+  dialogShow(flag: boolean) {
     this.isAlert = !this.isAlert;
+    if(flag) {
+      this.totalDelete = true;
+    }
+    else{
+      this.totalDelete = false;
+    }
   }
 
   open(index: number) {
@@ -103,16 +110,39 @@ export class AddComponent {
     // })
   }
 
-  disableContent() {
+  deleteFile(url: string) {
+    this.contentService.deleteFile("content", url).subscribe({
+      next: (value) => {
+        console.log(value);
+        // this.router.navigate(['/content']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
     this.isAlert = false;
     this.isDisabled = true;
   }
-
+  
   enableContent() {
     this.isAlert = false;
     this.isDisabled = false;
   }
 
+  deleteContent() {
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.contentService.deleteContent(_id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.router.navigate(['/content']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
 
   submit(form: any) {
     console.log(form.value);
@@ -203,9 +233,17 @@ export class AddComponent {
     console.log(this.content.module, this.module, this.statusArray);
   }
 
-  removeModule(index: number) {
-    this.module.splice(index, 1);
-    this.statusArray.splice(index, 1);
+  removeModule(index: number, url: string, type: string) {
+    if(type == "module") {
+      this.module.splice(index, 1);
+      this.statusArray.splice(index, 1);
+      if(this.statusArray[index].isUploaded) {
+        this.deleteFile(url)
+      }
+    }else {
+      this.content.module.splice(index, 1);
+      this.deleteFile(url);
+    }
     console.log(this.content.module, this.module, this.statusArray);
   }
 
@@ -382,6 +420,7 @@ export class AddComponent {
       this.focus();
     });
     if (this.activatedRoute.snapshot.params) {
+      console.log(this.activatedRoute.snapshot.params);
       var pathname = window.location.pathname.split('/');
       let value = this.activatedRoute.snapshot.params['id'];
       // console.log(this.categoryArray);
@@ -389,11 +428,10 @@ export class AddComponent {
         this.loadCategories(value, pathname[2]);
         // this.populate(value, pathname[2]);
       }
+      else{
+        this.loadCategories('', '');
+      }
     }
-    else{
-      this.loadCategories('', '');
-    }
-
   }
 
 }

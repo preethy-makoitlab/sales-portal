@@ -14,20 +14,16 @@
 
                 <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
                     <div *ngIf="showDisable && !isDisabled" class="flex justify-end">
-                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow()">Delete</button>
-                    </div>
-                    <div *ngIf="showDisable && isDisabled" class="flex justify-end">
-                        <button type="button" class="btn btn-primary enable-button"
-                            (click)="dialogShow()">Enable</button>
+                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow(true)">Delete</button>
                     </div>
                     <div *ngIf="isAlert && !isDisabled">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                            (closeAlert)="dialogShow()" (isDisable)="disableContent()"></app-alert-box>
+                            (closeAlert)="dialogShow(true)" (isDisable)="deleteContent()"></app-alert-box>
                     </div>
-                    <div *ngIf="isAlert && isDisabled">
+                    <!-- <div *ngIf="isAlert && isDisabled && totalDelete">
                         <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
-                            (closeAlert)="dialogShow()" (isDisable)="enableContent()"></app-alert-box>
-                    </div>
+                            (closeAlert)="dialogShow(true)" (isDisable)="enableContent()"></app-alert-box>
+                    </div> -->
                     <div *ngIf="viewForm" class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
                             <div>
@@ -132,8 +128,8 @@
                         <div *ngIf="(viewForm || editMode) && !isReUpload" class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
                             <label class="form-label">Upload Thumbnail</label>
                             <div class="flex items-start gap-2">
-                                    <img src="../../../assets/icons/dummy.svg"/>
-                                    <img src="../../../assets/icons/delete-spoc.svg" (click)="reUpload()"/>
+                                    <img src={{content.thumbnail}}>
+                                    <img src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && reUpload()"/>
                             </div>
                         </div>
                     </div>
@@ -144,7 +140,7 @@
                 <div class="flex justify-between">
                     <label *ngIf="isOriginal" class="form-label required">Modules</label>
                     <div *ngIf="viewForm || editMode" class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                        <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editMode && addModule()">
+                        <div [ngClass]="editMode ? 'flex flex-row justify-between btn custom-btn-primary gap-1' : 'flex flex-row justify-between btn custom-btn-primary gap-1 disabled'" (click)="editMode && addModule()" >
                             <div>
                                 <img class="add-icon" src="../../../assets/icons/add-icon.svg">
                             </div>
@@ -203,7 +199,7 @@
                                 </div>
                             </div>
                             <img class="cursor-pointer ml-1" src="../../../assets/icons/spoc-add.svg" (click)="!viewForm && addModule()">
-                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && removeModule(index)">
+                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && removeModule(index, content.module[index].url, module)">
                         </div>
                     </div>
     
@@ -256,14 +252,14 @@
                                 </div>
                             </div>
                         </div>
-                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="editMode && removeModule(index)">
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="editMode && removeModule(index, module[index].url, module)">
                     </div>
                 </div>
     
                 <!-- </div> -->
             
                 <div class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" *ngIf="viewForm || editMode">
-                    <div class="flex w-fit" *ngFor="let item of content.module; index as index">
+                    <div class="flex w-fit items-start" *ngFor="let item of content.module; index as index">
                         <div class="flex-auto">
                             <video #video width="500px" height="500px" controls>
                                 <source [src]="" type="video/mp4">
@@ -274,6 +270,15 @@
                             <label class="form-label required mt-1">Module name</label>
                             <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
                                 [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
+                        </div>
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow(false)">
+                        <div *ngIf="isAlert && !isDisabled && !totalDelete">
+                            <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                                (closeAlert)="dialogShow(false)" (isDisable)="removeModule(index, content.module[index].url, content)"></app-alert-box>
+                        </div>
+                        <div *ngIf="isAlert && isDisabled && !totalDelete">
+                            <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
+                                (closeAlert)="dialogShow(false)" (isDisable)="enableContent()"></app-alert-box>
                         </div>
                     </div>
                 </div>

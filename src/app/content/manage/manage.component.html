@@ -11,7 +11,10 @@
             <h1 class="sub-header-text">{{totalCount}} Content</h1>
         </div>
     </div>
-    
+    <div *ngIf="isAlert && !isDisabled">
+        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
+            ></app-alert-box>
+    </div>
     <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/content/add']">
         <div>
             <img class="add-icon" src="../../../assets/icons/add-icon.svg">
@@ -54,14 +57,16 @@
                 
             </div> -->
             <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                <div *ngFor="let data of contentData" class="cursor-pointer card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5" [routerLink]="['/content/view/', data.id]">
-                    <img src={{data.thumbnail}} alt="thumbnail" />
+                <div *ngFor="let data of contentData" class="cursor-pointer card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
+                    <div class="flex" [routerLink]="['/content/view/', data.id]">
+                        <img src={{data.thumbnail}} alt="thumbnail" />
+                    </div>
                     <div class="card-body">
                         <p class="text-content2">{{data.practiceName}}</p>
                         <div class="flex justify-between">
                             <img src="../../../assets/icons/rating-stars.svg">
                             <div class="flex gap-2">
-                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg">
+                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg" (click)="dialogShow()" (isDisable)="deleteContent(data.id)">
                                 <img class="cursor-pointer" src="../../../assets/icons/edit-content.svg" [routerLink]="['/content/edit/', data.id]"/>
                             </div>
                         </div>

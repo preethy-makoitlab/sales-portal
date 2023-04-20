@@ -68,6 +68,30 @@ export class ContentService {
     );
   }
 
+  public deleteFile(
+    type?: string,
+    id?:  string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('type',String(type));
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.uploadBasePath}/delete/${String(type)}/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
   public createContent(
     body?: Object,
     observe: any = 'body',
@@ -167,6 +191,28 @@ export class ContentService {
       {
         body: body,
         // params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public deleteContent(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }

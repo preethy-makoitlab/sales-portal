@@ -24,6 +24,10 @@ export class ManageComponent {
   pageNo: number = 0;
   pageSize: number = 4;
   contentLength!: number;
+  isAlert: boolean = false;
+  isDisabled: boolean = false;
+  alertHeaderDisable: string = "Content Delete"
+  alertBodyDisable: string = "Please make sure that you want to delete the content permanently"
 
   constructor(private router: Router,
     private contentService: ContentService,
@@ -43,6 +47,23 @@ export class ManageComponent {
   onKey(name: any) {
     console.log(name);
     this.practiceName = name;
+  }
+
+  dialogShow() {
+    this.isAlert = !this.isAlert;
+  }
+
+  deleteContent(id: string) {
+    this.contentService.deleteContent(id).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
   }
 
   listContent() {
