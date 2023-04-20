@@ -19,6 +19,11 @@
     margin: 7px;
 }
 
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .title-select {
     background: $background-primary;
     border: 1px solid $clr-text-muted;
