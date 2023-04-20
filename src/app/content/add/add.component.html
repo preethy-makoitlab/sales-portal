@@ -261,9 +261,15 @@
                 <div class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" *ngIf="viewForm || editMode">
                     <div class="flex w-fit items-start" *ngFor="let item of content.module; index as index">
                         <div class="flex-auto">
-                            <video #video width="500px" height="500px" controls>
-                                <source [src]="" type="video/mp4">
+                            <!-- <video #video width="500px" height="500px" controls>
+                                <source [src]="content.thumbnail | secure|async" type="video/mp4">
                             </video>
+                            {{content.thumbnail}}
+                            <video #video width="500px" height="500px" controls>
+                                <source [src]="content.thumbnail | secure" type="video/mp4">
+                            </video> -->
+                            <video *ngIf="content[index]?.url" #videoPlayer width="500px" height="500px" [src]="(content[index]?.url) | secure| async" controls></video>
+
                             <label class="form-label required mt-1">Module Index</label>
                             <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
                                 [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" />

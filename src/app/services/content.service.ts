@@ -55,7 +55,7 @@ export class ContentService {
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.uploadBasePath}/files/upload/`+id+'/'+category,
+      `${this.uploadBasePath}/files/upload/`+category+'/'+id,
       {
         body: file,
         headers: new HttpHeaders({
@@ -69,8 +69,7 @@ export class ContentService {
   }
 
   public deleteFile(
-    type?: string,
-    id?:  string,
+    url?:  string,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
@@ -78,12 +77,11 @@ export class ContentService {
       encoder: new CustomHttpUrlEncodingCodec(),
     });
     
-    queryParameters = queryParameters.set('type',String(type));
-    queryParameters = queryParameters.set('id',String(id));
+    queryParameters = queryParameters.set('url',String(url));
   
     return this.httpClient.request<Object>(
       'delete',
-      `${this.uploadBasePath}/delete/${String(type)}/${String(id)}`,
+      `${this.uploadBasePath}/delete/bylink`,
       {
         params: queryParameters,
         observe: observe,

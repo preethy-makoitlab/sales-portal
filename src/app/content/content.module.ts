@@ -10,6 +10,7 @@ import { HttpLoaderFactory } from '../app.module';
 import { HttpClient } from '@angular/common/http';
 import { ManageComponent } from './manage/manage.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { SecurePipe } from '../common/pipes/secure.pipe';
 
 
 @NgModule({

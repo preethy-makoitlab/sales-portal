@@ -48,7 +48,7 @@ export class AddComponent {
   clicked: boolean = false;
   addContentForm!: FormGroup;
   formData = new FormData();
-  maxSize: number = 5 * 1024 * 1024;
+  maxSize: number = 50 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
   viewForm: boolean = false; //
@@ -111,7 +111,7 @@ export class AddComponent {
   }
 
   deleteFile(url: string) {
-    this.contentService.deleteFile("content", url).subscribe({
+    this.contentService.deleteFile(url).subscribe({
       next: (value) => {
         console.log(value);
         // this.router.navigate(['/content']);
@@ -414,7 +414,7 @@ export class AddComponent {
   }
 
   ngOnInit(): void {
-    // this.loadCategories();
+    this.loadCategories('', '');
     const input = document.getElementById('category');
     input?.addEventListener('click', function () {
       this.focus();
