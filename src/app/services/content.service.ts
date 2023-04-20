@@ -55,7 +55,7 @@ export class ContentService {
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.uploadBasePath}/files/upload/`+id+'/'+category,
+      `${this.uploadBasePath}/files/upload/`+category+'/'+id,
       {
         body: file,
         headers: new HttpHeaders({
