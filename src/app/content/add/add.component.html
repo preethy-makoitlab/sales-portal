@@ -14,11 +14,11 @@
 
                 <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
                     <div *ngIf="showDisable && !isDisabled" class="flex justify-end">
-                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow(true)">Delete</button>
+                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow('fulldelete')">Delete</button>
                     </div>
-                    <div *ngIf="isAlert && !isDisabled">
+                    <div *ngIf="isAlert && !isDisabled && totalDelete && !isReUpload">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                            (closeAlert)="dialogShow(true)" (isDisable)="deleteContent()"></app-alert-box>
+                            (closeAlert)="dialogShow('fulldelete')" (isDisable)="deleteContent()"></app-alert-box>
                     </div>
                     <!-- <div *ngIf="isAlert && isDisabled && totalDelete">
                         <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
@@ -124,12 +124,21 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div *ngIf="isAlert && !isDisabled && !totalDelete && isReUpload">
+                            <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                                (closeAlert)="closeAlert()" (isDisable)="removeModule(0, content.thumbnail, 'thumbnail')"></app-alert-box>
+                        </div>
                         <div *ngIf="(viewForm || editMode) && !isReUpload" class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
                             <label class="form-label">Upload Thumbnail</label>
+                            
                             <div class="flex items-start gap-2">
-                                    <img src={{content.thumbnail}}>
-                                    <img src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && reUpload()"/>
+                                    <img class="md:w-1/4 sm:w-full w-full" [src]="content.thumbnail | secure | async">
+                                    <img src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && dialogShow('thumbnail')"/>
+                                    
+                                    <!-- <div *ngIf="isAlert && isDisabled && !totalDelete">
+                                        <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
+                                            (closeAlert)="dialogShow('')" (isDisable)="enableContent()"></app-alert-box>
+                                    </div> -->
                             </div>
                         </div>
                     </div>
@@ -268,7 +277,11 @@
                             <video #video width="500px" height="500px" controls>
                                 <source [src]="content.thumbnail | secure" type="video/mp4">
                             </video> -->
-                            <video *ngIf="content[index]?.url" #videoPlayer width="500px" height="500px" [src]="(content[index]?.url) | secure| async" controls></video>
+                            <div *ngIf="item?.url">
+                                <video *ngIf="item?.type == 'video/mp4'" #videoPlayer width="500px" height="500px" [src]="(item?.url) | secure| async" controls></video>
+                                <audio *ngIf="item?.type == 'audio/mp3'" width="500px" height="500px" [src]="(item?.url) | secure| async" controls></audio>
+                                
+                            </div>
 
                             <label class="form-label required mt-1">Module Index</label>
                             <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
@@ -277,15 +290,15 @@
                             <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
                                 [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
                         </div>
-                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow(false)">
-                        <div *ngIf="isAlert && !isDisabled && !totalDelete">
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow('module')">
+                        <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                                (closeAlert)="dialogShow(false)" (isDisable)="removeModule(index, content.module[index].url, content)"></app-alert-box>
+                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, content)"></app-alert-box>
                         </div>
-                        <div *ngIf="isAlert && isDisabled && !totalDelete">
+                        <!-- <div *ngIf="isAlert && isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
-                                (closeAlert)="dialogShow(false)" (isDisable)="enableContent()"></app-alert-box>
-                        </div>
+                                (closeAlert)="dialogShow('')" (isDisable)="enableContent()"></app-alert-box>
+                        </div> -->
                     </div>
                 </div>
 
