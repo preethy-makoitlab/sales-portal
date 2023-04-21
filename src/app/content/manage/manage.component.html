@@ -11,10 +11,6 @@
             <h1 class="sub-header-text">{{totalCount}} Content</h1>
         </div>
     </div>
-    <div *ngIf="isAlert && !isDisabled">
-        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
-            ></app-alert-box>
-    </div>
     <div class="flex flex-row justify-between btn custom-btn-primary gap-1" [routerLink]="['/content/add']">
         <div>
             <img class="add-icon" src="../../../assets/icons/add-icon.svg">
@@ -62,12 +58,16 @@
                         <img *ngIf="data.thumbnail" [src]="data.thumbnail | secure | async" alt="thumbnail" />
                         <img *ngIf="!data.thumbnail" src="../../../assets/icons/dummy.svg" alt="dummy" />
                     </div>
+                    <div *ngIf="isAlert && !isDisabled">
+                        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
+                        (isDisable)="deleteContent(data.id)"></app-alert-box>
+                    </div>
                     <div class="card-body">
                         <p class="text-content2">{{data.practiceName}}</p>
                         <div class="flex justify-between">
                             <img src="../../../assets/icons/rating-stars.svg">
                             <div class="flex gap-2">
-                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg" (click)="dialogShow()" (isDisable)="deleteContent(data.id)">
+                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg" (click)="dialogShow()">
                                 <img class="cursor-pointer" src="../../../assets/icons/edit-content.svg" [routerLink]="['/content/edit/', data.id]"/>
                             </div>
                         </div>

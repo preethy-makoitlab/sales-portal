@@ -85,14 +85,29 @@ export class AddComponent {
     this.editMode = true;
   }
 
-  dialogShow(flag: boolean) {
+  dialogShow(type: string) {
     this.isAlert = !this.isAlert;
-    if(flag) {
+    if(type === "fulldelete") {
+      console.log("fulldelete")
       this.totalDelete = true;
+      this.isReUpload = false;
     }
-    else{
+    else if(type === "thumbnail"){
+      console.log("thumbnail")
+      this.isReUpload = true;
       this.totalDelete = false;
     }
+    else{
+      console.log("module")
+      this.totalDelete = false;
+      this.isReUpload = false;
+    }
+  }
+
+  closeAlert() {
+    this.isAlert = !this.isAlert;
+    this.isReUpload = false;
+    this.totalDelete = false;
   }
 
   open(index: number) {
@@ -238,13 +253,21 @@ export class AddComponent {
   }
 
   removeModule(index: number, url: string, type: string) {
-    if(type == "module") {
+    if(type === "module") {
+      console.log("module")
       this.module.splice(index, 1);
       this.statusArray.splice(index, 1);
       if(this.statusArray[index].isUploaded) {
         this.deleteFile(url)
       }
-    }else {
+    }
+    else if(type === "thumbnail") {
+      console.log("thumbnail");
+      this.deleteFile(url);
+      this.content.thumbnail = "";
+    }
+    else {
+      console.log("content")
       this.content.module.splice(index, 1);
       this.deleteFile(url);
     }
