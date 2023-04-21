@@ -51,12 +51,15 @@ export class ManageComponent {
 
   dialogShow() {
     this.isAlert = !this.isAlert;
+    
   }
 
   deleteContent(id: string) {
     this.contentService.deleteContent(id).subscribe({
       next: (value) => {
         console.log(value);
+        this.listContent();
+        
       },
       error: (err) => {
         console.log(err);

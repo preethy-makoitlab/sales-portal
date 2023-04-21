@@ -99,17 +99,22 @@
               </div>
             </div>
             <div class="vertical-separator"></div>
-            <div class="grow basis-1/2 clickable" (click)="openFileExplorer()">
+            <div class="grow basis-1/2 clickable" *ngIf="!therapist.picture || therapist.picture === 'default'" (click)="openFileExplorer()">
               <label class="form-label required">Upload Profile Picture</label>
               <div class="flex p-6 border-dashed rounded-md upload-pic">
                 <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
                 <div class="flex flex-col items-center">
-                  <p>Browse to select file</p>
-                  <p class="text-xs">Upload jpg/png Max 5MB*</p>
+                  <p *ngIf="!profilePicture">Browse to select file</p>
+                  <p  *ngIf="!profilePicture" class="text-xs">Upload jpg/png Max 5MB*</p>
+                  <p *ngIf="profilePicture">File upload successful</p>
+
                 </div>
-                <input type="file" #fileInput style="display:none">
+                <input [disabled]="!this.editMode" type="file"  accept="image/*" (change)="profilePictureUpdate($event)" #fileInput style="display:none">
               </div>
             </div>
+            <img src="../../../assets/icons/delete-spoc.svg" *ngIf="this.editMode && therapist.picture !== 'default'"  (click)="dialogShow()"/>
+            <img *ngIf="therapist.picture !== 'default'" class="md:w-1/4 sm:w-full w-full"   [src]="therapist.picture |secure|async">
+
           </div>
         </div>
       </div>
@@ -320,6 +325,9 @@
           <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable" (closeAlert)="dialogShow()" (isDisable)="enableTherapist()"></app-alert-box>
         </div>
         
+           <div *ngIf="isAlert && isDisabled">
+          <app-alert-box [alertHeader]="alertHeaderDeletePicture" [alertBody]="alertBodyDeletePicture" (closeAlert)="dialogShow()" (isDisable)="deletePicture(therapist.picture)" ></app-alert-box>
+        </div>
         <button type="button" class="btn btn-primary btn-block" [disabled]="!gotonext"
           (click)="previous()">Previous</button>
         <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save

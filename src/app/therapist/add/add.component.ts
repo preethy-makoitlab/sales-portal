@@ -5,6 +5,9 @@ import { TherapistService } from 'src/app/services/therapist.service';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { MasterdataService } from 'src/app/services/masterdata.service';
 import { Status } from 'src/app/stores/types';
+import { ContentService } from 'src/app/services/content.service';
+import { lastValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-add',
@@ -110,7 +113,7 @@ export class AddComponent {
     isAvailable: false,
     // status: "active",
     preferredModesOfTherapy: [],
-    picture: "default",
+    picture: 'default',
     availableFrom: new Date(),
     lastSeen: new Date().toISOString(),
     rating: 0,
@@ -129,6 +132,14 @@ export class AddComponent {
   steppertitle1: string = "Profile Information"
   steppertitle2: string = "Availability"
 
+  alertHeaderDeletePicture:string = "Picture Delete";
+  alertBodyDeletePicture:string = "Picture Delete";
+  alertHeaderDelete = "Delete";
+  alertHeaderCancele = "Cancle";
+
+
+
+
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
@@ -142,7 +153,7 @@ export class AddComponent {
   audio: any;
   video: any;
   chat: any;
-
+profilePicture:any;
   qualifications: Select2Data = []
   expertise: Select2Data = [];
 
@@ -150,7 +161,7 @@ export class AddComponent {
     private therapistService: TherapistService,
     private masterdataService: MasterdataService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,private contentService:ContentService) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -178,6 +189,12 @@ export class AddComponent {
     this.therapist.areaOfExpertise = event.value;
   }
 
+  profilePictureUpdate(event:any){
+this.profilePicture = event.target?.files[0];
+console.log(this.profilePicture);
+
+
+  }
   getPlaceholder(category: string) {
     switch(category) {
       case 'Qualifications': 
@@ -202,7 +219,7 @@ export class AddComponent {
     this.editMode = true;
   }
 
-  submit(form: any) {
+  async submit(form: any) {
     console.log(form.value);
     this.therapist.preferredModesOfTherapy = []
     if(form.value.mode1 == true || this.audio == true){
@@ -254,11 +271,22 @@ export class AddComponent {
   
     let req = this.therapist;
     if(this.editMode){
+      console.log(this.profilePicture);
       let _id = String(this.activatedRoute.snapshot.params['id']);
+      if(this.profilePicture){
+        console.log("exist");
+        let formData  = new FormData();
+        formData.append("file",this.profilePicture);
+        let uploaded  = this.contentService.uploadFile(_id,"user",undefined,formData);
+        let obj = (await lastValueFrom(uploaded));
+
+        console.log(obj);
+        req.picture = obj.url;
+      }
       this.therapistService.updateTherapist(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          this.router.navigate(['/therapist']);
+          // this.router.navigate(['/therapist']);
         },
         error: (err) => {
           console.log(err);
@@ -267,8 +295,24 @@ export class AddComponent {
     }  
     else {
       this.therapistService.createTherapist(req).subscribe({
-        next: (value) => {
+        next: async (value:any) => {
           console.log(value);
+          if(this.profilePicture){
+            let formData  = new FormData();
+            formData.append("file",this.profilePicture);
+          let uploaded  = this.contentService.uploadFile(value.id,"user",undefined,formData);
+          let url = (await lastValueFrom(uploaded))?.url || null;
+          console.log(url);
+          value.picture = url;
+
+          if(url){
+            let saved  = this.therapistService.updateTherapist(value.id, value);
+            let res = (await lastValueFrom(saved));
+            console.log(res);
+
+          }
+        }
+
           this.router.navigate(['/therapist']);
         },
         error: (err) => {
@@ -388,6 +432,27 @@ export class AddComponent {
     this.isDisabled = true;
   }
 
+  async deletePicture(url:string){
+  if(url ){
+ let deletereq = this.contentService.deleteFile(url);
+ let res = await lastValueFrom(deletereq);
+ this.therapist.id
+ console.log(res);
+ this.profilePicture = null;
+ this.therapist.picture = 'default';
+ if(this.therapist.id){
+ this.therapistService.updateTherapist(this.therapist.id,{picture:'default'});
+
+}
+this.isAlert = false;
+
+}
+
+
+  }
+  onImageError(){
+    this.therapist.picture = 'default';
+  }
   enableTherapist() {
     let req = {
        'status' : Status.Active, 
