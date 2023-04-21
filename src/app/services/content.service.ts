@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CustomHttpUrlEncodingCodec } from '../common/encoder';
 import { environment } from '../../environments/environment';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +38,9 @@ export class ContentService {
   }
 
   public uploadFile(
+    id:string,
+    category:string,
+    index?:string,
     file?:  any,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -46,15 +50,39 @@ export class ContentService {
     });
     
     console.log(queryParameters);
+    queryParameters = queryParameters.set('index',String(index));
+
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.uploadBasePath}/files/upload`,
+      `${this.uploadBasePath}/files/upload/`+category+'/'+id,
       {
         body: file,
         headers: new HttpHeaders({
           'enctype': 'multipart/form-data'
         }),
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public deleteFile(
+    url?:  string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('url',String(url));
+  
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.uploadBasePath}/delete/bylink`,
+      {
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
@@ -77,6 +105,133 @@ export class ContentService {
       `${this.basePath}/contents/create`,
       {
         body: body,
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public contentList(
+    filter?: Object | null,
+    page?: number,
+    numberOfRecords?: number,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    if(filter !== undefined) {
+      queryParameters = queryParameters.set('filter', JSON.stringify(filter));
+    }
+    if (numberOfRecords !== undefined && numberOfRecords !== null) {
+      queryParameters = queryParameters.set(
+        'limit',
+        <any>numberOfRecords
+      );
+    }
+    if (page !== undefined && page !== null) {
+      queryParameters = queryParameters.set('page', <any>page);
+    } 
+    
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/contents`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public getContent(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public updateContent(
+    id:  String,
+    body?: Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+
+    console.log(id, body);
+    
+    return this.httpClient.request<Object>(
+      'patch',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        body: body,
+        // params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public deleteContent(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.basePath}/contents/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public deleteContentFiles(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'post',
+      `${this.uploadBasePath}/deletecontent/${String(id)}`,
+      {
         params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,

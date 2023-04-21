@@ -17,11 +17,18 @@ export class AppComponent implements OnInit {
   }
   async ngOnInit() {
     if (true) {
+      if(false){
+      this.cookieService.set("accessToken","6434ec72c6d448af54bed8a1");
+      this.cookieService.set("refreshToken","6434ec72c6d448af54bed8a1");
+      }
       let token = this.cookieService.get("accessToken");
-      token = token.replace(/['"]+/g, '');
-      console.log(token);
+      if(!token){
+        this.auth.clearUserData();
+       window.location.href = environment.authPageUrl;
 
-      let user = null;
+      }
+      token = token.replace(/['"]+/g, '');
+            let user = null;
 
       if (!this.auth.getUserId()) {
         if (!token) {

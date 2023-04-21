@@ -1,6 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChild, ViewChildren, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ContentService } from 'src/app/services/content.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -11,20 +11,36 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class AddComponent {
 
+  module: any = [
+    {
+      moduleId: "",
+      moduleName: "",
+      file: "",
+      url: "",
+      type:""
+    }
+  ]
+
   content: any = {
+    id:"",
     category: "",
     genre: "",
     emotion: "",
     energy: "",
     practiceName: "",
     thumbnail: "",
-    module: []
+    module: this.module
   }
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
   selectedCategory: any;
-  statusArray: any[] = [];
+  statusArray: any[] = [
+    {
+      isUploaded: false,
+      isLarge: false
+    }
+  ];
   categoryArray: any[] = [];
   modulesNo!: number;
   placeholder: string = "Enter Practice Name";
@@ -33,14 +49,26 @@ export class AddComponent {
   clicked: boolean = false;
   addContentForm!: FormGroup;
   formData = new FormData();
-  maxSize: number = 5 * 1024 * 1024;
+  maxSize: number = 50 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
+  viewForm: boolean = false; //
+  isDisabled: boolean = false;
+  editMode: boolean = false;
+  showDisable: boolean = false; //
+  isAlert: boolean = false;
+  alertHeaderDisable: string = "Content Deletion"
+  alertBodyDisable: string = "Please make sure that you want to delete the content permananently"
+  alertHeaderEnable: string = "Content Enable"
+  alertBodyEnable: string = "Please make sure that you want to enable the content"
+  isReUpload: boolean = false;
+  totalDelete: boolean = false;
 
   constructor(private router: Router,
     private contentService: ContentService,
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
+    private activatedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef) {
     this.addContentForm = this.formBuilder.group({
       category: ['', Validators.required],
@@ -50,6 +78,36 @@ export class AddComponent {
 
   openFileExplorer() {
     this.fileInput.nativeElement.click();
+  }
+
+  editForm() {
+    this.viewForm = false;
+    this.editMode = true;
+  }
+
+  dialogShow(type: string) {
+    this.isAlert = !this.isAlert;
+    if(type === "fulldelete") {
+      console.log("fulldelete")
+      this.totalDelete = true;
+      this.isReUpload = false;
+    }
+    else if(type === "thumbnail"){
+      console.log("thumbnail")
+      this.isReUpload = true;
+      this.totalDelete = false;
+    }
+    else{
+      console.log("module")
+      this.totalDelete = false;
+      this.isReUpload = false;
+    }
+  }
+
+  closeAlert() {
+    this.isAlert = !this.isAlert;
+    this.isReUpload = false;
+    this.totalDelete = false;
   }
 
   open(index: number) {
@@ -68,22 +126,86 @@ export class AddComponent {
     // })
   }
 
+  deleteFile(url: string) {
+    this.contentService.deleteFile(url).subscribe({
+      next: (value) => {
+        console.log(value);
+        // this.router.navigate(['/content']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+  
+  enableContent() {
+    this.isAlert = false;
+    this.isDisabled = false;
+  }
+
+  deleteContent() {
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    console.log("YESS",_id);
+    this.contentService.deleteContent(_id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.contentService.deleteContentFiles(_id);
+        this.router.navigate(['/content']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = true;
+  }
+
   submit(form: any) {
     console.log(form.value);
     this.content.category = this.selectedCategory.id;
     delete this.content.genre;
     delete this.content.emotion;
     delete this.content.energy;
-    console.log(this.content);
-    this.contentService.createContent(this.content).subscribe({
-      next: (value) => {
-        console.log(value);
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.log(err);
+    if(this.editMode){
+      this.module.forEach((mod: any) => {
+        this.content.module.push(mod);
+      })
+    }
+    this.content.module.forEach((ctl:any) =>{
+      if(ctl.file){
+        delete ctl.file;
       }
     })
+    console.log(this.content);
+    if(this.editMode) {
+      let _id = String(this.activatedRoute.snapshot.params['id']);
+      this.contentService.updateContent(_id, this.content).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/content']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.contentService.createContent(this.content).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.router.navigate(['/content']);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+  }
+
+  reUpload() {
+    this.isReUpload = true;
   }
 
   onKey(name: any) {
@@ -94,7 +216,10 @@ export class AddComponent {
         console.log(value);
         if (value.isValid) {
           this.isOriginal = true;
+          this.content.id = value.id;
           this.content.practiceName = name;
+          // this.content = Object.assign(value ,this.content);
+          console.log("Final",this.content);
         }
         else {
           this.isOriginal = false;
@@ -107,35 +232,48 @@ export class AddComponent {
   }
 
   addModule() {
-    console.log(this.modulesNo);
-    for (let i = 0; i < this.modulesNo; i++) {
-      this.statusArray.push(
-        {
-          isUploaded: false,
-          isLarge: false
-        }
-      );
+    if(this.editMode){
+      this.statusArray = [];
     }
-    console.log(this.statusArray);
-    this.cdr.detectChanges();
-    if (this.content.module.length > this.modulesNo) {
-      for (let i = this.content.module.length; i > this.modulesNo; i--) {
-        this.content.module.pop();
+    this.statusArray.push(
+      {
+        isUploaded: false,
+        isLarge: false
       }
+    );
+    let module = {
+      moduleId: "",
+              moduleName: "",
+              file: "",
+              url: "",
+              type:""
+    }
+    this.module.push(module);
+    console.log(this.content.module, this.module, this.statusArray);
+  }
+
+  removeModule(index: number, url: string, type: string) {
+    if(type === "module") {
+      console.log("module")
+      this.module.splice(index, 1);
+      this.statusArray.splice(index, 1);
+      if(this.statusArray[index].isUploaded) {
+        this.deleteFile(url)
+      }
+    }
+    else if(type === "thumbnail") {
+      console.log("thumbnail");
+      this.deleteFile(url);
+      this.content.thumbnail = "";
     }
     else {
-      for (let i = this.content.module.length; i < this.modulesNo; i++) {
-        let module = {
-          moduleId: i + 1,
-          moduleName: "",
-          file: "",
-          thumbnail: ""
-        }
-        this.content.module.push(module);
-      }
+      console.log("content")
+      this.content.module.splice(index, 1);
+      this.deleteFile(url);
     }
-    console.log(this.content.module);
+    console.log(this.content.module, this.module, this.statusArray);
   }
+
 
   uploadFile(event: any) {
     this.formData = new FormData();
@@ -145,7 +283,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData);
+      this.callUploadApi(this.formData,this.content.id);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -156,9 +294,12 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any, index: number) {
+  uploadModule(event: any,id:string, moduleIndex: any, index: any) {
+
+    moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
+    this.module[moduleIndex].type = file.type;
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
@@ -166,7 +307,8 @@ export class AddComponent {
         isUploaded: true,
         isLarge: false
       };
-      this.callUploadApi(this.formData);
+      console.log(id, index);
+      this.callUploadApi(this.formData,id,moduleIndex);
     }
     else if (file && file.size > this.maxSize) {
       this.statusArray[index] = {
@@ -182,12 +324,32 @@ export class AddComponent {
     }
   }
 
-  callUploadApi(file: any) {
+  callUploadApi(file: any,id:string,moduleIndex?:string) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile(file).subscribe({
+    this.contentService.uploadFile(id,"content",moduleIndex ,file).subscribe({
       next: (value) => {
+        console.log(value,moduleIndex,this.content.module);
+        if(moduleIndex){
+          if(this.editMode) {
+            this.module.forEach((mod:any) => {
+              if(Number(mod.moduleId) === Number(moduleIndex)){
+                 mod.url = value.url;
+              }
+            });
+          }
+          else{
+            this.content.module.forEach((module:any) => {
+              if(Number(module.moduleId) === Number(moduleIndex)){
+                 module.url = value.url;
+              }
+            });
+          }
+
+        }else{
+          this.content.thumbnail = value.url;
+        }
         console.log(value);
       },
       error: (err) => {
@@ -200,8 +362,9 @@ export class AddComponent {
     var flag = true;
     console.log(this.content);
     this.categoryArray.every(cat => {
-      if (cat.category == this.content.category) {
+      if (cat.category == this.content.category || cat.id == this.content.category) {
         this.selectedCategory = cat;
+        this.content.category = cat.category;
         this.content.genre = cat.genre;
         this.content.emotion = cat.emotionPurpose || "";
         this.content.energy = cat.energyPurpose || "";
@@ -217,11 +380,60 @@ export class AddComponent {
     }
   }
 
-  loadCategories() {
+  loadCategories(id: string, mode: string) {
     this.categoryService.getCategory().subscribe({
       next: (value) => {
         console.log(value);
         this.categoryArray = value;
+        if(id){
+          this.populate(id, mode);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  populate(id: string, mode: string) {
+    console.log(id);
+    this.contentService.getContent(id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.content = value;
+        // var flag = true;
+        // this.categoryArray.every(cat => {
+        //   if(value.category == cat.id) {
+        //     flag = false;
+        //     this.content.category = cat.category;
+        //     this.content.genre = cat.genre;
+        //     this.content.emotion = cat.emotionPurpose || "";
+        //     this.content.energy = cat.energyPurpose || "";
+        //   }
+        //   return flag;
+        // })
+        this.fetch();
+        // this.content.module.forEach(() => {
+        //   this.statusArray = [];
+        //   this.statusArray.push(
+        //     {
+        //       isUploaded: true,
+        //       isLarge: false
+        //     }
+        //   )
+        // })
+        this.module = [];
+        console.log(this.content, this.module);
+        this.isOriginal = true;
+        if(mode == "view"){
+          this.viewForm = true;
+          this.showDisable = true;
+        }
+        else{
+          this.viewForm = false;
+          this.showDisable = true;
+          this.editMode = true;
+        }        
       },
       error: (err) => {
         console.log(err);
@@ -230,12 +442,24 @@ export class AddComponent {
   }
 
   ngOnInit(): void {
-    this.loadCategories();
+    this.loadCategories('', '');
     const input = document.getElementById('category');
     input?.addEventListener('click', function () {
       this.focus();
     });
-
+    if (this.activatedRoute.snapshot.params) {
+      console.log(this.activatedRoute.snapshot.params);
+      var pathname = window.location.pathname.split('/');
+      let value = this.activatedRoute.snapshot.params['id'];
+      // console.log(this.categoryArray);
+      if (value) {
+        this.loadCategories(value, pathname[2]);
+        // this.populate(value, pathname[2]);
+      }
+      else{
+        this.loadCategories('', '');
+      }
+    }
   }
 
 }

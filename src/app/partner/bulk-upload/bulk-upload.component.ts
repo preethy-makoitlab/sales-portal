@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MemberService } from 'src/app/services/member.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-bulk-upload',
@@ -82,16 +85,33 @@ export class BulkUploadComponent {
       }
     })
   }
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: 'application/octet-stream' });
+    const url= window.URL.createObjectURL(blob);
+    window.open(url);
+  }
 
   downloadTemplate() {
+    // this.httpClient.get("http://34.131.6.95:3005/download/bulk-upload-template",{responseType:'blob'}).subscribe({
+
     this.memberService.downloadSampleTemplate().subscribe({
-      next: (value) => {
-        console.log(value);
+      next:(res:any)=>{
+        // console.log("res",res);
+        // this.downloadFile(res);
+        saveAs(res,"template.xlsx")
       },
-      error: (err) => {
-        console.log(err);
+      error:(err:any)=>{
+        console.log("err",err);
+
+        // saveAs(err,"template.xlsx")
+
       }
+
     })
+    // http://34.131.6.95:3005/download/bulk-upload-template?Authorization=Bearer 6434ec72c6d448af54bed8a1
+
+      //  return res;
+    // this.memberService.downloadSampleTemplate();
   }
 
   ngOnInit(): void {
