@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { AnyoTranslateService } from '../../services/anyo-translate.service';
 import { TherapistService } from 'src/app/services/therapist.service';
 import { isoToDDMMYYHHMM } from 'src/app/common/utils/utils';
 import { Status } from 'src/app/stores/types';
+import { ToastService } from 'src/app/common/services/toastr.service';
+import { AnyoTranslateService } from 'src/app/common/services/anyo-translate.service';
 
 @Component({
   selector: 'app-manage',
@@ -10,19 +11,22 @@ import { Status } from 'src/app/stores/types';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent {
-
   constructor(private translate: AnyoTranslateService,
-    private therapistService: TherapistService) {
+    private therapistService: TherapistService,
+    private toastrService: ToastService) {
   }
-  
+
+  isAlert: boolean = false;
   totalCount: number = 0;
   activeCount: number = 0;
-  fields: any[] = ['', 'Therapist', 'EmailID', 'Last Active On', 'No of Sessions', 'No of Patients', 'Rating'];
+  fields: any[] = ['Therapist', 'EmailID', 'Last Active On', 'No of Sessions', 'No of Patients', 'Rating'];
   actionField: Object = {
     label: 'Actions',
     colspan: '2'
   };
   tableData: any[] = [];
+  alertHeaderAvailability: string = "Therapist Availability";
+  alertBodyAvailability: string = "Please make sure that you want to toggle the availability of the therapist";
 
   getCount() {
     this.therapistService.therapistCount().subscribe({
@@ -35,9 +39,13 @@ export class ManageComponent {
         })
       },
       error: (err) => {
-        console.log(err);
+        this.toastrService.showError("Internal server error! Please try again later");
       }
     })
+  }
+
+  dialogShow() {
+    this.isAlert = !this.isAlert;
   }
 
   listTherapist() {
@@ -54,15 +62,6 @@ export class ManageComponent {
           var patients = 0;
           var rating = d.rating;
           var data = [
-            {
-              data: null,
-              isImage: true,
-              imageFile: 'default-user.svg',
-              isButton: false,
-              isEditable: false,
-              isClickable: false,
-              isCheckbox: false
-            },
             {
               data: name,
               isImage: false,
@@ -127,7 +126,8 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
-              isCheckbox: true
+              isCheckbox: true,
+              tooltip: "Therapist Availability"
             }
           ]
           therapistData.id = _id;
@@ -139,7 +139,7 @@ export class ManageComponent {
           })
       },
       error: (err) => {
-        console.log(err);
+        this.toastrService.showError("Internal server error! Please try again later");
       }
     })
   }
@@ -155,7 +155,7 @@ export class ManageComponent {
         console.log(value);
       },
       error: (err) => {
-        console.log(err);
+        this.toastrService.showError("Error updating availability of therapist");
       }
     })
   }
@@ -164,5 +164,4 @@ export class ManageComponent {
     this.getCount();
     this.listTherapist();
   }
-
 }
