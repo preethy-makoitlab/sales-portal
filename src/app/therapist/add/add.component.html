@@ -109,7 +109,7 @@
                   <p *ngIf="profilePicture">File upload successful</p>
 
                 </div>
-                <input [disabled]="!this.editMode" type="file"  (change)="profilePictureUpdate($event)" #fileInput style="display:none">
+                <input [disabled]="!this.editMode" type="file"  accept="image/*" (change)="profilePictureUpdate($event)" #fileInput style="display:none">
               </div>
             </div>
             <img src="../../../assets/icons/delete-spoc.svg" *ngIf="this.editMode && therapist.picture !== 'default'"  (click)="dialogShow()"/>

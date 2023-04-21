@@ -106,19 +106,19 @@
                                     <div *ngIf="!isUploaded">
                                         <p>Browse to select file</p>
                                         <p class="text-xs">Upload jpg/png Max 5MB*</p>
-                                        <input type="file" (change)="uploadFile($event)" accept=".jpg, .png," #fileInput
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
                                             style="display:none">
                                     </div>
                                     <div *ngIf="isUploaded && !isLarge">
                                         <p>File upload successful</p>
                                         <p class="text-xs">Click to re-upload</p>
-                                        <input type="file" (change)="uploadFile($event)" accept=".jpg, .png" #fileInput
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
                                             style="display:none">
                                     </div>
                                     <div *ngIf="isUploaded && isLarge">
                                         <p>File upload failed</p>
                                         <p class="text-xs">File size exceeded 5MB</p>
-                                        <input type="file" (change)="uploadFile($event)" accept=".jpg, .png" #fileInput
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
                                             style="display:none">
                                     </div>
                                 </div>
