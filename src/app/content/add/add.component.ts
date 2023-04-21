@@ -242,7 +242,7 @@ export class AddComponent {
       }
     );
     let module = {
-      moduleId: "",
+               moduleId: "",
               moduleName: "",
               file: "",
               url: "",
@@ -283,7 +283,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData,this.content.id);
+      this.callUploadApi(this.formData,this.content.id,undefined,true);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -299,7 +299,12 @@ export class AddComponent {
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
-    this.module[moduleIndex].type = file.type;
+    let module = this.module[index];
+    if(module){
+      module.type = file.type;
+      this.module[index] = module;
+
+    }
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
@@ -324,7 +329,7 @@ export class AddComponent {
     }
   }
 
-  callUploadApi(file: any,id:string,moduleIndex?:string) {
+  callUploadApi(file: any,id:string,moduleIndex?:string,thumbnail:boolean=false) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
@@ -348,7 +353,9 @@ export class AddComponent {
           }
 
         }else{
+          if(thumbnail){
           this.content.thumbnail = value.url;
+        }
         }
         console.log(value);
       },
