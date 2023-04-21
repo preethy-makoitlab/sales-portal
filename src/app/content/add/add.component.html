@@ -14,9 +14,9 @@
 
                 <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
                     <div *ngIf="showDisable && !isDisabled" class="flex justify-end">
-                        <button type="button" class="btn btn-error rounded-md" (click)="dialogShow('fulldelete')">Delete</button>
+                        <button type="button" class="btn btn-error rounded-md" [disabled]="!this.editMode"  (click)="dialogShow('fulldelete')">Delete</button>
                     </div>
-                    <div *ngIf="isAlert && !isDisabled && totalDelete && !isReUpload">
+                    <div  *ngIf="isAlert && !isDisabled && totalDelete && !isReUpload">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
                             (closeAlert)="dialogShow('fulldelete')" (isDisable)="deleteContent()"></app-alert-box>
                     </div>
@@ -133,7 +133,7 @@
                             
                             <div class="flex items-start gap-2">
                                     <img class="md:w-1/4 sm:w-full w-full" [src]="content.thumbnail | secure | async">
-                                    <img src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && dialogShow('thumbnail')"/>
+                                    <img src="../../../assets/icons/delete-spoc.svg" [hidden]="!this.editMode" (click)="!viewForm && dialogShow('thumbnail')"/>
                                     
                                     <!-- <div *ngIf="isAlert && isDisabled && !totalDelete">
                                         <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
@@ -169,7 +169,7 @@
                                     <div class="flex-auto">
                                         <label class="form-label required">Module Index</label>
                                         <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                            [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" />
+                                            [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" (change)="updateModule($event, content.module[index].moduleId,index)" />
                                         <label class="form-label required">Module name</label>
                                         <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
                                             [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
@@ -208,7 +208,7 @@
                                 </div>
                             </div>
                             <img class="cursor-pointer ml-1" src="../../../assets/icons/spoc-add.svg" (click)="!viewForm && addModule()">
-                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && removeModule(index, content.module[index].url, module)">
+                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg"  [hidden]="!this.editMode"  (click)="!viewForm && removeModule(index, content.module[index].url, module)">
                         </div>
                     </div>
     
@@ -223,7 +223,7 @@
                                 <div class="flex-auto">
                                     <label class="form-label required">Module Index</label>
                                     <input type="number" class="input small-text small" name="newmoduleid{{index}}" placeholder="Enter Module ID"
-                                        [(ngModel)]="module[index].moduleId" ngModel required [disabled]="viewForm" />
+                                        [(ngModel)]="module[index].moduleId" (change)="updateModule($event, content.module[index].moduleId,index)" ngModel required [disabled]="viewForm" />
                                     <label class="form-label required">Module name</label>
                                     <input class="input small-text" name="newmodulename{{index}}" placeholder="Enter Module Name"
                                         [(ngModel)]="module[index].moduleName" ngModel required [disabled]="viewForm"/>
@@ -261,7 +261,7 @@
                                 </div>
                             </div>
                         </div>
-                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="editMode && removeModule(index, module[index].url, module)">
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" [hidden]="!this.editMode" (click)="editMode && removeModule(index, module[index].url, module)">
                     </div>
                 </div>
     
@@ -278,19 +278,19 @@
                                 <source [src]="content.thumbnail | secure" type="video/mp4">
                             </video> -->
                             <div *ngIf="item?.url">
-                                <video *ngIf="item?.type == 'video/mp4'" #videoPlayer width="500px" height="500px" [src]="(item?.url) | secure| async" controls></video>
-                                <audio *ngIf="item?.type == 'audio/mp3'" width="500px" height="500px" [src]="(item?.url) | secure| async" controls></audio>
-                                
+                                <video *ngIf="getFileType(item?.type) === 'video'" #videoPlayer width="500px" height="500px" [src]="(item?.url) | secure| async" controls></video>
+                                <audio *ngIf="getFileType(item?.type) === 'audio'" width="500px" height="500px" [src]="(item?.url) | secure| async" controls></audio>
+                                <img  *ngIf="getFileType(item?.type)  === 'image'" width="500px" height="500px"[src]="(item?.url) | secure| async">
                             </div>
 
                             <label class="form-label required mt-1">Module Index</label>
                             <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" />
+                                [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" (change)="updateModule($event, content.module[index].moduleId,index)" />
                             <label class="form-label required mt-1">Module name</label>
                             <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
                                 [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
                         </div>
-                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow('module')">
+                        <img class="cursor-pointer ml-1" [hidden]="!this.editMode"  src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow('module')">
                         <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
                                 (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, content)"></app-alert-box>

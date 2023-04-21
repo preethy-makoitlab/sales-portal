@@ -84,6 +84,14 @@ export class AddComponent {
     this.viewForm = false;
     this.editMode = true;
   }
+   hasDuplicatePropertyValue(objects:any[],property:string) {
+    const ids = objects.map(function(object) {
+      return object[property];
+    });
+  
+    return (new Set(ids)).size !== ids.length;
+  }
+  
 
   dialogShow(type: string) {
     this.isAlert = !this.isAlert;
@@ -98,7 +106,7 @@ export class AddComponent {
       this.totalDelete = false;
     }
     else{
-      console.log("module")
+      console.log("module",type)
       this.totalDelete = false;
       this.isReUpload = false;
     }
@@ -161,9 +169,27 @@ export class AddComponent {
     this.isAlert = false;
     this.isDisabled = true;
   }
+   sortObjectsByProperty(objects:any, property:string) {
+    return objects.sort((a:any, b:any) => {
+      if (a[property] < b[property]) {
+        return -1;
+      }
+      if (a[property] > b[property]) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   submit(form: any) {
     console.log(form.value);
+    if(this.content.module){
+      if(this.hasDuplicatePropertyValue(this.content.module,"moduleId")){
+ window.alert("Please check Module Index field should be unique");
+ return;
+      }
+
+    }
     this.content.category = this.selectedCategory.id;
     delete this.content.genre;
     delete this.content.emotion;
@@ -178,7 +204,10 @@ export class AddComponent {
         delete ctl.file;
       }
     })
-    console.log(this.content);
+    if(this.content.module){
+      this.content.module = this.sortObjectsByProperty(this.content.module, "moduleId");
+
+    }
     if(this.editMode) {
       let _id = String(this.activatedRoute.snapshot.params['id']);
       this.contentService.updateContent(_id, this.content).subscribe({
@@ -255,10 +284,14 @@ export class AddComponent {
   removeModule(index: number, url: string, type: string) {
     if(type === "module") {
       console.log("module")
+      console.log(this.statusArray,this.statusArray[index].isUploaded)
+
       this.module.splice(index, 1);
       this.statusArray.splice(index, 1);
+      console.log(this.statusArray,this.statusArray[index].isUploaded)
       if(this.statusArray[index].isUploaded) {
-        this.deleteFile(url)
+        console.log(url);
+        this.deleteFile(url);
       }
     }
     else if(type === "thumbnail") {
@@ -274,7 +307,42 @@ export class AddComponent {
     console.log(this.content.module, this.module, this.statusArray);
   }
 
-
+   getFileType(mimeType: string): string | null {
+    switch (mimeType) {
+      case 'application/pdf':
+        return 'pdf';
+      case 'image/jpeg':
+      case 'image/jpg':
+        return 'image';
+      case 'image/png':
+        return 'image';
+      case 'image/gif':
+        return 'image';
+      case 'text/plain':
+        return 'txt';
+      case 'application/msword':
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        return 'doc';
+      case 'application/vnd.ms-excel':
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return 'xls';
+      case 'application/vnd.ms-powerpoint':
+      case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        return 'ppt';
+      case 'audio/mpeg':
+        return 'audio';
+      case 'audio/wav':
+        return 'audio';
+      case 'video/mp4':
+          return 'video';
+      case 'video/quicktime':
+          return 'video';
+      default:
+        return null;
+    }
+  }
+  
+  
   uploadFile(event: any) {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
@@ -402,12 +470,32 @@ export class AddComponent {
     })
   }
 
+  updateModule(event:any,id:any,index:number){
+console.log(event);
+    if(id){
+      console.log(this.isValueInPropertyOfAllObjects(this.module,"moduleId",id));
+    if(this.isValueInPropertyOfAllObjects(this.module,"moduleId",id)){
+      
+      // this.content.module[index].moduleId = this.content.module.length +1;
+    }
+    }
+
+  }
+
+  isValueInPropertyOfAllObjects(objects:[], property:string, value:any) {
+    return objects.every(function(object) {
+      return object[property] === value;
+    });
+  }
   populate(id: string, mode: string) {
     console.log(id);
     this.contentService.getContent(id).subscribe({
       next: (value) => {
         console.log(value);
         this.content = value;
+        if(this.content.module){
+          this.content.module = this.sortObjectsByProperty(this.content.module,"moduleId");
+        }
         // var flag = true;
         // this.categoryArray.every(cat => {
         //   if(value.category == cat.id) {
