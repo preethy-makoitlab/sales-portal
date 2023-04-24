@@ -137,6 +137,7 @@ export class ManageComponent {
     this.contentService.contentList(filter, this.pageNo, this.pageSize).subscribe({
       next: (value) => {
         console.log(value);
+        this.totalCount = value.count;
         this.contentData = value.data;
       },
       error: (err) => {
