@@ -58,7 +58,8 @@ export class ManageComponent {
     this.contentService.deleteContent(id).subscribe({
       next: (value) => {
         console.log(value);
-        this.listContent();
+        this.filter();
+        // this.listContent();
         
       },
       error: (err) => {

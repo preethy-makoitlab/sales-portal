@@ -293,7 +293,7 @@
                         <img class="cursor-pointer ml-1" [hidden]="!this.editMode"  src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow('module')">
                         <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, content)"></app-alert-box>
+                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, 'module')"></app-alert-box>
                         </div>
                         <!-- <div *ngIf="isAlert && isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
