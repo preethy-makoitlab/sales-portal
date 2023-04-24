@@ -36,11 +36,12 @@ export class AddComponent {
   @ViewChildren('moduleInput') moduleInputs!: QueryList<ElementRef>;
   selectedCategory: any;
   statusArray: any[] = [
-    {
-      isUploaded: false,
-      isLarge: false
-    }
+
   ];
+  // {
+  //   isUploaded: false,
+  //   isLarge: false
+  // }
   categoryArray: any[] = [];
   modulesNo!: number;
   placeholder: string = "Enter Practice Name";
@@ -107,6 +108,11 @@ export class AddComponent {
     }
     else{
       console.log("module",type)
+      if(this.content.module.length  === 1){
+        console.log("YESS");
+        window.alert("Atleast one module is needed in content");
+        return;
+      }
       this.totalDelete = false;
       this.isReUpload = false;
     }
@@ -249,6 +255,7 @@ export class AddComponent {
           this.content.practiceName = name;
           // this.content = Object.assign(value ,this.content);
           console.log("Final",this.content);
+          this.addModule();
         }
         else {
           this.isOriginal = false;
@@ -284,14 +291,14 @@ export class AddComponent {
   removeModule(index: number, url: string, type: string) {
     if(type === "module") {
       console.log("module")
-      console.log(this.statusArray,this.statusArray[index].isUploaded)
-
-      this.module.splice(index, 1);
+      console.log(this.statusArray)
+     this.content.module = this.content.module.splice(index, 1);
       this.statusArray.splice(index, 1);
-      console.log(this.statusArray,this.statusArray[index].isUploaded)
+      console.log(this.statusArray)
       if(this.statusArray[index].isUploaded) {
         console.log(url);
         this.deleteFile(url);
+        this.isAlert =!this.isAlert;
       }
     }
     else if(type === "thumbnail") {
@@ -508,15 +515,26 @@ console.log(event);
         //   return flag;
         // })
         this.fetch();
-        // this.content.module.forEach(() => {
-        //   this.statusArray = [];
-        //   this.statusArray.push(
-        //     {
-        //       isUploaded: true,
-        //       isLarge: false
-        //     }
-        //   )
-        // })
+        console.log(this.content.module);
+        this.content.module.forEach(() => {
+          this.statusArray = [];
+          this.statusArray.push(
+            {
+              isUploaded: true,
+              isLarge: false
+            }
+          )
+        })
+        for(let i of this.content.module){
+          this.statusArray.push(
+            {
+              isUploaded: true,
+              isLarge: false
+            }
+          )
+        }
+        console.log(this.statusArray);
+
         this.module = [];
         console.log(this.content, this.module);
         this.isOriginal = true;
