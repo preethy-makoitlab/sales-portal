@@ -6,9 +6,6 @@ module.exports = {
   rippleui: {
 		defaultStyle: false,
 	},
-  corePlugins: {
-    preflight: false,
-   },
   theme: {
     extend: {
       // fontFamily: {
