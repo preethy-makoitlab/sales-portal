@@ -12,14 +12,16 @@ import { CategoryService } from 'src/app/services/category.service';
 export class AddComponent {
 
   module: any = [
-    {
-      moduleId: "",
-      moduleName: "",
-      file: "",
-      url: "",
-      type:""
-    }
+
   ]
+  fileDeleteList:string[] = []
+  // {
+  //   moduleId: "",
+  //   moduleName: "",
+  //   file: "",
+  //   url: "",
+  //   type:""
+  // }
 
   content: any = {
     id:"",
@@ -218,7 +220,9 @@ export class AddComponent {
       let _id = String(this.activatedRoute.snapshot.params['id']);
       this.contentService.updateContent(_id, this.content).subscribe({
         next: (value) => {
-          console.log(value);
+          for(let item of this.fileDeleteList){
+            this.deleteFile(item);
+          }
           this.router.navigate(['/content']);
         },
         error: (err) => {
@@ -230,6 +234,9 @@ export class AddComponent {
       this.contentService.createContent(this.content).subscribe({
         next: (value) => {
           console.log(value);
+          for(let item of this.fileDeleteList){
+            this.deleteFile(item);
+          }
           this.router.navigate(['/content']);
         },
         error: (err) => {
@@ -290,26 +297,29 @@ export class AddComponent {
 
   removeModule(index: number, url: string, type: string) {
     if(type === "module") {
-      console.log("module")
       console.log(this.statusArray)
      this.content.module = this.content.module.splice(index, 1);
       this.statusArray.splice(index, 1);
       console.log(this.statusArray)
       if(this.statusArray[index].isUploaded) {
-        console.log(url);
-        this.deleteFile(url);
+        // console.log(url);
+        this.fileDeleteList.push(url);
+        // this.deleteFile(url);
         this.isAlert =!this.isAlert;
       }
     }
     else if(type === "thumbnail") {
       console.log("thumbnail");
       this.deleteFile(url);
+      this.fileDeleteList.push(url);
+      // this.deleteFile(url);
       this.content.thumbnail = "";
     }
     else {
       console.log("content")
       this.content.module.splice(index, 1);
-      this.deleteFile(url);
+      this.fileDeleteList.push(url);
+      // this.deleteFile(url);
     }
     console.log(this.content.module, this.module, this.statusArray);
   }
