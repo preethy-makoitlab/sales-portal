@@ -26,7 +26,7 @@
             <div class="flex items-center justify-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                 <div class="flex-auto">
                     <select class="select select-md title-select" name="genre" [(ngModel)]="genre" (change)="fetch()" ngModel>
-                        <option value="" disabled selected>Select Genre</option>
+                        <option value="" selected>Select Genre</option>
                         <option *ngFor="let option of genreArray" [value]="option.id">
                             {{option.genre}}
                         </option>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="flex-auto">
                     <select class="select select-md title-select" name="category" [(ngModel)]="category" ngModel>
-                        <option value="" disabled selected>Select Category</option>
+                        <option value="" selected>Select Category</option>
                         <option *ngFor="let option of categoryArray" [value]="option.id">
                             {{option.category}}
                         </option>
