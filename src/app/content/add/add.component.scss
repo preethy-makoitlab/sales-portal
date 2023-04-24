@@ -24,6 +24,12 @@
     pointer-events: none;
 }
 
+.thumbnail {
+    height: 10%;
+    width: 20%;
+    margin-bottom: 1rem;
+}
+
 .title-select {
     background: $background-primary;
     border: 1px solid $clr-text-muted;

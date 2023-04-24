@@ -135,8 +135,8 @@ export class ManageComponent {
           therapistData.isAvailable = d.isAvailable;
           therapistData.isDisabled = d.status === Status.Inactive ? true : false;
           this.tableData.push(therapistData)
-          console.log(this.tableData);
           })
+        console.log(this.tableData);
       },
       error: (err) => {
         this.toastrService.showError("Internal server error! Please try again later");
