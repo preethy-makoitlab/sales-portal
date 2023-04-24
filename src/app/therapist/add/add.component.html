@@ -30,7 +30,7 @@
         <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
           <div class="title-class">
             <label class="form-label required">Title</label>
-            <select class="select select-sm title-select" name="title" [(ngModel)]="therapist.title" ngModel required [disabled]="viewForm">
+            <select [ngClass]="form1[0].status ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="title" [(ngModel)]="therapist.title" ngModel required [disabled]="viewForm">
                 <option value="" disabled selected>Title</option>
                 <option>Mr</option>
                 <option>Ms</option>
@@ -41,33 +41,33 @@
           <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
             <div class="flex-auto">
               <label class="form-label required">First Name</label>
-              <input class="input small-text" name="firstname" placeholder="Enter your firstname"
+              <input [ngClass]="form1[1].status ? 'input small-text' : 'input small-text input-error'" name="firstname" placeholder="Enter your firstname"
                 [(ngModel)]="therapist.firstName" ngModel required [disabled]="viewForm" [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Last Name</label>
-              <input class="input small-text" name="lastname" placeholder="Enter your lastname"
+              <input [ngClass]="form1[2].status ? 'input small-text' : 'input small-text input-error'" name="lastname" placeholder="Enter your lastname"
                 [(ngModel)]="therapist.lastName" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">E-mail ID</label>
-              <input type="email" class="input small-text" name="email" placeholder="Enter your e-mail"
+              <input type="email" [ngClass]="form1[3].status ? 'input small-text' : 'input small-text input-error'" name="email" placeholder="Enter your e-mail"
                 [(ngModel)]="therapist.email" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Mobile Number</label>
-              <input class="input small-text" name="mobile" placeholder="Enter your mobile number"
+              <input [ngClass]="form1[4].status ? 'input small-text' : 'input small-text input-error'" name="mobile" placeholder="Enter your mobile number"
                 [(ngModel)]="therapist.contactNo" ngModel required [disabled]="viewForm" />
             </div>
           </div>
           <div class="flex flex-row items-center justify-between md:gap-4 lg:gap-4 sm:gap-2">
             <div class="flex-auto w-1/2">
               <label class="form-label required">Qualifications</label>
-              <select2 name="qualification" [data]="qualifications" [value]="therapist.qualification" multiple="true" (update)="updateQualification($event)" [disabled]="viewForm"> </select2>
+              <select2 [ngClass]="form1[5].status ? '' : '.select2-container--default'" name="qualification" [data]="qualifications" [value]="therapist.qualification" multiple="true" (update)="updateQualification($event)" [disabled]="viewForm" ngModel required> </select2>
             </div>
             <div class="flex-auto w-1/2">
               <label class="form-label required">Areas of Expertise</label>
-              <select2 name="expertise" [data]="expertise" multiple="true" [value]="therapist.areaOfExpertise" (update)="updateExpertise($event)" [disabled]="viewForm"> </select2>
+              <select2 [ngClass]="form1[6].status ? '' : '.select2-container--default'" name="expertise" [data]="expertise" multiple="true" [value]="therapist.areaOfExpertise" (update)="updateExpertise($event)" [disabled]="viewForm" ngModel required> </select2>
             </div>
             
             <!-- <div class="flex-auto">
@@ -88,20 +88,20 @@
               <div class="flex flex-row justify-between md:gap-4 lg:gap-4 sm:gap-2">
                 <div class="grow">
                   <label class="form-label required">Years of Experience</label>
-                  <input type="number" max="30" min="0" class="input small-text" name="experience"
+                  <input type="number" max="30" min="0" [ngClass]="form1[7].status ? 'input small-text' : 'input small-text input-error'" name="experience"
                     placeholder="Enter your experience in years" [(ngModel)]="therapist.yearsOfExperience" ngModel required [disabled]="viewForm" />
                 </div>
               </div>
               <div>
                 <label class="form-label required">About Therapist</label>
-                <textarea class="textarea" name="about" placeholder="Enter short description here"
+                <textarea [ngClass]="form1[8].status ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
                   [(ngModel)]="therapist.bio" ngModel required [disabled]="viewForm" maxlength="400"></textarea>
               </div>
             </div>
             <div class="vertical-separator"></div>
             <div class="grow basis-1/2 clickable" *ngIf="!therapist.picture || therapist.picture === 'default'" (click)="openFileExplorer()">
               <label class="form-label required">Upload Profile Picture</label>
-              <div class="flex p-6 border-dashed rounded-md upload-pic">
+              <div [ngClass]="form1[9].status ? 'flex p-6 border-dashed rounded-md upload-pic' : 'flex p-6 border-dashed rounded-md upload-pic input-error'" class="flex p-6 border-dashed rounded-md upload-pic">
                 <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
                 <div class="flex flex-col items-center">
                   <p *ngIf="!profilePicture">Browse to select file</p>
@@ -109,7 +109,7 @@
                   <p *ngIf="profilePicture">File upload successful</p>
 
                 </div>
-                <input [disabled]="!this.editMode" type="file"  accept="image/*" (change)="profilePictureUpdate($event)" #fileInput style="display:none">
+                <input type="file" name="profilepic" accept=".jpg,.png" (change)="profilePictureUpdate($event)" #fileInput style="display:none" ngModel required>
               </div>
             </div>
             <img src="../../../assets/icons/delete-spoc.svg" *ngIf="this.editMode && therapist.picture !== 'default'"  (click)="dialogShow()"/>
@@ -328,13 +328,12 @@
            <div *ngIf="isAlert && isDisabled">
           <app-alert-box [alertHeader]="alertHeaderDeletePicture" [alertBody]="alertBodyDeletePicture" (closeAlert)="dialogShow()" (isDisable)="deletePicture(therapist.picture)" ></app-alert-box>
         </div>
-        <button type="button" class="btn btn-primary btn-block" [disabled]="!gotonext"
+        <button type="button" class="btn btn-primary btn-block cursor-pointer" [disabled]="!gotonext"
           (click)="previous()">Previous</button>
-        <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous" [disabled]="!addTherapistForm.valid">Save
+        <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous cursor-pointer" [disabled]="!addTherapistForm.valid">Save
           and Submit</button>
-        <button type="button" *ngIf="!gotonext && !viewForm" class="btn btn-primary btn-block previous" (click)="next()">Save and
-          Continue</button>
-        <button type="button" *ngIf="!gotonext && viewForm" class="btn btn-primary btn-block previous" (click)="next()">Next</button>
+        <button type="button" *ngIf="!gotonext && !viewForm" class="btn btn-primary btn-block previous cursor-pointer" (click)="next(addTherapistForm)">Continue</button>
+        <button type="button" *ngIf="!gotonext && viewForm" class="btn btn-primary btn-block previous cursor-pointer" (click)="next(addTherapistForm)">Next</button>
       </div>
     </form>
   </div>

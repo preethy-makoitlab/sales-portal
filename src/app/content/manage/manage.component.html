@@ -52,11 +52,11 @@
             <!-- <div class="flex items-center justify-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                 
             </div> -->
-            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                <div *ngFor="let data of contentData" class="cursor-pointer card card-image-cover sm:w-1/2 md: w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5">
-                    <div class="flex" [routerLink]="['/content/view/', data.id]">
-                        <img *ngIf="data.thumbnail"  [src]="data.thumbnail | secure | async" alt="thumbnail" />
-                        <img *ngIf="!data.thumbnail"  src="../../../assets/icons/dummy.svg" alt="dummy" />
+            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap w-1/2 md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <div *ngFor="let data of contentData" class="cursor-pointer card sm:w-1/2 md:w-1/2 lg:w-2/5 xl:w-2/5 2xl:w-2/5 "> 
+                    <div class="flex w-fit" [routerLink]="['/content/view/', data.id]">
+                        <img *ngIf="data.thumbnail" class="thumbnail"  [src]="data.thumbnail | secure | async" alt="thumbnail" />
+                        <img *ngIf="!data.thumbnail" class="thumbnail" src="../../../assets/icons/dummy.svg" alt="dummy" />
                     </div>
                     <div *ngIf="isAlert && !isDisabled">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
@@ -67,8 +67,8 @@
                         <div class="flex justify-between">
                             <img src="../../../assets/icons/rating-stars.svg">
                             <div class="flex gap-2">
-                                <img class="cursor-pointer" src="../../../assets/icons/delete-content.svg" (click)="dialogShow()">
-                                <img class="cursor-pointer" src="../../../assets/icons/edit-content.svg" [routerLink]="['/content/edit/', data.id]"/>
+                                <img class="cursor-pointer icon" src="../../../assets/icons/delete-content.svg" (click)="dialogShow()">
+                                <img class="cursor-pointer icon" src="../../../assets/icons/edit-content.svg" [routerLink]="['/content/edit/', data.id]"/>
                             </div>
                         </div>
                     </div>

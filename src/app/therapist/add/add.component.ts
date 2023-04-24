@@ -118,6 +118,48 @@ export class AddComponent {
     lastSeen: new Date().toISOString(),
     rating: 0,
   }
+  form1: any[] = [
+    {
+      label: 'title',
+      status: true
+    },
+    {
+      label: 'firstname',
+      status: true
+    },
+    {
+      label: 'lastname',
+      status: true
+    },
+    {
+      label: 'email',
+      status: true
+    },
+    {
+      label: 'mobile',
+      status: true
+    },
+    {
+      label: 'qualification',
+      status: true
+    },
+    {
+      label: 'expertise',
+      status: true
+    },
+    {
+      label: 'experience',
+      status: true
+    },
+    {
+      label: 'about',
+      status: true
+    },
+    {
+      label: 'profilepic',
+      status: true
+    }
+  ] 
 
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
@@ -131,15 +173,10 @@ export class AddComponent {
   alertBodyEnable: string = "Please make sure that you want to enable the therapist"
   steppertitle1: string = "Profile Information"
   steppertitle2: string = "Availability"
-
   alertHeaderDeletePicture:string = "Picture Delete";
   alertBodyDeletePicture:string = "Picture Delete";
   alertHeaderDelete = "Delete";
   alertHeaderCancele = "Cancle";
-
-
-
-
 
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('first') first: any;
@@ -206,8 +243,21 @@ console.log(this.profilePicture);
     }
   }
   
-  next() {
-    this.gotonext = true;
+  next(form: any) {
+    var flag = true;
+    console.log(form.value);
+    this.form1.forEach((field, index) => {
+      if(!form.value[field.label]) {
+        this.form1[index].status = false;
+        flag = false;
+      }
+      else {
+        this.form1[index].status = true;
+      }
+    })
+    if(flag) {
+      this.gotonext = true;
+    }
   }
 
   previous() {

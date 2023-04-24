@@ -280,10 +280,12 @@ input:-internal-autofill-selected {
 
 .input-error {
     border-color: $clr-border-error;
+    box-shadow: 0px 0px 6px rgba(235, 87, 87, 0.32);
 }
 
 .input-success {
     border-color: $clr-border-success;
+    box-shadow: 0px 0px 6px rgba(33, 150, 83, 0.27);
 }
 
 .form-label {

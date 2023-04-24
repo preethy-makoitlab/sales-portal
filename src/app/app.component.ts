@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   }
   async ngOnInit() {
     if (true) {
-      if(false){
+      if(true){
       this.cookieService.set("accessToken","6434ec72c6d448af54bed8a1");
       this.cookieService.set("refreshToken","6434ec72c6d448af54bed8a1");
       }
