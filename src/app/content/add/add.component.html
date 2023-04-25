@@ -169,10 +169,10 @@
                                     <div class="flex-auto">
                                         <label class="form-label required">Module Index</label>
                                         <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                            [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" (change)="updateModule($event, content.module[index].moduleId,index)" />
+                                            [(ngModel)]="content.module[index].moduleId" ngModel  [disabled]="viewForm" />
                                         <label class="form-label required">Module name</label>
                                         <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
-                                            [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
+                                            [(ngModel)]="content.module[index].moduleName" ngModel [disabled]="viewForm"/>
                                     </div>
                                     <div class="flex-auto">
                                         <div class="grow basis-1/2 clickable" (click)="open(index)">
@@ -183,21 +183,21 @@
                                                     <div *ngIf="!statusArray[index].isUploaded">
                                                         <p>Browse to select file</p>
                                                         <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
-                                                        <input type="file" (change)="uploadModule($event, content.id, content.module[index].moduleId, index)"
+                                                        <input type="file" (change)="uploadModule($event, content.id, item.moduleId, index,item.uid)"
                                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                                             [(ngModel)]="content.module[index].file" style="display:none" ngModel required>
                                                     </div>
                                                     <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
                                                         <p>File upload successful</p>
                                                         <p class="text-xs">Click to re-upload</p>
-                                                        <input type="file" (change)="uploadModule($event, content.id, content.module[index].moduleId, index)"
+                                                        <input type="file" (change)="uploadModule($event, content.id, item.moduleId, index,item.uid)"
                                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                                             [(ngModel)]="content.module[index].file" style="display:none">
                                                     </div>
                                                     <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
                                                         <p>File upload failed</p>
                                                         <p class="text-xs">File size exceeded 5MB</p>
-                                                        <input type="file" (change)="uploadModule($event, content.id,  content.module[index].moduleId, index)"
+                                                        <input type="file" (change)="uploadModule($event, content.id, item.moduleId, index,item.uid)"
                                                             accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                                             [(ngModel)]="content.module[index].file" style="display:none">
                                                     </div>
@@ -208,7 +208,7 @@
                                 </div>
                             </div>
                             <img class="cursor-pointer ml-1" src="../../../assets/icons/spoc-add.svg" (click)="!viewForm && addModule()">
-                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg"  [hidden]="!this.editMode"  (click)="!viewForm && removeModule(index, content.module[index].url, module)">
+                            <img *ngIf="content.module.length > 1" class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg"   (click)="!viewForm && removeModule(index, content.module[index].url, module)">
                         </div>
                     </div>
     
@@ -217,10 +217,10 @@
                 <!-- <div class="flex" *ngIf="viewForm || editMode"> -->
                 <div *ngFor="let item of module; index as index" class="flex w-full">
                     <div *ngIf="viewForm || editMode" class="flex flex-wrap w-full justify-center items-start gap-2">
-                        <div
-                            class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-4 border-2 border-solid rounded-lg border-{#E8E8E8}">
+                        <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-4 border-2 border-solid rounded-lg border-{#E8E8E8}">
                             <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                 <div class="flex-auto">
+                    
                                     <label class="form-label required">Module Index</label>
                                     <input type="number" class="input small-text small" name="newmoduleid{{index}}" placeholder="Enter Module ID"
                                         [(ngModel)]="module[index].moduleId" (change)="updateModule($event, content.module[index].moduleId,index)" ngModel required [disabled]="viewForm" />
@@ -237,21 +237,21 @@
                                                 <div *ngIf="!statusArray[index].isUploaded">
                                                     <p>Browse to select file</p>
                                                     <p class="text-xs">Upload jpg/png/pdf Max 5MB*</p>
-                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index)"
+                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index,item.uid)"
                                                         accept=".jpg, .png, .pdf" name="newfileupload{{index}}" #moduleInput
                                                         [(ngModel)]="module[index].file" style="display:none">
                                                 </div>
                                                 <div *ngIf="statusArray[index].isUploaded && !statusArray[index].isLarge">
                                                     <p>File upload successful</p>
                                                     <p class="text-xs">Click to re-upload</p>
-                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index)"
+                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index,item.uid)"
                                                         accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                                         [(ngModel)]="module[index].file" style="display:none">
                                                 </div>
                                                 <div *ngIf="statusArray[index].isUploaded && statusArray[index].isLarge">
                                                     <p>File upload failed</p>
                                                     <p class="text-xs">File size exceeded 5MB</p>
-                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index)"
+                                                    <input type="file" (change)="uploadModule($event, content.id, module[index].moduleId, index,item.uid)"
                                                         accept=".jpg, .png, .pdf" name="fileupload{{index}}" #moduleInput
                                                         [(ngModel)]="module[index].file" style="display:none">
                                                 </div>
@@ -260,8 +260,9 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg" [hidden]="!this.editMode" (click)="editMode && removeModule(index, module[index].url, module)">
+                        <img class="cursor-pointer ml-1" src="../../../assets/icons/delete-spoc.svg"  (click)="editMode && removeModule(index, module[index].url, 'module')">
                     </div>
                 </div>
     
@@ -269,6 +270,10 @@
             
                 <div class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" *ngIf="viewForm || editMode">
                     <div class="flex w-fit items-start" *ngFor="let item of content.module; index as index">
+                        <!-- <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
+                            <app-alert-box  [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, 'module')"></app-alert-box>
+                        </div> -->
                         <div class="flex-auto">
                             <!-- <video #video width="500px" height="500px" controls>
                                 <source [src]="content.thumbnail | secure|async" type="video/mp4">
@@ -285,16 +290,14 @@
 
                             <label class="form-label required mt-1">Module Index</label>
                             <input type="number" class="input small-text small" name="moduleid{{index}}" placeholder="Enter Module ID"
-                                [(ngModel)]="content.module[index].moduleId" ngModel [required]="index == 0" [disabled]="viewForm" (change)="updateModule($event, content.module[index].moduleId,index)" />
+                                [(ngModel)]="content.module[index].moduleId" ngModel  [disabled]="viewForm" (change)="updateModule($event, content.module[index].moduleId,index)" />
                             <label class="form-label required mt-1">Module name</label>
                             <input class="input small-text" name="modulename{{index}}" placeholder="Enter Module Name"
-                                [(ngModel)]="content.module[index].moduleName" ngModel [required]="index == 0" [disabled]="viewForm"/>
+                                [(ngModel)]="content.module[index].moduleName" ngModel  [disabled]="viewForm"/>
                         </div>
-                        <img class="cursor-pointer ml-1" [hidden]="!this.editMode"  src="../../../assets/icons/delete-spoc.svg" (click)="dialogShow('module')">
-                        <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
-                            <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, 'module')"></app-alert-box>
-                        </div>
+        
+                        <img class="cursor-pointer ml-1" [hidden]="!this.editMode"  src="../../../assets/icons/delete-spoc.svg" (click)=" removeModule(index, content.module[index].url, 'module')">
+                
                         <!-- <div *ngIf="isAlert && isDisabled && !totalDelete && !isReUpload">
                             <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
                                 (closeAlert)="dialogShow('')" (isDisable)="enableContent()"></app-alert-box>

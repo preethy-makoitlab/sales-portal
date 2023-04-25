@@ -3,6 +3,8 @@ import { ContentService } from 'src/app/services/content.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/services/category.service';
+import { v4 as uuidv4 } from 'uuid';
+
 
 @Component({
   selector: 'app-add',
@@ -11,9 +13,8 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class AddComponent {
 
-  module: any = [
+  module: any = []
 
-  ]
   fileDeleteList:string[] = []
   // {
   //   moduleId: "",
@@ -285,20 +286,35 @@ export class AddComponent {
       }
     );
     let module = {
+               uid: uuidv4(),
                moduleId: "",
               moduleName: "",
               file: "",
               url: "",
               type:""
     }
+    console.log(this.content.module, this.module, this.statusArray);
+
     this.module.push(module);
+  
     console.log(this.content.module, this.module, this.statusArray);
   }
 
   removeModule(index: number, url: string, type: string) {
+    console.log(index);
     if(type === "module") {
-      console.log(this.statusArray)
-     this.content.module = this.content.module.splice(index, 1);
+      console.log(this.statusArray,index);
+      if(this.editMode){
+        console.log( this.content.module);
+         this.content.module.splice(index, 1);
+         console.log( this.content.module);
+
+
+      }else{
+        console.log( "EDIT ELSE");
+
+     this.module = this.module.splice(index, 1);
+    }
       this.statusArray.splice(index, 1);
       console.log(this.statusArray)
       if(this.statusArray[index].isUploaded) {
@@ -321,7 +337,7 @@ export class AddComponent {
       this.fileDeleteList.push(url);
       // this.deleteFile(url);
     }
-    console.log(this.content.module, this.module, this.statusArray);
+    console.log(index, this.content.module, this.module, this.statusArray);
   }
 
    getFileType(mimeType: string): string | null {
@@ -368,7 +384,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData,this.content.id,undefined,true);
+      this.callUploadApi(this.formData,this.content.id,undefined,null,true);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -379,12 +395,15 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any,id:string, moduleIndex: any, index: any) {
-
+  uploadModule(event: any,id:string, moduleIndex: any, index: any,uid?:string) {
+console.log(id,moduleIndex,index,uid);
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     let module = this.module[index];
+    // if(this.editMode){
+    //    module = this.module[index];
+    // }
     if(module){
       module.type = file.type;
       this.module[index] = module;
@@ -398,7 +417,7 @@ export class AddComponent {
         isLarge: false
       };
       console.log(id, index);
-      this.callUploadApi(this.formData,id,index);
+      this.callUploadApi(this.formData,id,index,uid);
     }
     else if (file && file.size > this.maxSize) {
       this.statusArray[index] = {
@@ -414,29 +433,37 @@ export class AddComponent {
     }
   }
 
-  callUploadApi(file: any,id:string,moduleIndex?:string,thumbnail:boolean=false) {
+  callUploadApi(file: any,id:string,moduleIndex?:string,uid?:any,thumbnail:boolean=false) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    this.contentService.uploadFile(id,"content",moduleIndex ,file).subscribe({
+    console.log(id,moduleIndex,thumbnail,uid);
+    this.contentService.uploadFile(id,"content",uid ,file).subscribe({
       next: (value) => {
         console.log(value,moduleIndex,this.content.module);
-        if(moduleIndex){
+        if(uid){
+          console.log(this.module,this.content.module);
           if(this.editMode) {
-            // this.module.forEach((mod:any) => {
-            //   if(Number(mod.moduleId) === Number(moduleIndex)){
-            //      mod.url = value.url;
-            //   }
-            // });
-            this.module[moduleIndex].url = value.url;
+            this.module.forEach((mod:any) => {
+              console.log(mod.uid,moduleIndex);
+              if(mod.uid === uid){
+                console.log("YES EDIT");
+                 mod.url = value.url;
+              }
+            });
+            // this.module[moduleIndex].url = value.url;
           }
           else{
-            // this.content.module.forEach((module:any) => {
-            //   if(Number(module.moduleId) === Number(moduleIndex)){
-            //      module.url = value.url;
-            //   }
-            // });
-            this.content.module[moduleIndex].url = value.url;
+            this.content.module.forEach((module:any) => {
+              if(module.uid === uid){
+                console.log("YES");
+
+                 module.url = value.url;
+              }
+            });
+            console.log(this.module,this.content.module);
+
+            // this.content.module[moduleIndex].url = value.url;
 
           }
 
@@ -515,7 +542,11 @@ console.log(event);
         this.content = value;
         if(this.content.module){
           this.content.module = this.sortObjectsByProperty(this.content.module,"moduleId");
+          this.module = this.content.module ;
         }
+        this.content.module.forEach((module:any)=>{
+          module['uid'] = uuidv4();
+        });
         // var flag = true;
         // this.categoryArray.every(cat => {
         //   if(value.category == cat.id) {
