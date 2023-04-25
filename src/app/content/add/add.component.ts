@@ -293,17 +293,26 @@ export class AddComponent {
               url: "",
               type:""
     }
+    console.log(this.content.module, this.module, this.statusArray);
+
     this.module.push(module);
+  
     console.log(this.content.module, this.module, this.statusArray);
   }
 
   removeModule(index: number, url: string, type: string) {
+    console.log(index);
     if(type === "module") {
-      console.log(this.statusArray)
+      console.log(this.statusArray,index);
       if(this.editMode){
-        this.content.module = this.content.module.splice(index, 1);
+        console.log( this.content.module);
+         this.content.module.splice(index, 1);
+         console.log( this.content.module);
+
 
       }else{
+        console.log( "EDIT ELSE");
+
      this.module = this.module.splice(index, 1);
     }
       this.statusArray.splice(index, 1);
@@ -328,7 +337,7 @@ export class AddComponent {
       this.fileDeleteList.push(url);
       // this.deleteFile(url);
     }
-    console.log(this.content.module, this.module, this.statusArray);
+    console.log(index, this.content.module, this.module, this.statusArray);
   }
 
    getFileType(mimeType: string): string | null {
@@ -387,14 +396,14 @@ export class AddComponent {
   }
 
   uploadModule(event: any,id:string, moduleIndex: any, index: any,uid?:string) {
-
+console.log(id,moduleIndex,index,uid);
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     let module = this.module[index];
-    if(this.editMode){
-       module = this.content.module[index];
-    }
+    // if(this.editMode){
+    //    module = this.module[index];
+    // }
     if(module){
       module.type = file.type;
       this.module[index] = module;
@@ -533,6 +542,7 @@ console.log(event);
         this.content = value;
         if(this.content.module){
           this.content.module = this.sortObjectsByProperty(this.content.module,"moduleId");
+          this.module = this.content.module ;
         }
         this.content.module.forEach((module:any)=>{
           module['uid'] = uuidv4();
