@@ -398,7 +398,7 @@ export class AddComponent {
         isLarge: false
       };
       console.log(id, index);
-      this.callUploadApi(this.formData,id,moduleIndex);
+      this.callUploadApi(this.formData,id,index);
     }
     else if (file && file.size > this.maxSize) {
       this.statusArray[index] = {
@@ -423,18 +423,21 @@ export class AddComponent {
         console.log(value,moduleIndex,this.content.module);
         if(moduleIndex){
           if(this.editMode) {
-            this.module.forEach((mod:any) => {
-              if(Number(mod.moduleId) === Number(moduleIndex)){
-                 mod.url = value.url;
-              }
-            });
+            // this.module.forEach((mod:any) => {
+            //   if(Number(mod.moduleId) === Number(moduleIndex)){
+            //      mod.url = value.url;
+            //   }
+            // });
+            this.module[moduleIndex].url = value.url;
           }
           else{
-            this.content.module.forEach((module:any) => {
-              if(Number(module.moduleId) === Number(moduleIndex)){
-                 module.url = value.url;
-              }
-            });
+            // this.content.module.forEach((module:any) => {
+            //   if(Number(module.moduleId) === Number(moduleIndex)){
+            //      module.url = value.url;
+            //   }
+            // });
+            this.content.module[moduleIndex].url = value.url;
+
           }
 
         }else{
