@@ -6,6 +6,7 @@ import { VideostreamComponent } from './components/videostream/videostream.compo
 import { PartnerRoutingModule } from './partner/partner-routing.module';
 import { TherapistRoutingModule } from './therapist/therapist-routing.module';
 import { ContentRoutingModule } from './content/content-routing.module';
+import { ListenerRoutingModule } from './listener/listener-routing.module';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
         path: 'content',
         loadChildren: () => ContentRoutingModule
       },
+      {
+        path: 'listener',
+        loadChildren: () => ListenerRoutingModule
+      }
     ]
   },
   { path: 'video', component: VideostreamComponent }

@@ -13,3 +13,10 @@ export interface ISubscriptionCount {
   available?: number
   active?: number
 }
+
+export interface IListenerCount {
+  totalChats: number
+  totalMins: number
+  totalUsers: number
+  totalListeners: number
+}

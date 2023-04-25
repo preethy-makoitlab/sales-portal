@@ -16,6 +16,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { PartnerModule } from './partner/partner.module';
 import { ContentModule } from './content/content.module';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ListenerModule } from './listener/listener.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     TherapistModule,
     PartnerModule,
     ContentModule,
+    ListenerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
