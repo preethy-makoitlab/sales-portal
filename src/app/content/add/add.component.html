@@ -326,13 +326,8 @@
                 <!-- </div> -->
 
                 <!-- modules from backend -->
-                <div class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2"
-                    *ngIf="viewForm || editMode">
-                    <div class="flex w-fit items-start" *ngFor="let item of content.module; index as index">
-                        <!-- <div *ngIf="isAlert && !isDisabled && !totalDelete && !isReUpload">
-                            <app-alert-box  [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
-                                (closeAlert)="dialogShow('module')" (isDisable)="removeModule(index, content.module[index].url, 'module')"></app-alert-box>
-                        </div> -->
+                <div class="flex items-center justify-start flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2" *ngIf="viewForm || editMode">
+                    <div class="flex flex-wrap w-1/4 items-start" *ngFor="let item of content.module; index as index">
                         <div class="flex-auto">
                             <!-- <video #video width="500px" height="500px" controls>
                                 <source [src]="content.thumbnail | secure|async" type="video/mp4">
@@ -342,12 +337,9 @@
                                 <source [src]="content.thumbnail | secure" type="video/mp4">
                             </video> -->
                             <div *ngIf="item?.url">
-                                <video *ngIf="getFileType(item?.type) === 'video'" #videoPlayer width="500px"
-                                    height="500px" [src]="(item?.url) | secure| async" controls></video>
-                                <audio *ngIf="getFileType(item?.type) === 'audio'" width="500px" height="500px"
-                                    [src]="(item?.url) | secure| async" controls></audio>
-                                <img *ngIf="getFileType(item?.type)  === 'image'" width="500px" height="500px"
-                                    [src]="(item?.url) | secure| async">
+                                <video class="h-40" *ngIf="getFileType(item?.type) === 'video'" #videoPlayer [src]="(item?.url) | secure| async" controls></video>
+                                <audio class="h-40" *ngIf="getFileType(item?.type) === 'audio'" [src]="(item?.url) | secure| async" controls></audio>
+                                <img class="h-40" *ngIf="getFileType(item?.type)  === 'image'" [src]="(item?.url) | secure| async">
                             </div>
 
                             <label class="form-label required mt-1">Module Index</label>

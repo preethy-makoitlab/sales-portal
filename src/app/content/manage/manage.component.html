@@ -52,13 +52,13 @@
             <!-- <div class="flex items-center justify-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                 
             </div> -->
-            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap w-1/2 md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                <div *ngFor="let data of contentData" class="cursor-pointer card sm:w-1/2 md:w-1/2 lg:w-2/5 xl:w-2/5 2xl:w-2/5 "> 
-                    <div class="flex w-fit" [routerLink]="['/content/view/', data.id]">
-                        <img *ngIf="data.thumbnail" class="thumbnail"  [src]="data.thumbnail | secure | async" alt="thumbnail" />
+            <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap w-full md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                <div *ngFor="let data of contentData" class="cursor-pointer card sm:w-1/2 md:w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5 "> 
+                    <div class="flex h-40" [routerLink]="['/content/view/', data.id]">
+                        <img *ngIf="data.thumbnail" class="thumbnail" [src]="data.thumbnail | secure | async" alt="thumbnail" />
                         <img *ngIf="!data.thumbnail" class="thumbnail" src="../../../assets/icons/dummy.svg" alt="dummy" />
                     </div>
-                    <div *ngIf="isAlert && !isDisabled">
+                    <div *ngIf="isAlert">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
                         (isDisable)="deleteContent(data.id)"></app-alert-box>
                     </div>
