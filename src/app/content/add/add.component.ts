@@ -53,7 +53,7 @@ export class AddComponent {
   clicked: boolean = false;
   addContentForm!: FormGroup;
   formData = new FormData();
-  maxSize: number = 50 * 1024 * 1024;
+  maxSize: number = 1 * 1024 * 1024 * 1024;
   isLarge: boolean = false;
   isUploaded: boolean = false;
   viewForm: boolean = false; //
