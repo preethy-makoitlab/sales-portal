@@ -15,7 +15,7 @@ export class AddComponent {
 
   module: any = []
 
-  fileDeleteList:string[] = []
+  fileDeleteList: string[] = []
   // {
   //   moduleId: "",
   //   moduleName: "",
@@ -25,7 +25,7 @@ export class AddComponent {
   // }
 
   content: any = {
-    id:"",
+    id: "",
     category: "",
     genre: "",
     emotion: "",
@@ -89,30 +89,30 @@ export class AddComponent {
     this.viewForm = false;
     this.editMode = true;
   }
-   hasDuplicatePropertyValue(objects:any[],property:string) {
-    const ids = objects.map(function(object) {
+  hasDuplicatePropertyValue(objects: any[], property: string) {
+    const ids = objects.map(function (object) {
       return object[property];
     });
-  
+
     return (new Set(ids)).size !== ids.length;
   }
-  
+
 
   dialogShow(type: string) {
     this.isAlert = !this.isAlert;
-    if(type === "fulldelete") {
+    if (type === "fulldelete") {
       console.log("fulldelete")
       this.totalDelete = true;
       this.isReUpload = false;
     }
-    else if(type === "thumbnail"){
+    else if (type === "thumbnail") {
       console.log("thumbnail")
       this.isReUpload = true;
       this.totalDelete = false;
     }
-    else{
-      console.log("module",type)
-      if(this.content.module.length  === 1){
+    else {
+      console.log("module", type)
+      if (this.content.module.length === 1) {
         console.log("YESS");
         window.alert("Atleast one module is needed in content");
         return;
@@ -157,7 +157,7 @@ export class AddComponent {
     this.isAlert = false;
     this.isDisabled = true;
   }
-  
+
   enableContent() {
     this.isAlert = false;
     this.isDisabled = false;
@@ -165,7 +165,7 @@ export class AddComponent {
 
   deleteContent() {
     let _id = String(this.activatedRoute.snapshot.params['id']);
-    console.log("YESS",_id);
+    console.log("YESS", _id);
     this.contentService.deleteContent(_id).subscribe({
       next: (value) => {
         console.log(value);
@@ -179,8 +179,8 @@ export class AddComponent {
     this.isAlert = false;
     this.isDisabled = true;
   }
-   sortObjectsByProperty(objects:any, property:string) {
-    return objects.sort((a:any, b:any) => {
+  sortObjectsByProperty(objects: any, property: string) {
+    return objects.sort((a: any, b: any) => {
       if (a[property] < b[property]) {
         return -1;
       }
@@ -193,10 +193,10 @@ export class AddComponent {
 
   submit(form: any) {
     console.log(form.value);
-    if(this.content.module){
-      if(this.hasDuplicatePropertyValue(this.content.module,"moduleId")){
- window.alert("Please check Module Index field should be unique");
- return;
+    if (this.content.module) {
+      if (this.hasDuplicatePropertyValue(this.content.module, "moduleId")) {
+        window.alert("Please check Module Index field should be unique");
+        return;
       }
 
     }
@@ -204,25 +204,25 @@ export class AddComponent {
     delete this.content.genre;
     delete this.content.emotion;
     delete this.content.energy;
-    if(this.editMode){
+    if (this.editMode) {
       this.module.forEach((mod: any) => {
         this.content.module.push(mod);
       })
     }
-    this.content.module.forEach((ctl:any) =>{
-      if(ctl.file){
+    this.content.module.forEach((ctl: any) => {
+      if (ctl.file) {
         delete ctl.file;
       }
     })
-    if(this.content.module){
+    if (this.content.module) {
       this.content.module = this.sortObjectsByProperty(this.content.module, "moduleId");
 
     }
-    if(this.editMode) {
+    if (this.editMode) {
       let _id = String(this.activatedRoute.snapshot.params['id']);
       this.contentService.updateContent(_id, this.content).subscribe({
         next: (value) => {
-          for(let item of this.fileDeleteList){
+          for (let item of this.fileDeleteList) {
             this.deleteFile(item);
           }
           this.router.navigate(['/content']);
@@ -232,11 +232,11 @@ export class AddComponent {
         }
       })
     }
-    else{
+    else {
       this.contentService.createContent(this.content).subscribe({
         next: (value) => {
           console.log(value);
-          for(let item of this.fileDeleteList){
+          for (let item of this.fileDeleteList) {
             this.deleteFile(item);
           }
           this.router.navigate(['/content']);
@@ -263,7 +263,7 @@ export class AddComponent {
           this.content.id = value.id;
           this.content.practiceName = name;
           // this.content = Object.assign(value ,this.content);
-          console.log("Final",this.content);
+          console.log("Final", this.content);
           this.addModule();
         }
         else {
@@ -287,14 +287,17 @@ export class AddComponent {
       }
     );
     let module = {
-               uid: uuidv4(),
-               moduleId: "",
-              moduleName: "",
-              file: "",
-              url: "",
-              type:""
+      uid: uuidv4(),
+      moduleId: "",
+      moduleName: "",
+      file: "",
+      url: "",
+      type: ""
     }
+    console.log(this.content.module, this.module, this.statusArray);
+
     this.module.push(module);
+
     console.log(this.content.module, this.module, this.statusArray);
   }
 
@@ -305,31 +308,24 @@ export class AddComponent {
   }
 
   removeModule(index: number, url: string, type: string) {
-    if(this.index || this.index == 0){
-      console.log("in");
-      index = this.index;
-    }
-    console.log(index, url, type);
-    if(type === "module") {
-      console.log(this.statusArray)
-      this.module.splice(index, 1);
-    //   if(this.editMode){
-    //     this.content.module.splice(index, 1);
+    console.log(index);
+    if (type === "module") {
+      console.log(this.statusArray, index);
+      if (this.editMode) {
+        console.log(this.content.module);
+        this.content.module.splice(index, 1);
+        console.log(this.content.module);
 
-    //   }
-    //   else {
-    //  this.module.splice(index, 1);
-    //   }
-      // if(this.statusArray[index].isUploaded) {
-      //   // console.log(url);
-      //   // this.fileDeleteList.push(url);
-      //   // this.deleteFile(url);
-      // }
-      // this.fileDeleteList.push(url);
+
+      } else {
+        console.log("EDIT ELSE");
+
+        this.module = this.module.splice(index, 1);
+      }
       this.statusArray.splice(index, 1);
       console.log(this.statusArray, this.module);
     }
-    else if(type === "thumbnail") {
+    else if (type === "thumbnail") {
       this.isAlert = !this.isAlert;
       console.log("thumbnail");
       this.deleteFile(url);
@@ -345,10 +341,10 @@ export class AddComponent {
       this.index = undefined;
       // this.deleteFile(url);
     }
-    console.log(this.content.module, this.module, this.statusArray);
+    console.log(index, this.content.module, this.module, this.statusArray);
   }
 
-   getFileType(mimeType: string): string | null {
+  getFileType(mimeType: string): string | null {
     switch (mimeType) {
       case 'application/pdf':
         return 'pdf';
@@ -375,15 +371,15 @@ export class AddComponent {
       case 'audio/wav':
         return 'audio';
       case 'video/mp4':
-          return 'video';
+        return 'video';
       case 'video/quicktime':
-          return 'video';
+        return 'video';
       default:
         return null;
     }
   }
-  
-  
+
+
   uploadFile(event: any) {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
@@ -392,7 +388,7 @@ export class AddComponent {
       console.log(file);
       this.isUploaded = true;
       this.isLarge = false;
-      this.callUploadApi(this.formData,this.content.id,undefined,null,true);
+      this.callUploadApi(this.formData, this.content.id, undefined, null, true);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -403,86 +399,88 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any,id:string, moduleIndex: any, index: any,uid?:string) {
-    console.log("uploading");
+  uploadModule(event: any, id: string, moduleIndex: any, index: any, uid?: string) {
+    console.log(id, moduleIndex, index, uid);
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
     const file: File = event.target?.files[0];
-    // let module = this.module[index];
+    let module = this.module[index];
     // if(this.editMode){
-    //    module = this.content.module[index];
+    //    module = this.module[index];
     // }
-    // if(module){
-    //   module.type = file.type;
-    //   this.module[index] = module;
+    if (module) {
+      module.type = file.type;
+      this.module[index] = module;
 
-    // }
-    this.module[index].type = file.type;
-    console.log(this.module);
-    if (file && file.size < this.maxSize) {
-      this.formData.append('file', file);
-      console.log(file);
-      this.statusArray[index] = {
-        isUploaded: true,
-        isLarge: false
-      };
-      console.log(id, index);
-      this.callUploadApi(this.formData,id,index,uid);
+      // }
+      this.module[index].type = file.type;
+      console.log(this.module);
+      if (file && file.size < this.maxSize) {
+        this.formData.append('file', file);
+        console.log(file);
+        this.statusArray[index] = {
+          isUploaded: true,
+          isLarge: false
+        };
+        console.log(id, index);
+        this.callUploadApi(this.formData, id, index, uid);
+      }
+      else if (file && file.size > this.maxSize) {
+        this.statusArray[index] = {
+          isUploaded: true,
+          isLarge: true
+        };
+      }
+      else {
+        this.statusArray[index] = {
+          isUploaded: false,
+          isLarge: false
+        };
+      }
     }
-    else if (file && file.size > this.maxSize) {
-      this.statusArray[index] = {
-        isUploaded: true,
-        isLarge: true
-      };
-    }
-    else {
-      this.statusArray[index] = {
-        isUploaded: false,
-        isLarge: false
-      };
-    }
-  }
+  };
 
-  callUploadApi(file: any,id:string,moduleIndex?:string,uid?:any,thumbnail:boolean=false) {
+
+  callUploadApi(file: any, id: string, moduleIndex?: string, uid?: any, thumbnail: boolean = false) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
-    console.log(id,moduleIndex,thumbnail,uid);
-    this.contentService.uploadFile(id,"content",uid ,file).subscribe({
+    console.log(id, moduleIndex, thumbnail, uid);
+    this.contentService.uploadFile(id, "content", uid, file).subscribe({
       next: (value) => {
         // console.log(value,moduleIndex,this.content.module);
         console.log(value);
         console.log(this.module);
-        if(uid){
-          console.log(this.module,this.content.module);
-          if(this.editMode) {
-            this.module.forEach((mod:any) => {
-              console.log(mod.uid,moduleIndex);
-              if(mod.uid === uid){
+        if (uid) {
+          console.log(this.module, this.content.module);
+          if (this.editMode) {
+            this.module.forEach((mod: any) => {
+              console.log(mod.uid, moduleIndex);
+              if (mod.uid === uid) {
                 console.log("YES EDIT");
-                 mod.url = value.url;
+                mod.url = value.url;
               }
             });
             // this.module[moduleIndex].url = value.url;
           }
-          else{
-            this.content.module.forEach((module:any) => {
-              if(module.uid === uid){
+          else {
+            this.content.module.forEach((module: any) => {
+              if (module.uid === uid) {
                 console.log("YES");
 
-                 module.url = value.url;
+                module.url = value.url;
               }
             });
-            console.log(this.module,this.content.module);
+            console.log(this.module, this.content.module);
 
             // this.content.module[moduleIndex].url = value.url;
 
           }
 
-        }else{
-          if(thumbnail){
-          this.content.thumbnail = value.url;
-        }
+        } else {
+          if (thumbnail) {
+            this.content.thumbnail = value.url;
+          }
         }
         console.log(value);
       },
@@ -519,7 +517,7 @@ export class AddComponent {
       next: (value) => {
         console.log(value);
         this.categoryArray = value;
-        if(id){
+        if (id) {
           this.populate(id, mode);
         }
       },
@@ -529,20 +527,20 @@ export class AddComponent {
     })
   }
 
-  updateModule(event:any,id:any,index:number){
-console.log(event);
-    if(id){
-      console.log(this.isValueInPropertyOfAllObjects(this.module,"moduleId",id));
-    if(this.isValueInPropertyOfAllObjects(this.module,"moduleId",id)){
-      
-      // this.content.module[index].moduleId = this.content.module.length +1;
-    }
+  updateModule(event: any, id: any, index: number) {
+    console.log(event);
+    if (id) {
+      console.log(this.isValueInPropertyOfAllObjects(this.module, "moduleId", id));
+      if (this.isValueInPropertyOfAllObjects(this.module, "moduleId", id)) {
+
+        // this.content.module[index].moduleId = this.content.module.length +1;
+      }
     }
 
   }
 
-  isValueInPropertyOfAllObjects(objects:[], property:string, value:any) {
-    return objects.every(function(object) {
+  isValueInPropertyOfAllObjects(objects: [], property: string, value: any) {
+    return objects.every(function (object) {
       return object[property] === value;
     });
   }
@@ -552,10 +550,11 @@ console.log(event);
       next: (value) => {
         console.log(value);
         this.content = value;
-        if(this.content.module){
-          this.content.module = this.sortObjectsByProperty(this.content.module,"moduleId");
+        if (this.content.module) {
+          this.content.module = this.sortObjectsByProperty(this.content.module, "moduleId");
+          this.module = this.content.module;
         }
-        this.content.module.forEach((module:any)=>{
+        this.content.module.forEach((module: any) => {
           module['uid'] = uuidv4();
         });
         // var flag = true;
@@ -593,15 +592,15 @@ console.log(event);
         this.module = [];
         console.log(this.content, this.module);
         this.isOriginal = true;
-        if(mode == "view"){
+        if (mode == "view") {
           this.viewForm = true;
           this.showDisable = true;
         }
-        else{
+        else {
           this.viewForm = false;
           this.showDisable = true;
           this.editMode = true;
-        }        
+        }
       },
       error: (err) => {
         console.log(err);
@@ -624,7 +623,7 @@ console.log(event);
         this.loadCategories(value, pathname[2]);
         // this.populate(value, pathname[2]);
       }
-      else{
+      else {
         this.loadCategories('', '');
       }
     }
