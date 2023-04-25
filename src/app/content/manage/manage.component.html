@@ -58,7 +58,7 @@
                         <img *ngIf="data.thumbnail" class="thumbnail" [src]="data.thumbnail | secure | async" alt="thumbnail" />
                         <img *ngIf="!data.thumbnail" class="thumbnail" src="../../../assets/icons/dummy.svg" alt="dummy" />
                     </div>
-                    <div *ngIf="isAlert && !isDisabled">
+                    <div *ngIf="isAlert">
                         <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
                         (isDisable)="deleteContent(data.id)"></app-alert-box>
                     </div>
