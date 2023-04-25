@@ -2,7 +2,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  content: ["./src/**/*.{html,ts,js}"],
+  content: ["./src/**/*.{html,ts,js,tsx,jsx}"],
   rippleui: {
 		defaultStyle: false,
 	},
