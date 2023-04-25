@@ -1,21 +1,19 @@
-/** @type {import('tailwindcss').Config} */
-const defaultTheme = require('tailwindcss/defaultTheme')
-
-module.exports = {
-  content: ["./src/**/*.{html,ts,js,tsx,jsx}"],
+module.exports =[ {
+  mode: "jit",
+  purge: {
+    enabled: true,
+    content: ["./src/**/*.{html,ts,js}"],
+  },
   rippleui: {
 		defaultStyle: false,
 	},
   theme: {
-    extend: {
-      // fontFamily: {
-      //   "font-poppins": ['Poppins']
-      // }
-    },
+    extend: {},
     container: {
       center: true,
     }
   },
-  plugins: [require("rippleui")]
-}
-// plugins: [require("rippleui")]
+  plugins: [
+    [require("rippleui")]
+  ]
+}]
