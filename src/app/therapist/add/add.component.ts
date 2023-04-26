@@ -329,14 +329,12 @@ console.log(this.profilePicture);
         formData.append("file",this.profilePicture);
         let uploaded  = this.contentService.uploadFile(_id,"user",undefined,formData);
         let obj = (await lastValueFrom(uploaded));
-
-        console.log(obj);
         req.picture = obj.url;
       }
       this.therapistService.updateTherapist(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          // this.router.navigate(['/therapist']);
+          this.router.navigate(['/therapist']);
         },
         error: (err) => {
           console.log(err);
@@ -350,17 +348,16 @@ console.log(this.profilePicture);
           if(this.profilePicture){
             let formData  = new FormData();
             formData.append("file",this.profilePicture);
-          let uploaded  = this.contentService.uploadFile(value.id,"user",undefined,formData);
+          let uploaded  = this.contentService.uploadFile(value.response.id,"user",undefined,formData);
           let url = (await lastValueFrom(uploaded))?.url || null;
 
           if(url){
             value.picture = url;
-            let saved  = this.therapistService.updateTherapist(value.id, value);
+            let saved  = this.therapistService.updateTherapist(value.response.id, value);
             let res = (await lastValueFrom(saved));
             console.log(res);
           }
         }
-
           this.router.navigate(['/therapist']);
         },
         error: (err) => {
