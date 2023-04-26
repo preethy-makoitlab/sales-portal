@@ -352,14 +352,12 @@ console.log(this.profilePicture);
             formData.append("file",this.profilePicture);
           let uploaded  = this.contentService.uploadFile(value.id,"user",undefined,formData);
           let url = (await lastValueFrom(uploaded))?.url || null;
-          console.log(url);
-          value.picture = url;
 
           if(url){
+            value.picture = url;
             let saved  = this.therapistService.updateTherapist(value.id, value);
             let res = (await lastValueFrom(saved));
             console.log(res);
-
           }
         }
 
