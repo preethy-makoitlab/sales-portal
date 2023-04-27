@@ -446,48 +446,51 @@ export class AddComponent {
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
     console.log(id, moduleIndex, thumbnail, uid);
-    this.contentService.uploadFile(id, "content", uid, file).subscribe({
-      next: (value) => {
-        // console.log(value,moduleIndex,this.content.module);
-        console.log(value);
-        console.log(this.module);
-        if (uid) {
-          console.log(this.module, this.content.module);
-          if (this.editMode) {
-            this.module.forEach((mod: any) => {
-              console.log(mod.uid, moduleIndex);
-              if (mod.uid === uid) {
-                console.log("YES EDIT");
-                mod.url = value.url;
-              }
-            });
-            // this.module[moduleIndex].url = value.url;
-          }
-          else {
-            this.content.module.forEach((module: any) => {
-              if (module.uid === uid) {
-                console.log("YES");
-
-                module.url = value.url;
-              }
-            });
-            console.log(this.module, this.content.module);
-
-            // this.content.module[moduleIndex].url = value.url;
-
-          }
-
-        } else {
-          if (thumbnail) {
-            this.content.thumbnail = value.url;
-          }
-        }
-        console.log(value);
-      },
-      error: (err) => {
-        console.log(err);
-      }
+    this.contentService.uploadFile(id, "content", uid, file).subscribe( event =>{
+    console.log(event);
     })
+    // this.contentService.uploadFile(id, "content", uid, file).subscribe({
+    //   next: (value) => {
+    //     // console.log(value,moduleIndex,this.content.module);
+    //     console.log(value);
+    //     console.log(this.module);
+    //     if (uid) {
+    //       console.log(this.module, this.content.module);
+    //       if (this.editMode) {
+    //         this.module.forEach((mod: any) => {
+    //           console.log(mod.uid, moduleIndex);
+    //           if (mod.uid === uid) {
+    //             console.log("YES EDIT");
+    //             mod.url = value.url;
+    //           }
+    //         });
+    //         // this.module[moduleIndex].url = value.url;
+    //       }
+    //       else {
+    //         this.content.module.forEach((module: any) => {
+    //           if (module.uid === uid) {
+    //             console.log("YES");
+
+    //             module.url = value.url;
+    //           }
+    //         });
+    //         console.log(this.module, this.content.module);
+
+    //         // this.content.module[moduleIndex].url = value.url;
+
+    //       }
+
+    //     } else {
+    //       if (thumbnail) {
+    //         this.content.thumbnail = value.url;
+    //       }
+    //     }
+    //     console.log(value);
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //   }
+    // })
   }
 
   fetch() {
