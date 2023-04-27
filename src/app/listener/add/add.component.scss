@@ -54,7 +54,6 @@
 // }
 
 .title-select {
-    width: 8%;
     background: $background-primary;
     // border: 1px solid $clr-text-muted;
     border-radius: 6px;
@@ -66,10 +65,6 @@
     font-size: 12px;
     line-height: 120%;
     letter-spacing: 0.25px;
-}
-
-.fullwidth {
-    width: 100%;
 }
 
 // .form2-select {
@@ -106,7 +101,7 @@
 // }
 
 .upload-pic {
-    border: 1.4px solid #E8E8E8;
+    border: 1.4px dashed #E8E8E8;;
 }
 
 .text-xs {
@@ -116,6 +111,16 @@
 }
 
 .btn {
+    // width: 15%;
+    margin: 5px;
+    border: 6px;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    border-radius: 6px;
+}
+
+.btn-block {
     width: 15%;
     margin: 5px;
     border: 6px;
@@ -125,14 +130,15 @@
     border-radius: 6px;
 }
 
-.btn-avtaar {
-    width: 100%;
+.btn-bigger {
+    width: 35%;
     margin: 5px;
     border: 6px;
     font-weight: $ft-medium;
     font-size: $ft-size-small;
     line-height: 120%;
     border-radius: 6px;
+    background-color: #15154C;
 }
 
 // .title-class {
@@ -327,20 +333,31 @@ left: auto !important;
 width: 100% !important;
 }
 
-.enable-button {
-    background-color: #FFFFFF;
-    border-radius: 6px;
-    color: #15154C;
-    border: 2px solid #15154C;
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
-.btn-bigger {
-    width: 35%;
+.card{
+    background: $clr-bg-primary;
+    max-width: 20rem;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.btn-avtaar {
+    width: 100%;
     margin: 5px;
     border: 6px;
     font-weight: $ft-medium;
     font-size: $ft-size-small;
     line-height: 120%;
     border-radius: 6px;
-    background-color: #15154C;
+}
+
+
+.fullwidth {
+    width: 100%;
 }

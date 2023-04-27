@@ -1,26 +1,97 @@
 <div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
     <div class="flex flex-wrap w-1/4 justify-start" *ngIf="!viewForm && !editMode">
-      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/therapist']">
+      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/listener']">
       <h1 class="header-text">{{ 'titles.addListener' | translate }}</h1>
     </div>
     <div class="flex flex-wrap w-1/4 justify-start" *ngIf="viewForm || editMode">
-      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/therapist']">
-      <h1 class="header-text"></h1>
+      <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/listener']">
+      <h1 class="header-text">{{listener.name}}</h1>
     </div>
 </div>
 
 <div class="custom-card">
     <div class="card-body">
         <form #addListenerForm="ngForm" (ngSubmit)="submit(addListenerForm)">
+          <!-- <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2 mb-4">
+
+            <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
+                <div *ngIf="(viewForm || editMode) && !isDisabled" class="flex justify-end">
+                    <button type="button" class="btn btn-error rounded-md" [disabled]="!this.editMode"
+                        (click)="dialogShow()">Disable</button>
+                </div>
+                <div *ngIf="(viewForm || editMode) && isDisabled" class="flex justify-end">
+                  <button type="button" class="btn btn-primary enable-button" (click)="dialogShow()">Enable</button>
+              </div>
+                <div *ngIf="isAlert && !isDisabled">
+                    <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                        (closeAlert)="dialogShow()" (isDisable)="disableListener()"></app-alert-box>
+                </div>
+                <div *ngIf="isAlert && isDisabled">
+                    <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
+                        (closeAlert)="dialogShow()" (isDisable)="enableListener()"></app-alert-box>
+                </div>
+                <div *ngIf="viewForm"
+                    class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+                        <div>
+                            <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                        </div>
+                        <div>
+                            <span class="">Edit Content</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1"
+                    [routerLink]="['/listener']">
+                    Discard
+                </div>
+            </div>
+
+        </div> -->
             <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-                <div class="title-class">
-                    <label class="form-label required">{{ 'labels.title' | translate }}</label>
-                    <select [ngClass]="true ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="title" ngModel required [disabled]="viewForm">
-                        <option value="" disabled selected>Title</option>
-                        <option>Mr</option>
-                        <option>Ms</option>
-                        <option>Mrs</option>
-                    </select>
+                <div class="flex justify-between items-center">
+                    <div class="title-class w-1/12">
+                      <label class="form-label required">{{ 'labels.title' | translate }}</label>
+                      <select [ngClass]="true ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="title" [(ngModel)]="listener.title" ngModel required [disabled]="viewForm">
+                          <option value="" disabled selected>Title</option>
+                          <option>Mr</option>
+                          <option>Ms</option>
+                          <option>Mrs</option>
+                      </select>
+                    </div>
+                    <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
+                      <div *ngIf="(viewForm || editMode) && !isDisabled" class="flex justify-end">
+                          <button type="button" class="btn btn-error rounded-md" [disabled]="!this.editMode"
+                              (click)="dialogShow()">Disable</button>
+                      </div>
+                      <div *ngIf="(viewForm || editMode) && isDisabled" class="flex justify-end">
+                        <button type="button" class="btn btn-primary enable-button" (click)="dialogShow()">Enable</button>
+                      </div>
+                      <div *ngIf="isAlert && !isDisabled">
+                          <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                              (closeAlert)="dialogShow()" (isDisable)="disableListener()"></app-alert-box>
+                      </div>
+                      <div *ngIf="isAlert && isDisabled">
+                          <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
+                              (closeAlert)="dialogShow()" (isDisable)="enableListener()"></app-alert-box>
+                      </div>
+                      <div *ngIf="viewForm"
+                          class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                          <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+                              <div>
+                                  <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                              </div>
+                              <div>
+                                  <span class="">Edit Content</span>
+                              </div>
+                          </div>
+                      </div>
+                      <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1"
+                          [routerLink]="['/listener']">
+                          Discard
+                      </div>
+                    </div>
+
                 </div>
 
                 <div class="divider"></div>
@@ -29,24 +100,24 @@
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.email' | translate }}</label>
                       <input [ngClass]="true ? 'input small-text' : 'input small-text input-error'" name="email" placeholder="Enter your emailID"
-                        ngModel required [disabled]="viewForm"/>
+                        ngModel required [(ngModel)]="listener.email" [disabled]="viewForm"/>
                     </div>
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.fullName' | translate }}</label>
                       <input [ngClass]="true ? 'input small-text' : 'input small-text input-error'" name="name" placeholder="Enter your fullname"
-                        ngModel required [disabled]="viewForm" />
+                        ngModel required [(ngModel)]="listener.name" [disabled]="viewForm" />
                     </div>
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.mobile' | translate }}</label>
                       <input [ngClass]="true ? 'input small-text' : 'input small-text input-error'" name="mobile" placeholder="Enter your mobile number"
-                        ngModel required [disabled]="viewForm" />
+                        ngModel required [(ngModel)]="listener.mobileNumber" [disabled]="viewForm" />
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.avtaarName' | translate }}</label>
-                      <select [ngClass]="true ? 'select select-md title-select fullwidth' : 'select select-md title-select fullwidth input-error'" name="avtaar name" ngModel required [disabled]="viewForm">
+                      <select [ngClass]="true ? 'select select-md title-select fullwidth' : 'select select-md title-select fullwidth input-error'" name="avtaar name" [(ngModel)]="listener.avtaarName" ngModel required [disabled]="viewForm">
                         <option value="" disabled selected>Avtaar Name</option>
                         <option>Aang</option>
                         <option>Bolin</option>
@@ -55,17 +126,30 @@
                     </select>
                     </div>
                     <div class="flex-auto">
-                        <div [ngClass]="true ? 'flex w-1/2 p-2 border-solid rounded-md upload-pic' : 'flex p-2 border-solid rounded-md upload-pic input-error'">
+                        <div [ngClass]="true ? 'flex p-2 items-center border-solid rounded-md upload-pic cursor-pointer' : 'flex p-2 items-center border-solid rounded-md upload-pic cursor-pointer input-error'" (click)="show()">
                             <img class="m-2 cursor-pointer" src="../../../assets/icons/dummy-avtaar.svg">
                             <div class="flex flex-col items-center">
                               <p class="text-sm">Choose your avtaar</p>
                               <div class="flex gap-1">
-                                <button class="btn btn-avtaar btn-primary enable-button text-sm">{{ 'buttons.cancel' | translate }}</button>
-                                <button class="btn btn-avtaar btn-primary btn-block text-sm">{{ 'buttons.upload' | translate }}</button>
+                                <!-- <button class="btn btn-avtaar btn-primary enable-button text-sm">{{ 'buttons.cancel' | translate }}</button>
+                                <button class="btn btn-avtaar btn-primary btn-block text-sm">{{ 'buttons.upload' | translate }}</button> -->
                               </div>
                             </div>
-                            <!-- <input type="file" name="profilepic" accept=".jpg,.png" (change)="profilePictureUpdate($event)" #fileInput style="display:none" ngModel required> -->
                           </div>
+                    </div>
+                    <div class="flex-auto">
+                        <div *ngIf="avtaarCard" class="card">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                          <img class="m-2 cursor-pointer" src="../../../assets/icons/avtaar-male.svg" (click)="show()">
+                        </div>
                     </div>
                 </div>
 
@@ -76,7 +160,7 @@
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.dob' | translate }}</label>
-                      <input type="date" class="input small-text" name="dob" ngModel required [disabled]="viewForm"/>
+                      <input type="date" class="input small-text" name="dob" [(ngModel)]="listener.dob" ngModel required [disabled]="viewForm"/>
                     </div>
                     <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.areasOfSpecialization' | translate }}</label>
@@ -90,7 +174,7 @@
                     <div class="flex-auto">
                         <label class="form-label required">{{ 'labels.about' | translate }}</label>
                         <textarea [ngClass]="true ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
-                        ngModel required [disabled]="viewForm" maxlength="400"></textarea>
+                        [(ngModel)]="listener.about" ngModel required [disabled]="viewForm" maxlength="400"></textarea>
                     </div>
                 </div>
 

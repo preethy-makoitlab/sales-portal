@@ -67,4 +67,4 @@
     </div>
 </div>
 
-<app-table [fields]="fields" [actionField]="actionField" [data]="tableData" (call)="call($event)"></app-table>
+<app-table [fields]="fields" [actionField]="actionField" [data]="tableData" (call)="call($event)" (scroll)="onScroll()"></app-table>

@@ -247,9 +247,12 @@ console.log(this.profilePicture);
     var flag = true;
     console.log(form.value);
     this.form1.forEach((field, index) => {
+      let avoidFields = ["qualification", "expertise", "profilepic"];
       if(!form.value[field.label]) {
         this.form1[index].status = false;
-        flag = false;
+        if(!avoidFields.includes(field.label)){
+          flag = false;
+        }
       }
       else {
         this.form1[index].status = true;
@@ -336,7 +339,7 @@ console.log(this.profilePicture);
       this.therapistService.updateTherapist(_id, req).subscribe({
         next: (value) => {
           console.log(value);
-          // this.router.navigate(['/therapist']);
+          this.router.navigate(['/therapist']);
         },
         error: (err) => {
           console.log(err);
