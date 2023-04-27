@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Select2Data } from 'ng-select2-component';
+import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
+import { isoToYMD } from 'src/app/common/utils/utils';
 import { ListenerService } from 'src/app/services/listener.service';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 import { Status } from 'src/app/stores/types';
 
 @Component({
@@ -12,7 +14,10 @@ import { Status } from 'src/app/stores/types';
 })
 export class AddComponent {
 
-  qualifications: Select2Data = []
+  specialization: Select2Data = [];
+  language: Select2Data = [];
+  avatarNames: any[] = [];
+  avatarImages: any[] = [];
   viewForm: boolean = false;
   editMode: boolean = false;
   avtaarCard: boolean = false;
@@ -29,25 +34,26 @@ export class AddComponent {
     email: "",
     name: "",
     mobileNumber: "",
-    languages: [""],
+    languages: [],
     avtaarName: "",
     avtaar: "default",
     dob: Date,
-    specialization: [""],
+    specialization: [],
     about: ""
   }
 
   constructor(private router: Router,
     private listenerService: ListenerService,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private masterdataService: MasterdataService
     ) {
     this.addListenerForm = this.formBuilder.group({   
     });
   }
 
   submit(form: any) {
-    console.log(form);
+    console.log(form.value);
     console.log(this.listener);
     this.listener.dob = new Date(this.listener.dob).toISOString();
     if (this.editMode) {
@@ -73,6 +79,14 @@ export class AddComponent {
         }
       })
     }
+  }
+
+  updateSpecialization(event: Select2UpdateEvent<any>) {
+    this.listener.specialization = event.value;
+  }
+
+  updateLanguage(event: Select2UpdateEvent<any>) {
+    this.listener.languages = event.value;
   }
 
   show() {
@@ -132,6 +146,51 @@ export class AddComponent {
         console.log(value);
         this.viewForm = true;
         this.listener = value;
+        this.listener.dob = isoToYMD(this.listener.dob);
+        if (value.status == Status.Inactive) {
+          this.isDisabled = true;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  loadMasterData() {
+    let req = {
+      categories: ["Languages","ListenersSpecialization","AvatarNames","AvatarImages"]
+    }
+    this.masterdataService.fetchMasterData(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        var masterdata: Array<Array<any>> = Object.values(value);
+        masterdata.forEach((master, index) => {
+          master.forEach(data => {
+            if(data.status == Status.Active) {
+              let obj = {
+                value: data.m_id,
+                label: data.data
+              }
+              if(index == 2 || index == 3) {
+                if(data.isAvailable){
+                  if(index == 2) {
+                    this.avatarNames.push(obj)
+                  }
+                  if(index == 3) {
+                    this.avatarImages.push(obj)
+                  }
+                }
+              } 
+              else if(index == 0) {
+                this.specialization.push(obj)
+              }
+              else {
+                this.language.push(obj)
+              }
+            }
+          })
+        })
       },
       error: (err) => {
         console.log(err);
@@ -148,6 +207,7 @@ export class AddComponent {
         this.populate(value)
       }
     }
+    this.loadMasterData();
 
   }
 

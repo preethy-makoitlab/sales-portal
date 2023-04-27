@@ -21,7 +21,7 @@ export class ManageComponent {
   fields: any[] = ['Listeners', 'Phone Number', 'Email ID', 'Last Active On', {label: 'Total Chats (Min)', icon: "table-sort.svg"}, {label: 'No of Min Chats', icon: "table-sort.svg"}, {label: 'Rating', icon: "table-sort.svg"}]
   actionField: Object = {
     label: 'Actions',
-    colspan: '2'
+    colspan: '1'
   };
 
   constructor(private router: Router,
@@ -121,16 +121,6 @@ export class ManageComponent {
               isEditable: false,
               isClickable: true,
               route: '/listener/add/',
-              isCheckbox: false
-            },
-            {
-              data: null,
-              isImage: true,
-              imageFile: 'disabled.svg',
-              isButton: false,
-              isEditable: false,
-              isClickable: true,
-              route: '',
               isCheckbox: false
             }
           ]
