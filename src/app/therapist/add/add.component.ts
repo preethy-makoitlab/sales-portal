@@ -7,6 +7,7 @@ import { MasterdataService } from 'src/app/services/masterdata.service';
 import { Status } from 'src/app/stores/types';
 import { ContentService } from 'src/app/services/content.service';
 import { lastValueFrom } from 'rxjs';
+import { ToastService } from 'src/app/common/services/toastr.service';
 
 
 @Component({
@@ -198,6 +199,7 @@ profilePicture:any;
     private therapistService: TherapistService,
     private masterdataService: MasterdataService,
     private router: Router,
+    private toastrService: ToastService,
     private activatedRoute: ActivatedRoute,private contentService:ContentService) {
     this.addTherapistForm = this.formBuilder.group({
       title: ['', Validators.required],
@@ -260,6 +262,9 @@ console.log(this.profilePicture);
     })
     if(flag) {
       this.gotonext = true;
+    }
+    else {
+      this.toastrService.showError("Please fill all the required fields");
     }
   }
 
@@ -365,6 +370,7 @@ console.log(this.profilePicture);
         },
         error: (err) => {
           console.log(err);
+          this.toastrService.showError(err.error.message);
         }
       })
     }

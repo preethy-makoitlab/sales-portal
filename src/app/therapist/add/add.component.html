@@ -112,8 +112,8 @@
                 <input type="file" name="profilepic" accept=".jpg,.png" (change)="profilePictureUpdate($event)" #fileInput style="display:none" ngModel required>
               </div>
             </div>
-            <img src="../../../assets/icons/delete-spoc.svg" *ngIf="this.editMode && therapist.picture !== 'default'"  (click)="dialogShow()"/>
-            <img *ngIf="therapist.picture !== 'default'" class="md:w-1/4 sm:w-full w-full"   [src]="therapist.picture |secure|async">
+            <!-- <img src="../../../assets/icons/delete-spoc.svg" *ngIf="this.editMode && therapist.picture !== 'default'"  (click)="dialogShow()"/> -->
+            <img *ngIf="therapist.picture !== 'default'" class="md:w-1/4 sm:w-full w-full"   [src]="therapist.picture | secure| async">
 
           </div>
         </div>
