@@ -234,9 +234,10 @@ profilePicture:any;
     this.profilePicture = event.target?.files[0];
     console.log(this.profilePicture);
     this.therapist.picture = this.profilePicture;
-    if(this.editMode) {
-      this.reUpload = true;
-    }
+    this.reUpload = true;
+    // if(this.editMode) {
+    //   this.reUpload = true;
+    // }
   }
 
   getPlaceholder(category: string) {

@@ -102,8 +102,8 @@
             <div class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
               <label class="form-label required">Upload Profile Picture</label>
               <div [ngClass]="form1[9].status ? 'flex p-6 border-dashed rounded-md gap-4 upload-pic' : 'flex p-6 border-dashed rounded-md gap-4 upload-pic input-error'" class="flex p-6 border-dashed rounded-md upload-pic">
-                <img *ngIf="(therapist.picture === 'default' || !therapist.picture) || reUpload" class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
-                <img *ngIf="therapist.picture && !reUpload" class="md:w-1/12 sm:w-full w-full"   [src]="therapist.picture | secure | async">
+                <img *ngIf="!therapist.picture || reUpload" class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                <img *ngIf="therapist.picture" class="md:w-1/12 sm:w-full w-full" [src]="therapist.picture | secure | async">
                 <div class="flex flex-col items-center">
                   <p *ngIf="!profilePicture && (therapist.picture === 'default' || !therapist.picture)">Browse to select file</p>
                   <p *ngIf="(therapist.picture !== 'default' && therapist.picture) && !profilePicture">Re-upload file</p>
