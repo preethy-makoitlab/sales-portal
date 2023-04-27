@@ -114,7 +114,7 @@ export class AddComponent {
     isAvailable: false,
     // status: "active",
     preferredModesOfTherapy: [],
-    picture: 'default',
+    picture: "",
     availableFrom: new Date(),
     lastSeen: new Date().toISOString(),
     rating: 0,
@@ -125,11 +125,11 @@ export class AddComponent {
       status: true
     },
     {
-      label: 'firstname',
+      label: 'firstName',
       status: true
     },
     {
-      label: 'lastname',
+      label: 'lastName',
       status: true
     },
     {
@@ -137,7 +137,7 @@ export class AddComponent {
       status: true
     },
     {
-      label: 'mobile',
+      label: 'contactNo',
       status: true
     },
     {
@@ -145,19 +145,19 @@ export class AddComponent {
       status: true
     },
     {
-      label: 'expertise',
+      label: 'areaOfExpertise',
       status: true
     },
     {
-      label: 'experience',
+      label: 'yearsOfExperience',
       status: true
     },
     {
-      label: 'about',
+      label: 'bio',
       status: true
     },
     {
-      label: 'profilepic',
+      label: 'picture',
       status: true
     }
   ] 
@@ -168,14 +168,16 @@ export class AddComponent {
   editMode: boolean = false;
   isAlert: boolean = false;
   isDisabled: boolean = false;
+  reUpload: boolean = false;
+  isThumbnail: boolean = false;
   alertHeaderDisable: string = "Therapist Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the therapist"
   alertHeaderEnable: string = "Therapist Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the therapist"
   steppertitle1: string = "Profile Information"
   steppertitle2: string = "Availability"
-  alertHeaderDeletePicture:string = "Picture Delete";
-  alertBodyDeletePicture:string = "Picture Delete";
+  alertHeaderDeletePicture:string = "Thumbnail Delete";
+  alertBodyDeletePicture:string = "Thumbnail Delete";
   alertHeaderDelete = "Delete";
   alertHeaderCancele = "Cancle";
 
@@ -229,11 +231,14 @@ profilePicture:any;
   }
 
   profilePictureUpdate(event:any){
-this.profilePicture = event.target?.files[0];
-console.log(this.profilePicture);
-
-
+    this.profilePicture = event.target?.files[0];
+    console.log(this.profilePicture);
+    this.therapist.picture = this.profilePicture;
+    if(this.editMode) {
+      this.reUpload = true;
+    }
   }
+
   getPlaceholder(category: string) {
     switch(category) {
       case 'Qualifications': 
@@ -247,14 +252,15 @@ console.log(this.profilePicture);
   
   next(form: any) {
     var flag = true;
-    console.log(form.value);
+    console.log(form, this.therapist);
     this.form1.forEach((field, index) => {
-      let avoidFields = ["qualification", "expertise", "profilepic"];
-      if(!form.value[field.label]) {
+      // let avoidFields = ["qualification", "expertise", "profilepic"];
+      if(!this.therapist[field.label]) {
         this.form1[index].status = false;
-        if(!avoidFields.includes(field.label)){
-          flag = false;
-        }
+        // if(!avoidFields.includes(field.label)){
+        //   flag = false;
+        // }
+        flag = false;
       }
       else {
         this.form1[index].status = true;
@@ -326,7 +332,7 @@ console.log(this.profilePicture);
     console.log(this.availability);
     this.therapist.availability = this.availability;
     console.log(this.therapist);
-  
+    this.therapist.picture = "default";
     let req = this.therapist;
     if(this.editMode){
       console.log(this.profilePicture);
@@ -462,8 +468,19 @@ console.log(this.profilePicture);
     this.therapist['isAvailable'] = !this.therapist['isAvailable'];
   }
 
-  dialogShow() {
+  dialogShow(type: string) {
+    if(type === "thumbnail") {
+      this.isThumbnail = true;
+    }
+    else {
+      this.isThumbnail = false;
+    }
     this.isAlert = !this.isAlert;
+  }
+
+  closeAlert() {
+    this.isAlert = false;
+    this.isThumbnail = false;
   }
 
   disableTherapist() {
@@ -493,7 +510,7 @@ console.log(this.profilePicture);
  this.therapist.id
  console.log(res);
  this.profilePicture = null;
- this.therapist.picture = 'default';
+ this.therapist.picture = "";
  if(this.therapist.id){
  this.therapistService.updateTherapist(this.therapist.id,{picture:'default'});
 

@@ -116,8 +116,14 @@
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                     <div class="flex-auto">
+                        <label class="form-label required">Languages known</label>
+                        <select2 name="languages" 
+                        [data]="qualifications" multiple="true" 
+                        [disabled]="viewForm" > </select2>
+                    </div>
+                    <div class="flex-auto">
                       <label class="form-label required">{{ 'labels.avtaarName' | translate }}</label>
-                      <select [ngClass]="true ? 'select select-md title-select fullwidth' : 'select select-md title-select fullwidth input-error'" name="avtaar name" [(ngModel)]="listener.avtaarName" ngModel required [disabled]="viewForm">
+                      <select [ngClass]="true ? 'select select-md title-select fullwidth' : 'select select-md title-select fullwidth input-error'" name="avtaarname" [(ngModel)]="listener.avtaarName" ngModel required [disabled]="viewForm">
                         <option value="" disabled selected>Avtaar Name</option>
                         <option>Aang</option>
                         <option>Bolin</option>

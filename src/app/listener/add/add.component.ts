@@ -29,6 +29,7 @@ export class AddComponent {
     email: "",
     name: "",
     mobileNumber: "",
+    languages: [""],
     avtaarName: "",
     avtaar: "default",
     dob: Date,
