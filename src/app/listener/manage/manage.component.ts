@@ -12,13 +12,13 @@ import { IListenerCount } from 'src/app/stores/types';
 export class ManageComponent {
 
   totalCount: number = 0;
-  listenerCount: IListenerCount = { totalChats: 0, totalMins: 0, totalUsers: 0, totalListeners: 0 };
+  listenerCount: IListenerCount = { totalChats: 0, totalMins: 0, totalUsers: 0, totalListeners: this.totalCount };
   tableData: any[] = [];
   isAlert: boolean = false;
   pageNo: number = 0;
   pageSize: number = 10;
   contentLength!: number;
-  fields: any[] = ['Listeners', 'Phone Number', 'Email ID', 'Last Active On', {label: 'Total Chats (Min)', icon: "table-sort.svg"}, {label: 'No of Min Chats', icon: "table-sort.svg"}, {label: 'Rating', icon: "table-sort.svg"}]
+  fields: any[] = ['Listeners', 'Phone Number', 'Email ID', 'Last Active On', {label: 'Total Chats (Min)', icon: "table-sort.svg"}, {label: 'No of Min Chats', icon: "table-sort.svg"}, 'Rating']
   actionField: Object = {
     label: 'Actions',
     colspan: '1'
@@ -44,6 +44,7 @@ export class ManageComponent {
       next: (value) => {
         console.log(value);
         this.totalCount = value.count;
+        this.listenerCount.totalListeners = this.totalCount;
         this.contentLength = value.data.length;
         value.data.forEach((d: { id: any; name: any; mobileNumber: any; email: any; status: string; }) => {
           var listenerData: any = {};
