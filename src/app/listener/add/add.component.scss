@@ -345,6 +345,9 @@ width: 100% !important;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    overflow: auto;
+    position: absolute;
+    z-index: 1;
 }
 
 .btn-avtaar {
@@ -360,4 +363,12 @@ width: 100% !important;
 
 .fullwidth {
     width: 100%;
+}
+
+.ng-select2-label:after, .ng-select2-label:before {
+    content: none;
+}
+
+select2 .select2-required {
+    display: none;
 }

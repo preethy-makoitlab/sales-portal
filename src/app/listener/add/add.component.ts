@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
+import { ToastService } from 'src/app/common/services/toastr.service';
 import { isoToYMD } from 'src/app/common/utils/utils';
 import { ListenerService } from 'src/app/services/listener.service';
 import { MasterdataService } from 'src/app/services/masterdata.service';
@@ -24,6 +25,8 @@ export class AddComponent {
   addListenerForm!: FormGroup;
   isAlert: boolean = false;
   isDisabled: boolean = false;
+  thumbnail: string = "";
+  isSubmit: boolean = false;
   alertHeaderDisable: string = "Listener Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the listener"
   alertHeaderEnable: string = "Listener Enable"
@@ -36,7 +39,7 @@ export class AddComponent {
     mobileNumber: "",
     languages: [],
     avtaarName: "",
-    avtaar: "default",
+    avtaar: "dummy-avtaar",
     dob: Date,
     specialization: [],
     about: ""
@@ -46,39 +49,66 @@ export class AddComponent {
     private listenerService: ListenerService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private masterdataService: MasterdataService
+    private masterdataService: MasterdataService,
+    private toastrService: ToastService
     ) {
     this.addListenerForm = this.formBuilder.group({   
     });
   }
 
   submit(form: any) {
+    this.isSubmit = false;
     console.log(form.value);
     console.log(this.listener);
-    this.listener.dob = new Date(this.listener.dob).toISOString();
-    if (this.editMode) {
-      let _id = String(this.activatedRoute.snapshot.params['id']);
-      this.listenerService.updateListener(_id, this.listener).subscribe({
-        next: (value) => {
-          console.log(value);
-          // this.router.navigate(['/listener']);
-        },
-        error: (err) => {
-          console.log(err);
+    var flag = true;
+    var listener: Array<any> = Object.values(this.listener);
+    listener.forEach((field: any) => {
+      if(!field || field.length == 0) {
+        flag = false;
+      }
+    })
+    if(flag) {
+      if (this.editMode) {
+        let _id = String(this.activatedRoute.snapshot.params['id']);
+        if(this.thumbnail) {
+          this.listener.avtaar = this.thumbnail;
         }
-      })
+        else {
+          this.avatarImages.forEach(avatar => {
+            if(this.listener.avtaar === avatar.label) {
+              this.listener.avtaar = avatar.value;
+            }
+          })
+        }
+        this.listener.dob = new Date(this.listener.dob).toISOString();
+        this.listenerService.updateListener(_id, this.listener).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.router.navigate(['/listener']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
+      else {
+        this.listener.dob = new Date(this.listener.dob).toISOString();
+        this.listener.avtaar = this.thumbnail;
+        this.listenerService.createListener(this.listener).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.router.navigate(['/listener']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
     }
     else {
-      this.listenerService.createListener(this.listener).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.router.navigate(['/listener']);
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
-    }
+      this.isSubmit = true;
+      this.toastrService.showError("Please fill all the required fields");
+    }  
   }
 
   updateSpecialization(event: Select2UpdateEvent<any>) {
@@ -91,6 +121,27 @@ export class AddComponent {
 
   show() {
     this.avtaarCard = !this.avtaarCard;
+    var commonCard = document.getElementById("card");
+    var choose = document.getElementById("chooseAvatar");
+      if(choose && commonCard) {
+        if(this.avtaarCard) {
+          const elementPosition = choose.getBoundingClientRect();
+          commonCard.style.display = "flex";
+          commonCard.style.top = `${elementPosition.bottom}px`;
+          commonCard.style.left = `${elementPosition.left}px`;
+        }
+        else {
+          commonCard.style.display = "none";
+        }
+      }
+  }
+
+  uploadAvatar(id: string, label: string) {
+    var commonCard = document.getElementById("card");
+    if(commonCard)
+    commonCard.style.display = "none";
+    this.listener.avtaar = label;
+    this.thumbnail = id;
   }
 
   dialogShow() {
@@ -111,7 +162,7 @@ export class AddComponent {
     this.listenerService.updateListener(_id, req).subscribe({
       next: (value) => {
         console.log(value);
-        // this.router.navigate(['/listener']);
+        this.router.navigate(['/listener']);
       },
       error: (err) => {
         console.log(err);
@@ -130,7 +181,7 @@ export class AddComponent {
     this.listenerService.updateListener(_id, req).subscribe({
       next: (value) => {
         console.log(value);
-        // this.router.navigate(['/listener']);
+        this.router.navigate(['/listener']);
       },
       error: (err) => {
         console.log(err);
@@ -145,8 +196,40 @@ export class AddComponent {
       next: (value) => {
         console.log(value);
         this.viewForm = true;
-        this.listener = value;
+        this.listener = value.data;
         this.listener.dob = isoToYMD(this.listener.dob);
+        var masterdata: Array<Array<any>> = Object.values(value.masterdata);
+        masterdata.forEach((master, index) => {
+          master.forEach((data: { status: Status; m_id: any; data: any; isAvailable: any; }) => {
+            if(data.status == Status.Active) {
+              let obj = {
+                value: data.m_id,
+                label: data.data
+              }
+              if(index == 2 || index == 3) {
+                if(data.isAvailable){
+                  if(index == 2) {
+                    this.avatarNames.push(obj)
+                  }
+                  if(index == 3) {
+                    this.avatarImages.push(obj)
+                  }
+                }
+              } 
+              else if(index == 0) {
+                this.specialization.push(obj)
+              }
+              else {
+                this.language.push(obj)
+              }
+            }
+          })
+        })
+        this.avatarImages.forEach(avatar => {
+          if(this.listener.avtaar === avatar.value) {
+            this.listener.avtaar = avatar.label;
+          }
+        })
         if (value.status == Status.Inactive) {
           this.isDisabled = true;
         }
@@ -206,9 +289,10 @@ export class AddComponent {
       if (value) {
         this.populate(value)
       }
+      else {
+        this.loadMasterData();
+      }
     }
-    this.loadMasterData();
-
   }
 
 }
