@@ -34,6 +34,7 @@ export class AddComponent {
   alertBodyEnable: string = "Please make sure that you want to enable the partner"
   partnerSector: any[] = [];
   noOfSubscriptions: any[] = []
+  planDuration: any[] = []
   showDisable: boolean = false;
 
   constructor(private router: Router,
@@ -46,7 +47,6 @@ export class AddComponent {
       companyname: ['', Validators.required],
       companybranch: ['', Validators.required],
       partnertype: ['', Validators.required],
-      companysector: ['', Validators.required],
       weblink: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
@@ -306,6 +306,14 @@ export class AddComponent {
             master.masterData.forEach(data => {
               if (data.status == Status.Active) {
                 this.noOfSubscriptions.push(data.data);
+              }
+            })
+          }
+
+          if (master.category == 'PlanDuration') {
+            master.masterData.forEach(data => {
+              if (data.status == Status.Active) {
+                this.planDuration.push(data.data);
               }
             })
           }
