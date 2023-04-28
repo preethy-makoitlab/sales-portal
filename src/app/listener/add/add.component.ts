@@ -88,6 +88,7 @@ export class AddComponent {
           },
           error: (err) => {
             console.log(err);
+            this.toastrService.showError(err.error.message);
           }
         })
       }
@@ -101,6 +102,7 @@ export class AddComponent {
           },
           error: (err) => {
             console.log(err);
+            this.toastrService.showError(err.error.message);
           }
         })
       }
@@ -230,7 +232,7 @@ export class AddComponent {
             this.listener.avtaar = avatar.label;
           }
         })
-        if (value.status == Status.Inactive) {
+        if (value.data.status == Status.Inactive) {
           this.isDisabled = true;
         }
       },
