@@ -12,6 +12,7 @@ import { IListenerCount } from 'src/app/stores/types';
 export class ManageComponent {
 
   totalCount: number = 0;
+  activeCount: number = 0;
   listenerCount: IListenerCount = { totalChats: 0, totalMins: 0, totalUsers: 0, totalListeners: this.totalCount };
   tableData: any[] = [];
   isAlert: boolean = false;
@@ -43,7 +44,12 @@ export class ManageComponent {
     this.listenerService.listenerList(this.pageNo, this.pageSize).subscribe({
       next: (value) => {
         console.log(value);
-        this.totalCount = value.count;
+        value.count.forEach((v: { _id: string, count: number; }) => {
+          this.totalCount += v.count;
+          if(v._id === 'active') {
+            this.activeCount += v.count;
+          }
+        })
         this.listenerCount.totalListeners = this.totalCount;
         this.contentLength = value.data.length;
         value.data.forEach((d: { id: any; name: any; mobileNumber: any; email: any; status: string; }) => {
