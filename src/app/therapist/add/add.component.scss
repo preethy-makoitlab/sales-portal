@@ -105,6 +105,10 @@
     border: 1.4px dashed #E8E8E8;;
 }
 
+.upload-pic-input-error {
+    border: 1.4px solid #EB5757;
+}
+
 .text-xs {
     font-size: 8px;
     font-weight: 400;
@@ -112,6 +116,16 @@
 }
 
 .btn {
+    // width: 15%;
+    margin: 5px;
+    border: 6px;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    border-radius: 6px;
+}
+
+.btn-block {
     width: 15%;
     margin: 5px;
     border: 6px;

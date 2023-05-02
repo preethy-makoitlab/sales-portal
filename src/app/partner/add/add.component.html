@@ -50,7 +50,7 @@
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label required">Partner Type</label>
-                            <select class="select select-md title-select" name="partnertype"
+                            <select [ngClass]="(isSubmit && partner.partnerType) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="partnertype"
                                 [(ngModel)]="partner.partnerType" ngModel required [disabled]="viewForm">
                                 <option value="" disabled selected>Select here</option>
                                 <option value="corporate">Corporate</option>
@@ -59,12 +59,12 @@
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Name of the Partner</label>
-                            <input class="input small-text" name="companyname" placeholder="Enter Company Name"
+                            <input [ngClass]="(isSubmit && partner.companyName) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="companyname" placeholder="Enter Company Name"
                                 [(ngModel)]="partner.companyName" ngModel required [disabled]="viewForm" />
                         </div>
                         <div class="flex-auto">
                             <label class="form-label">Partner Branch</label>
-                            <input class="input small-text" name="companybranch" placeholder="Enter Company Branch"
+                            <input [ngClass]="(isSubmit && partner.companyBranch) || !isSubmit ? 'input small-text' : 'input small-text input-error'"  name="companybranch" placeholder="Enter Company Branch"
                                 [(ngModel)]="partner.companyBranch" ngModel [disabled]="viewForm" />
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <div class="flex-auto">
                             <label class="form-label required">Website Link</label>
                             <div class="flex flex-row">
-                                <input class="input small-text" name="weblink" placeholder="Enter website link"
+                                <input [ngClass]="(isSubmit && partner.websiteLink) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="weblink" placeholder="Enter website link"
                                     [(ngModel)]="partner.websiteLink" ngModel required [disabled]="viewForm" />
                                 <div class="btn btn-block link-button" (click)="redirect(partner.websiteLink)">
                                     <img src="../../../assets/icons/link.svg">
@@ -95,17 +95,17 @@
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label required">Partner Address</label>
-                            <input class="input small-text" name="address" placeholder="Enter Company Address"
+                            <input [ngClass]="(isSubmit && partner.address) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="address" placeholder="Enter Company Address"
                                 [(ngModel)]="partner.address" ngModel required [disabled]="viewForm" />
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">City</label>
-                            <input class="input small-text" name="city" placeholder="Enter City"
+                            <input [ngClass]="(isSubmit && partner.city) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="city" placeholder="Enter City"
                                 [(ngModel)]="partner.city" ngModel required [disabled]="viewForm" />
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">State</label>
-                            <input class="input small-text" name="state" placeholder="Enter State"
+                            <input [ngClass]="(isSubmit && partner.state) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="state" placeholder="Enter State"
                                 [(ngModel)]="partner.state" ngModel required [disabled]="viewForm" />
                         </div>
                     </div>
@@ -164,26 +164,50 @@
                         <div class="flex w-full justify-start items-start">
                             <div
                                 class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-8 border-2 border-solid rounded-lg border-{#E8E8E8}">
-                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-                                    <div class="flex-auto">
-                                        <label class="form-label required">SPOC Name</label>
-                                        <input class="input small-text" name="spocname{{index}}"
-                                            placeholder="Enter your firstname" [(ngModel)]="spoc[index].name" ngModel
-                                            [required]="index == 0" [disabled]="viewForm" />
-                                    </div>
-                                    <div class="flex-auto">
-                                        <label class="form-label required">E-mail ID</label>
-                                        <input class="input small-text" name="email{{index}}"
-                                            placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel
-                                            [required]="index == 0" [disabled]="viewForm" />
-                                    </div>
-                                    <div class="flex-auto">
-                                        <label class="form-label required">Mobile Number</label>
-                                        <input class="input small-text" name="mobile{{index}}"
-                                            placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile"
-                                            ngModel [required]="index == 0" [disabled]="viewForm" />
-                                    </div>
+                                <div *ngIf="index == 0" class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                    <!-- <div *ngIf="index == 0" class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2"> -->
+                                        <div class="flex-auto">
+                                            <label class="form-label required">SPOC Name</label>
+                                            <input [ngClass]="(isSubmit && partner.spocDetails[0].name) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="spocname{{index}}"
+                                                placeholder="Enter your firstname" [(ngModel)]="spoc[index].name" ngModel
+                                                [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                        <div class="flex-auto">
+                                            <label class="form-label required">E-mail ID</label>
+                                            <input [ngClass]="(isSubmit && partner.spocDetails[0].email) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="email{{index}}"
+                                                placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel
+                                                [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                        <div class="flex-auto">
+                                            <label class="form-label required">Mobile Number</label>
+                                            <input [ngClass]="(isSubmit && partner.spocDetails[0].mobile) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="mobile{{index}}"
+                                                placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile"
+                                                ngModel [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
                                 </div>
+                                    <!-- </div> -->
+                                    <div *ngIf="index > 0" class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                        <div class="flex-auto">
+                                            <label class="form-label required">SPOC Name</label>
+                                            <input class="input small-text" name="spocname{{index}}"
+                                                placeholder="Enter your firstname" [(ngModel)]="spoc[index].name" ngModel
+                                                [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                        <div class="flex-auto">
+                                            <label class="form-label required">E-mail ID</label>
+                                            <input class="input small-text" name="email{{index}}"
+                                                placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel
+                                                [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                        <div class="flex-auto">
+                                            <label class="form-label required">Mobile Number</label>
+                                            <input class="input small-text" name="mobile{{index}}"
+                                                placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile"
+                                                ngModel [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                    </div>
+                                    
+                                <!-- </div> -->
                                 <div class="flex flex-wrap cursor-pointer gap-4">
                                     <input type="checkbox" name="isoperations{{index}}" class="checkbox checkbox-sm"
                                         [(ngModel)]="spoc[index].isOperations" ngModel [disabled]="viewForm" />
@@ -203,12 +227,10 @@
                 <button type="button" *ngIf="!gotonext" class="btn btn-primary btn-block enable-button"
                     [routerLink]="['/partner']">Cancel</button>
                 <div class="flex justify-end w-full">
-                    <button *ngIf="!gotonext && !viewForm && !editMode" class="btn btn-primary btn-block enable-button"
-                        [disabled]="!addCompanyForm.valid">Create and Close</button>
+                    <button *ngIf="!gotonext && !viewForm && !editMode" class="btn btn-primary btn-block enable-button">Create and Close</button>
                     <button *ngIf="!gotonext && !viewForm && editMode"
                         class="btn btn-primary btn-block enable-button">Save partner</button>
-                    <button *ngIf="!gotonext && !viewForm && !editMode" class="btn btn-primary btn-bigger"
-                        [disabled]="!addCompanyForm.valid" (click)="next(addCompanyForm)">Create Partner and Proceed to
+                    <button type="button" *ngIf="!gotonext && !viewForm && !editMode" class="btn btn-primary btn-bigger" (click)="next(addCompanyForm)">Create Partner and Proceed to
                         Add Subscription</button>
                     <button type="button" *ngIf="!gotonext && !viewForm && editMode" class="btn btn-primary btn-bigger"
                         (click)="fetchSubscription()">Save and Go to Subscription details</button>
@@ -224,7 +246,7 @@
                     <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex-auto">
                             <label class="form-label required">Number of Subscriptions</label>
-                            <select class="select select-md title-select" name="subscriptionsnum"
+                            <select [ngClass]="(isSubmit && subscription.noOfSubscriptions) || !isSubmit ? 'select select-md title-select' : 'select select-md title-select input-error'" name="subscriptionsnum"
                                 [(ngModel)]="subscription.noOfSubscriptions" ngModel required [disabled]="viewForm">
                                 <option value="" disabled selected>Select here</option>
                                 <option *ngFor="let option of noOfSubscriptions">
@@ -234,13 +256,13 @@
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Number of Therapy Sessions</label>
-                            <input type="number" class="input small-text" name="sessionsnum"
+                            <input type="number" [ngClass]="(isSubmit && subscription.noOfTherapySessions) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="sessionsnum"
                                 placeholder="Enter no. of therapy sessions"
                                 [(ngModel)]="subscription.noOfTherapySessions" ngModel required [disabled]="viewForm" />
                         </div>
                         <div class="flex-auto">
                             <label class="form-label required">Plan Duration(months)</label>
-                            <input type="number" class="input small-text" min="3" max="36" step="3" name="planduration"
+                            <input type="number" [ngClass]="(isSubmit && subscription.planDuration) || !isSubmit ? 'input small-text' : 'input small-text input-error'" min="3" max="36" step="3" name="planduration"
                                 placeholder="Enter duration" (change)="setEndDate()"
                                 [(ngModel)]="subscription.planDuration" ngModel required [disabled]="viewForm" />
                         </div>
@@ -277,8 +299,7 @@
             <div class="flex justify-end mt-2">
                 <button *ngIf="gotonext && !viewForm" type="button" class="btn btn-primary btn-block enable-button"
                     (click)="previous()">Cancel</button>
-                <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block"
-                    [disabled]="!addSubscriptionForm.valid">Save Details</button>
+                <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block">Save Details</button>
                 <button type="button" *ngIf="gotonext && viewForm" class="btn btn-primary btn-block"
                     (click)="previous()">Previous</button>
             </div>

@@ -8,6 +8,7 @@ import { PartnerService } from 'src/app/services/partner.service';
 import { SubscriptionService } from 'src/app/services/subscription.service';
 import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 import { Status } from 'src/app/stores/types';
+import { ToastService } from 'src/app/common/services/toastr.service';
 
 @Component({
   selector: 'app-add',
@@ -35,11 +36,14 @@ export class AddComponent {
   partnerSector: any[] = [];
   noOfSubscriptions: any[] = []
   showDisable: boolean = false;
-
+  isSubmit: boolean = false;
+  compulsoryFields = ['partnerType','companyName','companyBranch','websiteLink','address','city','state','spocDetails'];
+  
   constructor(private router: Router,
     private partnerService: PartnerService,
     private subscriptionService: SubscriptionService,
     private masterdataService: MasterdataService,
+    private toastrService: ToastService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
     this.addCompanyForm = this.formBuilder.group({
@@ -99,40 +103,63 @@ export class AddComponent {
     placeholder: 'DD-MM-YYYY',
   };
 
+  validation() {
+    this.isSubmit = false;
+    var flag = true;
+    this.compulsoryFields.forEach((field: any) => {
+      if(!this.partner[field] || this.partner[field].length == 0) {
+        flag = false;
+      }
+      if(field == 'spocDetails') {
+        if(!this.partner[field][0].name || !this.partner[field][0].email || !this.partner[field][0].mobile) {
+          flag = false;
+        }
+      }
+    })
+    return flag;
+  }
 
   submit(form: any) {
     console.log(form?.value);
     console.log(this.partner);
     let req = this.partner;
-    if (this.editMode) {
-      let _id = String(this.activatedRoute.snapshot.params['id']);
-      this.partnerService.updatePartner(_id, req).subscribe({
-        next: (value) => {
-          console.log(value);
-          if (!this.gotonext) {
-            this.router.navigate(['/partner']);
+    var flag = this.validation()
+    if (flag) {
+      if (this.editMode) {
+        let _id = String(this.activatedRoute.snapshot.params['id']);
+        this.partnerService.updatePartner(_id, req).subscribe({
+          next: (value) => {
+            console.log(value);
+            if (!this.gotonext) {
+              this.router.navigate(['/partner']);
+            }
+          },
+          error: (err) => {
+            console.log(err);
           }
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
+        })
+      }
+      else {
+        this.partnerService.createPartner(req).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.partnerId = value.partnerId;
+            console.log(this.partnerId)
+            if (!this.gotonext) {
+              this.router.navigate(['/partner']);
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
     }
     else {
-      this.partnerService.createPartner(req).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.partnerId = value.partnerId;
-          console.log(this.partnerId)
-          if (!this.gotonext) {
-            this.router.navigate(['/partner']);
-          }
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
+      this.isSubmit = true;
+      this.toastrService.showError("Please fill all the required fields");
     }
+    
   }
 
   submitAndSubscribe(form: any) {
@@ -141,27 +168,40 @@ export class AddComponent {
     this.subscription.partnerId = this.partnerId;
     this.subscription.subscriptionEnd = this.endDate;
     let req = this.subscription;
-    if (this.editMode) {
-      this.subscriptionService.updateSubscription(this.subscriptionId, req).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.router.navigate(['/partner']);
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
+    var flag = true;
+    var subscription: Array<any> = Object.values(this.subscription);
+    subscription.forEach(field => {
+      if(!field || field.length == 0) {
+        flag = false;
+      }
+    })
+    if (flag) {
+      if (this.editMode) {
+        this.subscriptionService.updateSubscription(this.subscriptionId, req).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.router.navigate(['/partner']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
+      else {
+        this.subscriptionService.createSubscription(req).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.router.navigate(['/partner']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
     }
     else {
-      this.subscriptionService.createSubscription(req).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.router.navigate(['/partner']);
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
+      this.isSubmit = true;
+      this.toastrService.showError("Please fill all the required fields");
     }
   }
 
@@ -186,8 +226,16 @@ export class AddComponent {
   }
 
   next(form: any) {
-    this.gotonext = true;
-    this.submit(form);
+    console.log(form, this.partner);
+    var flag = this.validation();
+    if(flag) {
+      this.gotonext = true;
+      this.submit(form);
+    }
+    else {
+      this.isSubmit = true;
+      this.toastrService.showError("Please fill all the required fields");
+    }
   }
 
   previous() {

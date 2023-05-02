@@ -7,16 +7,24 @@
     <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/therapist']">
     <h1 class="header-text">{{ therapist.firstName }} {{ therapist.lastName }}</h1>
   </div>
-  <div *ngIf="viewForm" class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
-    <div>
-        <img class="edit-icon" src="../../../assets/icons/edit-icon.svg">
+  <div class="flex gap-2">
+    <div *ngIf="(viewForm || editMode) && !isDisabled" class="flex justify-end">
+      <button type="button" class="btn btn-error previous" (click)="dialogShow('therapist')">Disable</button>
     </div>
-    <div>
-        <span class="">Edit therapist</span>
+    <div *ngIf="(viewForm || editMode) && isDisabled" class="flex justify-end">
+      <button type="button" class="btn btn-primary enable-button" (click)="dialogShow('therapist')">Enable</button>
     </div>
-  </div>
-  <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1" [routerLink]="['/therapist']">
-    Discard
+    <div *ngIf="viewForm" class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+      <div>
+          <img class="edit-icon" src="../../../assets/icons/edit-icon.svg">
+      </div>
+      <div>
+          <span class="">Edit therapist</span>
+      </div>
+    </div>
+    <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1" [routerLink]="['/therapist']">
+      Discard
+    </div>
   </div>
 </div>
 
@@ -30,7 +38,7 @@
         <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
           <div class="title-class">
             <label class="form-label required">Title</label>
-            <select [ngClass]="form1[0].status ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="title" [(ngModel)]="therapist.title" ngModel required [disabled]="viewForm">
+            <select [ngClass]="(isSubmit && therapist.title) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="title" [(ngModel)]="therapist.title" ngModel required [disabled]="viewForm">
                 <option value="" disabled selected>Title</option>
                 <option>Mr</option>
                 <option>Ms</option>
@@ -41,33 +49,38 @@
           <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
             <div class="flex-auto">
               <label class="form-label required">First Name</label>
-              <input [ngClass]="form1[1].status ? 'input small-text' : 'input small-text input-error'" name="firstname" placeholder="Enter your firstname"
+              <input [ngClass]="(isSubmit && therapist.firstName) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="firstname" placeholder="Enter your firstname"
                 [(ngModel)]="therapist.firstName" ngModel required [disabled]="viewForm" [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Last Name</label>
-              <input [ngClass]="form1[2].status ? 'input small-text' : 'input small-text input-error'" name="lastname" placeholder="Enter your lastname"
+              <input [ngClass]="(isSubmit && therapist.lastName) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="lastname" placeholder="Enter your lastname"
                 [(ngModel)]="therapist.lastName" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">E-mail ID</label>
-              <input type="email" [ngClass]="form1[3].status ? 'input small-text' : 'input small-text input-error'" name="email" placeholder="Enter your e-mail"
+              <input type="email" [ngClass]="(isSubmit && therapist.email) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="email" placeholder="Enter your e-mail"
                 [(ngModel)]="therapist.email" ngModel required [disabled]="viewForm" />
             </div>
             <div class="flex-auto">
               <label class="form-label required">Mobile Number</label>
-              <input [ngClass]="form1[4].status ? 'input small-text' : 'input small-text input-error'" name="mobile" placeholder="Enter your mobile number"
+              <input [ngClass]="(isSubmit && therapist.contactNo) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="mobile" placeholder="Enter your mobile number"
                 [(ngModel)]="therapist.contactNo" ngModel required [disabled]="viewForm" />
             </div>
           </div>
           <div class="flex flex-row items-center justify-between md:gap-4 lg:gap-4 sm:gap-2">
             <div class="flex-auto w-1/2">
+              <label class="form-label required">Languages known</label>
+              <select2 name="languages" [value]="therapist.languages" [data]="languages" multiple="true" (update)="updateLanguages($event)" [disabled]="viewForm"> </select2>
+              <!-- <select2 [ngClass]="(isSubmit && therapist.languages) || !isSubmit ? '' : '.select2-container--default'" name="language" [data]="languages" [value]="therapist.languages" multiple="true" (update)="updateLanguages($event)" [disabled]="viewForm"> </select2> -->
+            </div>
+            <div class="flex-auto w-1/2">
               <label class="form-label required">Qualifications</label>
-              <select2 [ngClass]="form1[5].status ? '' : '.select2-container--default'" name="qualification" [data]="qualifications" [value]="therapist.qualification" multiple="true" (update)="updateQualification($event)" [disabled]="viewForm" ngModel required> </select2>
+              <select2 [ngClass]="(isSubmit && therapist.qualification) || !isSubmit ? '' : '.select2-container--default'" name="qualification" [data]="qualifications" [value]="therapist.qualification" multiple="true" (update)="updateQualification($event)" [disabled]="viewForm"> </select2>
             </div>
             <div class="flex-auto w-1/2">
               <label class="form-label required">Areas of Expertise</label>
-              <select2 [ngClass]="form1[6].status ? '' : '.select2-container--default'" name="expertise" [data]="expertise" multiple="true" [value]="therapist.areaOfExpertise" (update)="updateExpertise($event)" [disabled]="viewForm" ngModel required> </select2>
+              <select2 [ngClass]="(isSubmit && therapist.yearsOfExperience) || !isSubmit ? '' : '.select2-container--default'" name="expertise" [data]="expertise" multiple="true" [value]="therapist.areaOfExpertise" (update)="updateExpertise($event)" [disabled]="viewForm"> </select2>
             </div>
             
             <!-- <div class="flex-auto">
@@ -88,20 +101,20 @@
               <div class="flex flex-row justify-between md:gap-4 lg:gap-4 sm:gap-2">
                 <div class="grow">
                   <label class="form-label required">Years of Experience</label>
-                  <input type="number" max="30" min="0" [ngClass]="form1[7].status ? 'input small-text' : 'input small-text input-error'" name="experience"
+                  <input type="number" max="30" min="0" [ngClass]="(isSubmit && therapist.yearsOfExperience) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="experience"
                     placeholder="Enter your experience in years" [(ngModel)]="therapist.yearsOfExperience" ngModel required [disabled]="viewForm" />
                 </div>
               </div>
               <div>
                 <label class="form-label required">About Therapist</label>
-                <textarea [ngClass]="form1[8].status ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
+                <textarea [ngClass]="(isSubmit && therapist.bio) || !isSubmit ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
                   [(ngModel)]="therapist.bio" ngModel required [disabled]="viewForm" maxlength="400"></textarea>
               </div>
             </div>
             <div class="vertical-separator"></div>
             <div class="grow basis-1/2 clickable" (click)="!viewForm && openFileExplorer()">
               <label class="form-label required">Upload Profile Picture</label>
-              <div [ngClass]="form1[9].status ? 'flex p-6 border-dashed rounded-md gap-4 upload-pic' : 'flex p-6 border-dashed rounded-md gap-4 upload-pic input-error'" class="flex p-6 border-dashed rounded-md upload-pic">
+              <div [ngClass]="(isSubmit && therapist.picture) || !isSubmit ? 'flex p-6 border-dashed rounded-md gap-4 upload-pic' : 'flex p-6 border-dashed rounded-md gap-4 upload-pic-input-error'" class="flex p-6 border-dashed rounded-md upload-pic">
                 <img *ngIf="!therapist.picture || reUpload" class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
                 <img *ngIf="therapist.picture" class="md:w-1/12 sm:w-full w-full" [src]="therapist.picture | secure | async">
                 <div class="flex flex-col items-center">
@@ -124,7 +137,7 @@
         <div [hidden]="!gotonext">
           
             <div class="divider divide"></div>
-              <label class="label">Set Available Hours<span class="span-imp">*</span></label>
+              <label class="form-label required">Set Available Hours</label>
               <div class="flex flex-row items-center">
                 <div class="flex flex-row w-1/5 justify-between">
                   <label class="form-label additional-label m-2">Monday</label>
@@ -170,7 +183,7 @@
                   <img *ngIf="!availability[2].ifSlot2" src="../../../assets/icons/plus.svg" class="mx-4 cursor-pointer" (click)="add('wednesday')">
                 </div>
                 <div *ngIf="availability[2].ifSlot2" class="flex flex-row ml-12 my-1">
-                  <input type="time"class="input small-text" name="wednesday2-end" placeholder="Start timing" [(ngModel)]="availability[2].slot2Start" [disabled]="viewForm"/>
+                  <input type="time"class="input small-text" name="wednesday2-start" placeholder="Start timing" [(ngModel)]="availability[2].slot2Start" [disabled]="viewForm"/>
                   <label class="form-label additional-label m-2">To</label>
                   <input type="time" class="input small-text" name="wednesday2-end" placeholder="End timing" [(ngModel)]="availability[2].slot2End" [disabled]="viewForm"/>
                   <img src="../../../assets/icons/cross-icon.svg" class="mx-4 cursor-pointer" (click)="remove('wednesday')" >
@@ -314,12 +327,12 @@
         </div>
       </div>
       <div class="flex justify-end">
-        <div *ngIf="editMode && gotonext && !isDisabled" class="flex justify-start w-11/12">
+        <!-- <div *ngIf="editMode && gotonext && !isDisabled" class="flex justify-start w-11/12">
           <button type="button" class="btn btn-error previous" (click)="dialogShow('therapist')">Disable</button>
         </div>
         <div *ngIf="editMode && gotonext && isDisabled" class="flex justify-start w-11/12">
           <button type="button" class="btn btn-primary enable-button" (click)="dialogShow('therapist')">Enable</button>
-        </div>
+        </div> -->
         <div *ngIf="isAlert && !isDisabled && !isThumbnail">
           <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="closeAlert()" (isDisable)="disableTherapist()"></app-alert-box>
         </div>
@@ -331,7 +344,7 @@
         </div>
         <button type="button" class="btn btn-primary btn-block cursor-pointer" [disabled]="!gotonext"
           (click)="previous()">Previous</button>
-        <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous cursor-pointer" [disabled]="!addTherapistForm.valid">Save
+        <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block previous cursor-pointer">Save
           and Submit</button>
         <button type="button" *ngIf="!gotonext && !viewForm" class="btn btn-primary btn-block previous cursor-pointer" (click)="next(addTherapistForm)">Continue</button>
         <button type="button" *ngIf="!gotonext && viewForm" class="btn btn-primary btn-block previous cursor-pointer" (click)="next(addTherapistForm)">Next</button>

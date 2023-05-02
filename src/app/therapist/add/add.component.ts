@@ -105,6 +105,7 @@ export class AddComponent {
     lastName: "",
     email: "",
     contactNo: "",
+    languages: [],
     qualification: [],
     yearsOfExperience: "",
     areaOfExpertise: [],
@@ -119,49 +120,8 @@ export class AddComponent {
     lastSeen: new Date().toISOString(),
     rating: 0,
   }
-  form1: any[] = [
-    {
-      label: 'title',
-      status: true
-    },
-    {
-      label: 'firstName',
-      status: true
-    },
-    {
-      label: 'lastName',
-      status: true
-    },
-    {
-      label: 'email',
-      status: true
-    },
-    {
-      label: 'contactNo',
-      status: true
-    },
-    {
-      label: 'qualification',
-      status: true
-    },
-    {
-      label: 'areaOfExpertise',
-      status: true
-    },
-    {
-      label: 'yearsOfExperience',
-      status: true
-    },
-    {
-      label: 'bio',
-      status: true
-    },
-    {
-      label: 'picture',
-      status: true
-    }
-  ] 
-
+  compulsoryFields = ['title','firstName','lastName','email','contactNo','qualification','areaOfExpertise','yearsOfExperience','bio','picture'];
+ 
   gotonext: boolean = false;
   addTherapistForm!: FormGroup;
   viewForm: boolean = false;
@@ -170,6 +130,7 @@ export class AddComponent {
   isDisabled: boolean = false;
   reUpload: boolean = false;
   isThumbnail: boolean = false;
+  isSubmit: boolean = false;
   alertHeaderDisable: string = "Therapist Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the therapist"
   alertHeaderEnable: string = "Therapist Enable"
@@ -193,9 +154,10 @@ export class AddComponent {
   audio: any;
   video: any;
   chat: any;
-profilePicture:any;
-  qualifications: Select2Data = []
+  profilePicture:any;
+  qualifications: Select2Data = [];
   expertise: Select2Data = [];
+  languages: Select2Data = []
 
   constructor(private formBuilder: FormBuilder,
     private therapistService: TherapistService,
@@ -230,6 +192,10 @@ profilePicture:any;
     this.therapist.areaOfExpertise = event.value;
   }
 
+  updateLanguages(event: Select2UpdateEvent<any>) {
+    this.therapist.languages = event.value;
+  }
+
   profilePictureUpdate(event:any){
     this.profilePicture = event.target?.files[0];
     console.log(this.profilePicture);
@@ -253,24 +219,19 @@ profilePicture:any;
   
   next(form: any) {
     var flag = true;
+    this.isSubmit = false;
     console.log(form, this.therapist);
-    this.form1.forEach((field, index) => {
-      // let avoidFields = ["qualification", "expertise", "profilepic"];
-      if(!this.therapist[field.label]) {
-        this.form1[index].status = false;
-        // if(!avoidFields.includes(field.label)){
-        //   flag = false;
-        // }
+    var flag = true;
+    this.compulsoryFields.forEach((field: any) => {
+      if(!this.therapist[field] || this.therapist[field].length == 0) {
         flag = false;
-      }
-      else {
-        this.form1[index].status = true;
       }
     })
     if(flag) {
       this.gotonext = true;
     }
     else {
+      this.isSubmit = true;
       this.toastrService.showError("Please fill all the required fields");
     }
   }
@@ -286,6 +247,8 @@ profilePicture:any;
 
   async submit(form: any) {
     console.log(form.value);
+    console.log(this.therapist);
+    var errorMessage = "";
     this.therapist.preferredModesOfTherapy = []
     if(form.value.mode1 == true || this.audio == true){
       this.therapist.preferredModesOfTherapy.push('audio')
@@ -296,9 +259,8 @@ profilePicture:any;
     if(form.value.mode3 == true || this.chat == true){
       this.therapist.preferredModesOfTherapy.push('chat')
     }
-    if(!form.value.mode1 && !form.value.mode2 && !form.value.mode3) {
-      this.therapist.preferredModesOfTherapy.push('')
-    }
+    var availabilityFlag = false;
+    var modeFlag = true;
     console.log(this.therapist)
     console.log(form.value)
 
@@ -335,53 +297,104 @@ profilePicture:any;
     console.log(this.therapist);
     this.therapist.picture = "default";
     let req = this.therapist;
-    if(this.editMode){
-      console.log(this.profilePicture);
-      let _id = String(this.activatedRoute.snapshot.params['id']);
-      if(this.profilePicture){
-        console.log("exist");
-        let formData  = new FormData();
-        formData.append("file",this.profilePicture);
-        let uploaded  = this.contentService.uploadFile(_id,"user",undefined,formData);
-        let obj = (await lastValueFrom(uploaded));
-        req.picture = obj.url;
-      }
-      this.therapistService.updateTherapist(_id, req).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.router.navigate(['/therapist']);
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
-    }  
-    else {
-      this.therapistService.createTherapist(req).subscribe({
-        next: async (value:any) => {
-          console.log(value);
-          if(this.profilePicture){
-            let formData  = new FormData();
-            formData.append("file",this.profilePicture);
-          let uploaded  = this.contentService.uploadFile(value.response.id,"user",undefined,formData);
-          let url = (await lastValueFrom(uploaded))?.url || null;
 
-          if(url){
-            value.picture = url;
-            let saved  = this.therapistService.updateTherapist(value.response.id, value);
-            let res = (await lastValueFrom(saved));
-            console.log(res);
-          }
+    this.therapist.availability.forEach((day: { slot1Start: any; slot1End: any; slot2Start: any; slot2End: any; }) => {
+      if(day.slot1Start) {
+        if(day.slot1End) {
+          availabilityFlag = true;
         }
-          this.router.navigate(['/therapist']);
-        },
-        error: (err) => {
-          console.log(err);
-          this.toastrService.showError(err.error.message);
+        else {
+          availabilityFlag = false;
+          errorMessage = "Please provide the end timing for the slots given"
         }
-      })
+      }
+      if(day.slot2Start) {
+        if(day.slot2End) {
+          availabilityFlag = true;
+        }
+        else {
+          availabilityFlag = false;
+          errorMessage = "Please provide the end timing for the slots given"
+        }
+      }
+    })
+
+    if(this.therapist.preferredModesOfTherapy.length == 0) {
+      modeFlag = false;
     }
 
+    if(availabilityFlag && modeFlag) {
+    if(this.editMode){
+        console.log(this.profilePicture);
+        let _id = String(this.activatedRoute.snapshot.params['id']);
+        if(this.profilePicture){
+          console.log("exist");
+          let formData  = new FormData();
+          formData.append("file",this.profilePicture);
+          let uploaded  = this.contentService.uploadFile(_id,"user",undefined,formData);
+          let obj = (await lastValueFrom(uploaded));
+          req.picture = obj.url;
+        }
+        this.therapistService.updateTherapist(_id, req).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.toastrService.showSuccess("Therapist edited successfully");
+            this.router.navigate(['/therapist']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }  
+      else {
+        this.therapistService.createTherapist(req).subscribe({
+          next: async (value:any) => {
+            console.log(value);
+            if(this.profilePicture){
+              let formData  = new FormData();
+              formData.append("file",this.profilePicture);
+            let uploaded  = this.contentService.uploadFile(value.response.id,"user",undefined,formData);
+            let url = (await lastValueFrom(uploaded))?.url || null;
+  
+            if(url){
+              value.picture = url;
+              let saved  = this.therapistService.updateTherapist(value.response.id, value);
+              let res = (await lastValueFrom(saved));
+              console.log(res);
+            }
+          } 
+            this.toastrService.showSuccess("Therapist added successfully");
+            this.router.navigate(['/therapist']);
+          },
+          error: (err) => {
+            console.log(err);
+            this.toastrService.showError(err.error.message);
+          }
+        })
+      }
+    }
+    else {
+      if(!availabilityFlag && !modeFlag) {
+        if(errorMessage) {
+          this.toastrService.showError(errorMessage + " and the preferred mode of therapy");
+        }
+        else {
+          this.toastrService.showError("Please provide the atleast one slot of availability and the preferred mode of therapy");
+        }
+      }
+      else if (!availabilityFlag && modeFlag) {
+        if(errorMessage) {
+          this.toastrService.showError(errorMessage);
+        }
+        else {
+          this.toastrService.showError("Please provide atleast one slot of availability");
+        }
+      }
+      else {
+        this.toastrService.showError("Please provide the preferred mode of therapy");
+      }
+    }
+    
   }
 
   openFileExplorer() {
@@ -495,6 +508,8 @@ profilePicture:any;
     this.therapistService.updateTherapist(_id, req).subscribe({
       next: (value) => {
         console.log(value);
+        this.toastrService.showSuccess("Therapist disabled successfully");
+        this.router.navigate(['/therapist']);
       },
       error: (err) => {
         console.log(err);
@@ -535,6 +550,8 @@ this.isAlert = false;
     this.therapistService.updateTherapist(_id, req).subscribe({
       next: (value) => {
         console.log(value);
+        this.toastrService.showSuccess("Therapist enabled successfully");
+        this.router.navigate(['/therapist']);
       },
       error: (err) => {
         console.log(err);
@@ -549,28 +566,28 @@ this.isAlert = false;
       next: (value) => {
         console.log(value);
         this.viewForm = true;
-        this.therapist = value;
-        const array = JSON.parse(JSON.stringify(value.availability));
-        this.audio = value.preferredModesOfTherapy.includes('audio') ? true : false;
-        this.video = value.preferredModesOfTherapy.includes('video') ? true : false;
-        this.chat = value.preferredModesOfTherapy.includes('chat') ? true : false;
+        this.therapist = value.data;
+        const array = JSON.parse(JSON.stringify(value.data.availability));
+        this.audio = value.data.preferredModesOfTherapy.includes('audio') ? true : false;
+        this.video = value.data.preferredModesOfTherapy.includes('video') ? true : false;
+        this.chat = value.data.preferredModesOfTherapy.includes('chat') ? true : false;
 
         var count = 0;
         var flag = true;
         
-        var slot1Start = value.availability[0].slot1Start;
-        var slot1End = value.availability[0].slot1End;
-        if(value.availability[0].ifSlot2 == true) {
-          var slot2Start = value.availability[0].slot2Start;
-          var slot2End = value.availability[0].slot2End;
+        var slot1Start = value.data.availability[0].slot1Start;
+        var slot1End = value.data.availability[0].slot1End;
+        if(value.data.availability[0].ifSlot2 == true) {
+          var slot2Start = value.data.availability[0].slot2Start;
+          var slot2End = value.data.availability[0].slot2End;
         }  
 
         console.log(slot1Start, slot1End, slot2Start, slot2End);  
         
-        value.availability.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
+        value.data.availability.every((day: { slot1Start: any; slot1End: any; ifSlot2: boolean; slot2Start: any; slot2End: any; }) => {
           console.log(day);
           if(day.slot1Start == slot1Start && day.slot1End == slot1End) {
-            if(value.availability[0].ifSlot2 == true){
+            if(value.data.availability[0].ifSlot2 == true){
               if(day.slot2Start == slot2Start && day.slot2End == slot2End){
                 count += 1;
               }
@@ -593,20 +610,47 @@ this.isAlert = false;
           console.log('alldays')
           this.extra[1] = array[0];
           this.extra[1].day = "alldays";
-          console.log(this.extra, this.availability, value.availability, array);
+          console.log(this.extra, this.availability, value.data.availability, array);
         }
         else if(count == 5){
           console.log('monfri')
           this.extra[0] = array[0];
           this.extra[0].day = "monfri";
-          console.log(this.extra, this.availability, value.availability, array);
+          console.log(this.extra, this.availability, value.data.availability, array);
         }
         else{
-          this.availability = value.availability;
+          this.availability = value.data.availability;
         }
         
+        var masterdata: Array<Array<any>> = Object.values(value.masterdata);
+        masterdata.forEach((master, index)=> {
+          master.forEach(data => {
+            if(data.status == Status.Active) {
+              if(index == 0 || index == 1) {
+                let obj = {
+                  value: data.data.toString(),
+                  label: data.data
+                }
+                if(index == 0) {
+                  this.qualifications.push(obj);
+                }
+                else {
+                  this.expertise.push(obj);
+                }
+              }
+              else {
+                let obj = {
+                  value: data.m_id,
+                  label: data.data
+                }
+                this.languages.push(obj);
+              }  
+            }
+          })
+        })
+
         console.log(this.availability);
-        if(value.status == 'inactive') {
+        if(value.data.status == Status.Inactive) {
           this.isDisabled = true;
         }
       },
@@ -645,6 +689,18 @@ this.isAlert = false;
               }
             })
           }
+
+          if(master.category == 'Languages'){
+            master.masterData.forEach(data => {
+              if(data.status == 'active'){
+                let obj = {
+                  value: data.m_id,
+                  label: data.data
+                }
+                this.languages.push(obj);
+              }
+            })
+          }
         })
       },
       error: (err) => {
@@ -661,9 +717,10 @@ this.isAlert = false;
       if(value){
        this.populate(value)
       }
+      else {
+        this.loadMasterData();
+      }
     }
-
-    this.loadMasterData();
   }
 
 }

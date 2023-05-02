@@ -81,7 +81,7 @@
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                     <div class="flex-auto w-1/12">
-                        <label class="form-label required">Languages known</label>
+                        <label class="form-label required">{{ 'labels.languagesKnown' | translate }}</label>
                         <select2 name="languages" [value]="listener.languages"
                         [data]="language" multiple="true" (update)="updateLanguage($event)"
                         [disabled]="viewForm"> </select2>
