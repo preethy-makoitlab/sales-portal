@@ -7,6 +7,7 @@ import { PartnerRoutingModule } from './partner/partner-routing.module';
 import { TherapistRoutingModule } from './therapist/therapist-routing.module';
 import { ContentRoutingModule } from './content/content-routing.module';
 import { ListenerRoutingModule } from './listener/listener-routing.module';
+import { RoutineRoutingModule } from './routine/routine-routing.module';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
       {
         path: 'listener',
         loadChildren: () => ListenerRoutingModule
+      },
+      {
+        path: 'routine',
+        loadChildren: () => RoutineRoutingModule
       }
     ]
   },

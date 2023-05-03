@@ -106,6 +106,7 @@
 
 .upload-pic-input-error {
     border: 1.4px solid #EB5757;
+    box-shadow: 0px 0px 6px rgba(235, 87, 87, 0.32);
 }
 
 .text-xs {
@@ -164,7 +165,27 @@ tag {
 }
 
 .textarea {
-    width: 50%;
+    width: 100%;
+}
+
+.radio {
+    --checkline-color: #15154C;
+    --radio-bg: $background-primary;
+    --radio-bg-hover: transparent;
+}
+
+.radio:checked {
+    background-color: $background-primary;
+    border-color: #15154C;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.input:disabled {
+    opacity: unset;
 }
 
 .btn-discard {
@@ -241,6 +262,10 @@ tag {
     width: 50%;
     min-width: 50%;
     max-width: 50%
+}
+
+.small-width {
+    width: 25%;
 }
 
 

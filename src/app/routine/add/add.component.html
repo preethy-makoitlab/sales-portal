@@ -1,0 +1,231 @@
+<div class="flex flex-row flex-nowrap md:gap-3 items-center justify-between">
+    <div class="flex flex-wrap w-1/4 justify-start">
+        <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/routine']">
+        <h1 class="header-text">Create Routine</h1>
+    </div>
+</div>
+
+<div class="custom-card">
+    <div class="card-body">
+        <form #addRoutineForm="ngForm" (ngSubmit)="submit(addRoutineForm)">
+            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2 mb-4">
+                <div *ngIf="(viewForm || editMode) && !isDisabled" class="flex flex-row justify-end gap-2">
+                    <div class="flex justify-end">
+                        <button type="button" class="btn btn-error rounded-md" [disabled]="!this.editMode"
+                            (click)="dialogShow('fulldelete')">Delete</button>
+                    </div>
+                    <div *ngIf="isAlert && !isDisabled">
+                        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable"
+                            (closeAlert)="dialogShow('fulldelete')" (isDisable)="deleteRoutine()"></app-alert-box>
+                    </div>
+                    <div *ngIf="viewForm"
+                        class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                        <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
+                            <div>
+                                <img class="add-icon" src="../../../assets/icons/add-icon.svg">
+                            </div>
+                            <div>
+                                <span class="">Edit Content</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="editMode" class="flex flex-row bg-white justify-between btn btn-discard gap-1"
+                        [routerLink]="['/content']">
+                        Discard
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+
+                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex-auto w-1/4">
+                        <label class="form-label">Choose Group</label>
+                        <select [ngClass]="(isSubmit && routine.group) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="group" 
+                            [disabled]="viewForm" [(ngModel)]="routine.group" ngModel required>
+                            <option value="" disabled selected>Select</option>
+                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                {{option}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex-auto w-1/4">
+                        <label class="form-label required">Routine Name</label>
+                        <app-input-with-icon [placeholder]="placeholder" [src]="icon" (inputString)="onKey($event)"
+                            [isDisabled]="viewForm" [value]="routine.routineName" [isFilled]="(isSubmit && routine.routineName) || !isSubmit ? true : false"></app-input-with-icon>
+                        <div *ngIf="isOriginal == false && clicked" class="flex justify-end gap-2 items-center">
+                            <img src="../../../assets/icons/verify-cross.svg" />
+                            <p>Already taken</p>
+                        </div>
+                        <div *ngIf="isOriginal && clicked" class="flex justify-end gap-2 items-center">
+                            <img src="../../../assets/icons/verify-tick.svg" />
+                            <p class="text-sm">Verified</p>
+                        </div>
+                    </div>
+                    <div class="flex-auto w-1/4">
+                        <label class="form-label">Choose Timing</label>
+                        <select [ngClass]="(isSubmit && routine.timing) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="time" 
+                            [disabled]="viewForm" [(ngModel)]="routine.timing" ngModel required>
+                            <option value="" disabled selected>Select</option>
+                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                {{option}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex-auto">
+                        <div *ngIf="!viewForm && !editMode" class="grow basis-1/2 clickable"
+                            (click)="!viewForm && openFileExplorer()">
+                            <label class="form-label">Upload Banner Image</label>
+                            <div [ngClass]="(isSubmit && routine.banner) || !isSubmit ? 'flex p-6 border-dashed rounded-md upload-pic' : 'flex p-6 border-dashed rounded-md upload-pic-input-error'">
+                                <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
+                                <div class="flex flex-col items-center">
+                                    <div *ngIf="!isUploaded">
+                                        <p>Browse to select file</p>
+                                        <p class="text-xs">Upload jpg/png Max 5MB*</p>
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
+                                            style="display:none">
+                                    </div>
+                                    <div *ngIf="isUploaded && !isLarge">
+                                        <p>File upload successful</p>
+                                        <p class="text-xs">Click to re-upload</p>
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
+                                            style="display:none">
+                                    </div>
+                                    <div *ngIf="isUploaded && isLarge">
+                                        <p>File upload failed</p>
+                                        <p class="text-xs">File size exceeded 5MB</p>
+                                        <input type="file" (change)="uploadFile($event)" accept="image/*" #fileInput
+                                            style="display:none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-auto">
+                        <label class="form-label">Choose Difficulty Level</label>
+                        <select [ngClass]="(isSubmit && routine.difficulty) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="difficulty" 
+                            [disabled]="viewForm" [(ngModel)]="routine.difficulty" ngModel required>
+                            <option value="" disabled selected>Select</option>
+                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                {{option}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex-auto">
+                        <label class="form-label">Instructor Name</label>
+                        <select2 name="instructor" [value]="routine.instructor"
+                        [data]="instructors" multiple="true"
+                        disabled> </select2>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                    <div class="flex-auto">
+                        <label class="form-label required">{{ 'labels.about' | translate }}</label>
+                        <textarea [ngClass]="(isSubmit && routine.about) || !isSubmit ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
+                        ngModel required [(ngModel)]="routine.about" [disabled]="viewForm" maxlength="400"></textarea>
+                    </div>
+                    <div *ngIf="viewForm || editMode" class="flex-auto">
+                        <label class="form-label required">Number of days</label>
+                        <input type="number" class="input small-text" name="days" placeholder="No. of days"
+                        [(ngModel)]="routine.days.length" ngModel required disabled />
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <label class="form-label required">Day-wise Details</label>
+                <div *ngIf="true" class="flex justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                    <div *ngFor="let item of days; index as index" class="flex w-full justify-start items-start gap-2">
+                            <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-11/12 p-8 border-2 border-solid rounded-lg border-{#E8E8E8}">
+                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                        <div class="flex flex-row items-center">
+                                            <label class="form-label required">Day number</label>
+                                            <input type="number" min="1" class="input small-text small-width" name="dayNumber{{index}}" [(ngModel)]="item.dayNumber" ngModel [required]="index == 0" [disabled]="viewForm" />
+                                        </div>
+                                </div>
+                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Genre</label>
+                                        <select class="select select-md title-select" name="genre{{index}}" [(ngModel)]="item.genre" ngModel>
+                                            <option value="" selected>Select Genre</option>
+                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                                {{option}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Category</label>
+                                        <select class="select select-md title-select" name="category{{index}}" [(ngModel)]="item.category" ngModel>
+                                            <option value="" selected>Select Category</option>
+                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                                {{option}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Practice Name</label>
+                                        <select class="select select-md title-select" name="practicename{{index}}" [(ngModel)]="item.practiceName" ngModel>
+                                            <option value="" selected>Select Practice Name</option>
+                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                                {{option}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Estimated Time</label>
+                                        <input class="input small-text" name="estime{{index}}" placeholder="Estimated Time" [(ngModel)]="item.estimatedTime" ngModel disabled />
+                                    </div>
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Choose difficulty level</label>
+                                        <select class="select select-md title-select" name="difficulty{{index}}" [(ngModel)]="item.difficulty" ngModel>
+                                            <option value="" selected>Select</option>
+                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
+                                                {{option}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-auto w-1/4">
+                                        <label class="form-label required">Choose Instructor</label>
+                                        <select2 name="instructor" [data]="instructors" [value]="item.instructor" multiple="true" [disabled]="viewForm" (update)="updateInstructor($event, index)"> </select2>
+                                    </div>
+                                </div>
+                                <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
+                                    <div class="flex-auto">
+                                        <label class="form-label required">Introduction</label>
+                                        <textarea class="textarea" name="intro{{index}}" placeholder="Enter introduction" [(ngModel)]="item.intro" ngModel [disabled]="viewForm" maxlength="400"></textarea>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label class="form-label required">Upload required</label>
+                                        <div class="flex gap-2">
+                                            <input type="radio" value="yes" class="radio radio-sm" name="yes{{index}}" [(ngModel)]="item.uploadRequired" ngModel [disabled]="viewForm" /><span
+                                            class="form-label">Yes</span>
+                                            <input type="radio" value="no" class="radio radio-sm" name="no{{index}}" [(ngModel)]="item.uploadRequired" ngModel [disabled]="viewForm" />
+                                            <span class="form-label">No</span>
+                                        </div>
+                                    </div>
+                                </div>       
+                            </div>
+                            <img src="../../../assets/icons/spoc-add.svg" class="cursor-pointer"
+                                (click)="!viewForm && addDay()">
+                            <img *ngIf="days.length > 1" class="cursor-pointer" 
+                                src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && removeDay(item.uid)">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <div class="flex justify-end w-full">
+                    <button type="button" class="btn btn-primary btn-block enable-button"
+                        [routerLink]="['/content']">Cancel</button>
+                    <button class="btn btn-primary btn-bigger">Save Routine</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

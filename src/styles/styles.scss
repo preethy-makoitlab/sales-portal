@@ -279,7 +279,7 @@ input:-internal-autofill-selected {
 }
 
 .input-error {
-    border: 1px solid $clr-border-error;
+    border: 1px solid $clr-border-error !important;
     box-shadow: 0px 0px 6px rgba(235, 87, 87, 0.32);
 }
 

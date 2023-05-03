@@ -17,6 +17,7 @@ import { PartnerModule } from './partner/partner.module';
 import { ContentModule } from './content/content.module';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ListenerModule } from './listener/listener.module';
+import { RoutineModule } from './routine/routine.module';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ListenerModule } from './listener/listener.module';
     PartnerModule,
     ContentModule,
     ListenerModule,
+    RoutineModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

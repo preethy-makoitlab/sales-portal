@@ -26,7 +26,13 @@ export class ManageComponent {
   getCount() {
     this.partnerService.partnerCount().subscribe({
       next: (value) => {
-        this.totalCount = value.count;
+        console.log(value);
+        value.forEach((v: { _id: string, count: number; }) => {
+          this.totalCount += v.count;
+          if(v._id === 'active') {
+            this.activeCount += v.count;
+          }
+        })
       },
       error: (err) => {
         console.log(err);
