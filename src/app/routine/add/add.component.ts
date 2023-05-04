@@ -3,7 +3,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
 import { ToastService } from 'src/app/common/services/toastr.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { InstructorService } from 'src/app/services/instructor.service';
 import { MasterdataService } from 'src/app/services/masterdata.service';
+import { RoutineService } from 'src/app/services/routine.service';
+import { Status } from 'src/app/stores/types';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -30,7 +34,13 @@ export class AddComponent {
   banner: any;
   default: string = ""; /////ngmodel
   formData = new FormData();
-  instructors: Select2Data = [{label: "hey", value: "1"}, {label: "hi", value: "2"}, {label: "hello", value: "3"}];
+  groups: any[] = [];
+  difficulty: any[] = [];
+  timings: any[] = [];
+  categoryArray: any[] = [];
+  genreArray: any[] = [];
+  deepCopyCategoryArray: any[] = []
+  instructors: Select2Data = [];
   icon: string = "../../../assets/icons/success-tick.svg";
   placeholder: string = "Enter Routine Name";
   alertHeaderDisable: string = "Routine Deletion";
@@ -54,6 +64,7 @@ export class AddComponent {
   ]
 
   routine: any = {
+    id: "",
     group: "",
     routineName: "",
     timing: "",
@@ -66,8 +77,11 @@ export class AddComponent {
 
   constructor(private router: Router,
     private masterdataService: MasterdataService,
+    private routineService: RoutineService,
     private toastrService: ToastService,
     private activatedRoute: ActivatedRoute,
+    private categoryService: CategoryService,
+    private instructorService: InstructorService,
     private formBuilder: FormBuilder) {}
 
   dialogShow(type: string) {
@@ -86,26 +100,22 @@ export class AddComponent {
   onKey(name: any) {
     this.clicked = true;
     console.log(name);
-    this.routine.routineName = name;
-    // this.contentService.practiceNameCheck(name).subscribe({
-    //   next: (value) => {
-    //     console.log(value);
-    //     if (value.isValid) {
-    //       this.isOriginal = true;
-    //       this.content.id = value.id;
-    //       this.content.practiceName = name;
-    //       // this.content = Object.assign(value ,this.content);
-    //       console.log("Final", this.content);
-    //       this.addModule();
-    //     }
-    //     else {
-    //       this.isOriginal = false;
-    //     }
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   }
-    // })
+    this.routineService.routineNameCheck(name).subscribe({
+      next: (value) => {
+        console.log(value);
+        if (value.isValid) {
+          this.isOriginal = true;
+          this.routine.id = value.id;
+          this.routine.routineName = name;
+        }
+        else {
+          this.isOriginal = false;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   editForm() {
@@ -126,7 +136,7 @@ export class AddComponent {
       console.log(this.banner);
       this.isUploaded = true;
       this.isLarge = false;
-      // this.callUploadApi(this.formData, this.content.id, undefined, null, true);
+      this.callUploadApi(this.formData, this.routine.id);
     }
     else if (this.banner && this.banner.size > this.maxSize) {
       this.isLarge = true;
@@ -135,6 +145,18 @@ export class AddComponent {
     else {
       this.isUploaded = false;
     }
+  }
+
+  callUploadApi(file: any, id: string) {
+    this.routineService.uploadFile(id, "routine", undefined, file).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.routine.banner = value.url;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   deleteRoutine() {
@@ -173,11 +195,10 @@ export class AddComponent {
     console.log(this.days);
   }
 
-  submit(form: any) {
-    console.log(form.value);
-    console.log(this.routine);
+  validation() {
     var flag = true;
     this.isSubmit = false;
+    var isAllDaysPresent = false;
     this.compulsoryFields.forEach((field: any) => {
       if(!this.routine[field] || this.routine[field].length == 0) {
         flag = false;
@@ -196,18 +217,154 @@ export class AddComponent {
     if (flag) {
       var num = this.routine.days.length;
       var arr = this.routine.days.map((obj: { dayNumber: any; }) => obj.dayNumber);
-      const isAllDaysPresent = Array.from({length: num}, (_, i) => i + 1).every(n => arr.includes(n));
-      if(isAllDaysPresent) {
-        this.toastrService.showSuccess("Success");
+      isAllDaysPresent = Array.from({length: num}, (_, i) => i + 1).every(n => arr.includes(n));
+    }
+    return [flag, isAllDaysPresent]
+  }
+
+  submit(form: any) {
+    console.log(form.value);
+    console.log(this.routine);
+    var status: any[] = this.validation();
+    delete this.routine.instructor;
+    delete this.routine.days.genre;
+    delete this.routine.days.category;
+    if(status[0] && status[1]) {
+      this.routineService.createRoutine(this.routine).subscribe({
+        next: (value) => {
+          console.log(value);
+          this.toastrService.showSuccess("Success");
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else {
+      if(!status[0] && !status[1]) {
+        this.isSubmit = true;
+        this.toastrService.showError("Please fill all the required fields");
       }
       else {
         this.isSubmit = true;
         this.toastrService.showError("Please provide routine for all days from 1 to desired count");
       }
     }
-    else {
-      this.isSubmit = true;
-      this.toastrService.showError("Please fill all the required fields");
+  }
+
+  fetch(index: number) {
+    console.log(this.routine.days[index].genre)
+    let categoryArray: any[]= [];
+    this.deepCopyCategoryArray.forEach(cat => {
+      if (cat.genreId == this.routine.days[index].genre) {
+        categoryArray.push(cat);
+      }
+    })
+    this.categoryArray = categoryArray;
+  }
+
+  fetchPracticeName(index: number) {
+    let filter = {
+      "category": this.routine.days[index].category
+    }
+    console.log(filter);
+    this.routineService.fetchPracticeName(filter).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  loadCategories() {
+    this.categoryService.getCategory().subscribe({
+      next: (value) => {
+        console.log(value);
+        this.categoryArray = value;
+        this.deepCopyCategoryArray  = JSON.parse(JSON.stringify(value));
+        this.categoryArray.forEach(cat => {
+          let obj = {
+            id: cat.genreId, 
+            genre: cat.genre
+          }
+          var flag = true;
+          if(this.genreArray.some(gen => gen.id === obj.id)) {
+            flag = false;
+          }
+          if(flag){
+            this.genreArray.push(obj);
+          }
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  loadMasterData() {
+    let req = {
+      categories: ["RoutineGroups","DifficultyLevels","RoutineTiming"]
+    }
+    this.masterdataService.fetchMasterData(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        var masterdata: Array<Array<any>> = Object.values(value);
+        masterdata.forEach((master, index) => {
+          master.forEach(data => {
+            if(data.status == Status.Active) {
+              let obj = {
+                value: data.m_id,
+                label: data.data
+              }
+              if(index == 0) {
+                this.groups.push(obj)
+              } 
+              else if(index == 1) {
+                this.difficulty.push(obj)
+              }
+              else {
+                this.timings.push(obj)
+              }
+            }
+          })
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.instructorService.instructorList().subscribe({
+      next: (value) => {
+        console.log(value);
+        value.forEach((data: { id: any; name: any; }) => {
+          let obj = {
+            value: data.id,
+            label: data.name
+          }
+          this.instructors.push(obj);
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+
+  }
+
+  ngOnInit(): void {
+    this.loadCategories();
+    if (this.activatedRoute.snapshot.params) {
+      console.log(this.activatedRoute.snapshot.params);
+      let value = this.activatedRoute.snapshot.params['id'];
+      if (value) {
+        // this.populate(value)
+      }
+      else {
+        this.loadMasterData();
+      }
     }
   }
 

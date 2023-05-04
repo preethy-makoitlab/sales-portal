@@ -37,47 +37,71 @@
             </div>
             <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
 
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto w-1/4">
-                        <label class="form-label">Choose Group</label>
+                <div class="flex items-start justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div class="flex-auto">
+                        <label class="form-label required">Choose Group</label>
                         <select [ngClass]="(isSubmit && routine.group) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="group" 
                             [disabled]="viewForm" [(ngModel)]="routine.group" ngModel required>
-                            <option value="" disabled selected>Select</option>
-                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                {{option}}
+                            <option value="" selected>Select</option>
+                            <option *ngFor="let option of groups" [value]="option.value">
+                                {{option.label}}
                             </option>
                         </select>
                     </div>
-                    <div class="flex-auto w-1/4">
+                    <div class="flex-auto">
+                        <label class="form-label required">Choose Timing</label>
+                        <select [ngClass]="(isSubmit && routine.timing) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="time" 
+                            [disabled]="viewForm" [(ngModel)]="routine.timing" ngModel required>
+                            <option value="" selected>Select</option>
+                            <option *ngFor="let option of timings" [value]="option.value">
+                                {{option.label}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex-auto">
                         <label class="form-label required">Routine Name</label>
                         <app-input-with-icon [placeholder]="placeholder" [src]="icon" (inputString)="onKey($event)"
                             [isDisabled]="viewForm" [value]="routine.routineName" [isFilled]="(isSubmit && routine.routineName) || !isSubmit ? true : false"></app-input-with-icon>
                         <div *ngIf="isOriginal == false && clicked" class="flex justify-end gap-2 items-center">
                             <img src="../../../assets/icons/verify-cross.svg" />
-                            <p>Already taken</p>
+                            <p class="text-sm">Already taken</p>
                         </div>
                         <div *ngIf="isOriginal && clicked" class="flex justify-end gap-2 items-center">
                             <img src="../../../assets/icons/verify-tick.svg" />
                             <p class="text-sm">Verified</p>
                         </div>
                     </div>
-                    <div class="flex-auto w-1/4">
-                        <label class="form-label">Choose Timing</label>
-                        <select [ngClass]="(isSubmit && routine.timing) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="time" 
-                            [disabled]="viewForm" [(ngModel)]="routine.timing" ngModel required>
-                            <option value="" disabled selected>Select</option>
-                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                {{option}}
-                            </option>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div *ngIf="viewForm || editMode" class="flex-auto">
+                        <label class="form-label">Instructor Name</label>
+                        <select2 name="instructor" [value]="routine.instructor"
+                        [data]="instructors" multiple="true"
+                        disabled> </select2>
+                    </div>
                     <div class="flex-auto">
-                        <div *ngIf="!viewForm && !editMode" class="grow basis-1/2 clickable"
+                        <label class="form-label required">Choose Difficulty Level</label>
+                        <select [ngClass]="(isSubmit && routine.difficulty) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="difficulty" 
+                            [disabled]="viewForm" [(ngModel)]="routine.difficulty" ngModel required>
+                            <option value="" selected>Select</option>
+                            <option *ngFor="let option of difficulty" [value]="option.value">
+                                {{option.label}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex-auto">
+                        <label class="form-label required">{{ 'labels.about' | translate }}</label>
+                        <textarea [ngClass]="(isSubmit && routine.about) || !isSubmit ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
+                        ngModel required [(ngModel)]="routine.about" [disabled]="viewForm" maxlength="400"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-start justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 w-3/4">
+                    <div class="flex-auto">
+                        <div *ngIf="!viewForm && !editMode && isOriginal" class="grow basis-1/2 clickable"
                             (click)="!viewForm && openFileExplorer()">
-                            <label class="form-label">Upload Banner Image</label>
+                            <label class="form-label required">Upload Banner Image</label>
                             <div [ngClass]="(isSubmit && routine.banner) || !isSubmit ? 'flex p-6 border-dashed rounded-md upload-pic' : 'flex p-6 border-dashed rounded-md upload-pic-input-error'">
                                 <img class="m-2 cursor-pointer" src="../../../assets/icons/upload-pic.svg">
                                 <div class="flex flex-col items-center">
@@ -103,30 +127,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex-auto">
-                        <label class="form-label">Choose Difficulty Level</label>
-                        <select [ngClass]="(isSubmit && routine.difficulty) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="difficulty" 
-                            [disabled]="viewForm" [(ngModel)]="routine.difficulty" ngModel required>
-                            <option value="" disabled selected>Select</option>
-                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                {{option}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="flex-auto">
-                        <label class="form-label">Instructor Name</label>
-                        <select2 name="instructor" [value]="routine.instructor"
-                        [data]="instructors" multiple="true"
-                        disabled> </select2>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
-                    <div class="flex-auto">
-                        <label class="form-label required">{{ 'labels.about' | translate }}</label>
-                        <textarea [ngClass]="(isSubmit && routine.about) || !isSubmit ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
-                        ngModel required [(ngModel)]="routine.about" [disabled]="viewForm" maxlength="400"></textarea>
-                    </div>
                     <div *ngIf="viewForm || editMode" class="flex-auto">
                         <label class="form-label required">Number of days</label>
                         <input type="number" class="input small-text" name="days" placeholder="No. of days"
@@ -149,19 +149,19 @@
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Genre</label>
-                                        <select class="select select-md title-select" name="genre{{index}}" [(ngModel)]="item.genre" ngModel>
+                                        <select class="select select-md title-select" name="genre{{index}}" [(ngModel)]="item.genre" (change)="fetch(index)" ngModel>
                                             <option value="" selected>Select Genre</option>
-                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                                {{option}}
+                                            <option *ngFor="let option of genreArray" [value]="option.id">
+                                                {{option.genre}}
                                             </option>
                                         </select>
                                     </div>
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Category</label>
-                                        <select class="select select-md title-select" name="category{{index}}" [(ngModel)]="item.category" ngModel>
+                                        <select class="select select-md title-select" name="category{{index}}" [(ngModel)]="item.category" (change)="fetchPracticeName(index)" ngModel>
                                             <option value="" selected>Select Category</option>
-                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                                {{option}}
+                                            <option *ngFor="let option of categoryArray" [value]="option.id">
+                                                {{option.category}}
                                             </option>
                                         </select>
                                     </div>
@@ -184,8 +184,8 @@
                                         <label class="form-label required">Choose difficulty level</label>
                                         <select class="select select-md title-select" name="difficulty{{index}}" [(ngModel)]="item.difficulty" ngModel>
                                             <option value="" selected>Select</option>
-                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                                {{option}}
+                                            <option *ngFor="let option of difficulty" [value]="option.value">
+                                                {{option.label}}
                                             </option>
                                         </select>
                                     </div>
@@ -223,7 +223,7 @@
                 <div class="flex justify-end w-full">
                     <button type="button" class="btn btn-primary btn-block enable-button"
                         [routerLink]="['/content']">Cancel</button>
-                    <button class="btn btn-primary btn-bigger">Save Routine</button>
+                    <button class="btn btn-primary btn-bigger" [disabled]="!isOriginal">Save Routine</button>
                 </div>
             </div>
         </form>

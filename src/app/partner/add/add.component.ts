@@ -292,6 +292,7 @@ export class AddComponent {
 
   setEndDate() {
     if (this.subscription.subscriptionStart) {
+      this.subscription.planDuration = Number(this.subscription.planDuration);
       var start = new Date(this.subscription.subscriptionStart);
       var end = new Date(start);
       end.setMonth(start.getMonth() + this.subscription.planDuration);

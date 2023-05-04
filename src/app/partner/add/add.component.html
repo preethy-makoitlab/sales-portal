@@ -265,9 +265,9 @@
                             <!-- <input type="number" class="input small-text" min="3" max="36" step="3" name="planduration"
                                 placeholder="Enter duration" (change)="setEndDate()"
                                 [(ngModel)]="subscription.planDuration" ngModel required [disabled]="viewForm" /> -->
-                            <select class="select select-md title-select" name="planduration" (change)="setEndDate()"
+                            <select [ngClass]="(isSubmit && subscription.planDuration) || !isSubmit ? 'select select-md title-select' : 'select select-md title-select input-error'" name="planduration" (change)="setEndDate()"
                                 [(ngModel)]="subscription.planDuration" ngModel required [disabled]="viewForm">
-                                <option value="" disabled selected>Select here</option>
+                                <option value="" selected>Select here</option>
                                 <option *ngFor="let option of planDuration">
                                     {{option}}
                                 </option>
@@ -305,7 +305,7 @@
 
             <div class="flex justify-end mt-2">
                 <button *ngIf="gotonext && !viewForm" type="button" class="btn btn-primary btn-block enable-button"
-                    (click)="previous()">Cancel</button>
+                    (click)="previous()">Previous</button>
                 <button *ngIf="gotonext && !viewForm" class="btn btn-primary btn-block">Save Details</button>
                 <button type="button" *ngIf="gotonext && viewForm" class="btn btn-primary btn-block"
                     (click)="previous()">Previous</button>
