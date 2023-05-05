@@ -5,7 +5,7 @@ module.exports = {
   content: ["./src/**/*.{html,ts,js,tsx,jsx}",
     './pages/**/*.{html,ts,js,tsx,jsx}',
     './components/**/*.{html,ts,js,tsx,jsx}', './*.{html,js,ts,jsx}', './src/**/*.html',
-    './src/**/*.ts', './dist/frontend/index.html', './dist/frontend/*.{css}',
+    './src/**/*.ts', './dist/frontend/index.html', './dist/frontend/*.css',
     './src/**/*.{html,ts}'
   ],
   rippleui: {
