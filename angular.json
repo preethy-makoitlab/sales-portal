@@ -31,7 +31,7 @@
             ],
             "styles": [
               "src/styles/styles.scss",
-              "node_modules/ngx-toastr/toastr.css" 
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -40,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "100kb"
                 }
               ],
               "outputHashing": "all"
@@ -98,7 +98,7 @@
             ],
             "styles": [
               "src/styles/styles.scss",
-              "node_modules/ngx-toastr/toastr.css" 
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           }

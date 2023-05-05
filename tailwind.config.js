@@ -24,12 +24,10 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   prefix: 'tw-',
-  purge: {
-    enabled: true,
-    content: ["./src/**/*.{html,ts,js}",
-      './pages/**/*.{html,ts,js}',
-      './components/**/*.{html,ts,js}', './*.{html,js,ts}']
-  },
+  content: ["./src/**/*.{html,ts,js}",
+    './pages/**/*.{html,ts,js}',
+    './components/**/*.{html,ts,js}', './*.{html,js,ts}'],
+
   rippleui: {
     defaultStyle: false,
   },
