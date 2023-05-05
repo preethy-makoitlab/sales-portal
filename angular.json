@@ -49,7 +49,11 @@
                   "maximumError": "100kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "styles": [
+                "src/styles/styles.scss",
+                "node_modules/ngx-toastr/toastr.css"
+              ]
             },
             "development": {
               "buildOptimizer": false,
@@ -57,7 +61,11 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "styles": [
+                "src/styles/styles.scss",
+                "node_modules/ngx-toastr/toastr.css"
+              ]
             }
           },
           "defaultConfiguration": "production"
