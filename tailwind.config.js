@@ -26,9 +26,10 @@ module.exports = {
   prefix: 'tw-',
   purge: {
     enabled: true,
-    content: ['./src/**/*.{html,ts}']
+    content: ["./src/**/*.{html,ts,js}",
+      './pages/**/*.{html,ts,js}',
+      './components/**/*.{html,ts,js}', './*.{html,js,ts}']
   },
-  darkMode: false, // or 'media' or 'class'
   rippleui: {
     defaultStyle: false,
   },
