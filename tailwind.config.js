@@ -55,8 +55,9 @@ module.exports = {
 
 module.exports = {
   mode: 'jit',
-  purge: [
-    './src/**/*.{html,ts}',
+  content: [
+    './src/**/*.{html,ts,js}',
+    './dist/**/*.{html,ts,js}',
   ],
   rippleui: {
     defaultStyle: false,
