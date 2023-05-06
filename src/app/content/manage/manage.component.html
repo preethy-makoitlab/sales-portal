@@ -44,8 +44,12 @@
                     <input class="input small-text" name="name" [(ngModel)]="practiceName"
                         placeholder="Enter Practice Name" ngModel required />
                 </div>
-                <div class="flex-auto items-end">
+                <!-- <div class="flex-auto">
+
+                </div> -->
+                <div class="flex items-end">
                     <button class="btn btn-primary btn-bigger" (click)="filter()">Filter</button>
+                    <button class="btn btn-primary btn-bigger enable-button width" (click)="clear()">Clear Filter</button>
                 </div>
             </div>
 

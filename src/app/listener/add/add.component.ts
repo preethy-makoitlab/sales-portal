@@ -73,6 +73,7 @@ export class AddComponent {
       flag = false;
       errorMessage = "Age must be more than 18 years";
     }
+    var dob = this.listener.dob;
     if(flag) {
       if (this.editMode) {
         let _id = String(this.activatedRoute.snapshot.params['id']);
@@ -86,7 +87,6 @@ export class AddComponent {
             }
           })
         }
-        var dob = this.listener.dob;
         this.listener.dob = new Date(this.listener.dob).toISOString();
         console.log(dob, this.listener.dob);
         this.listenerService.updateListener(_id, this.listener).subscribe({
@@ -108,6 +108,7 @@ export class AddComponent {
       }
       else {
         this.listener.dob = new Date(this.listener.dob).toISOString();
+        var avatar = this.listener.avtaar;
         this.listener.avtaar = this.thumbnail;
         this.listenerService.createListener(this.listener).subscribe({
           next: (value) => {
@@ -115,6 +116,8 @@ export class AddComponent {
             this.router.navigate(['/listener']);
           },
           error: (err) => {
+            this.listener.dob = dob;
+            this.listener.avtaar = avatar;
             console.log(err);
             this.toastrService.showError(err.error.message);
           }

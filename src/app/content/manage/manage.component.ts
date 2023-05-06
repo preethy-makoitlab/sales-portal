@@ -150,6 +150,19 @@ export class ManageComponent {
     })
   }
 
+  clear() {
+    this.contentService.contentList(null, this.pageNo, this.pageSize).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.totalCount = value.count;
+        this.contentData = value.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   ngOnInit(): void {
     this.listContent();
     this.loadCategories();
