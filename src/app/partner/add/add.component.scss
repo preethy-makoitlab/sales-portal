@@ -132,6 +132,10 @@
     line-height: 12px;
 }
 
+.btn-success {
+    border-radius: 6px;
+}
+
 .btn-block {
     width: 15%;
     margin: 5px;
@@ -265,3 +269,9 @@ left: auto !important;
 width: 100% !important;
 }
 
+.datepicker-inline {
+    width: 100% !important;
+}
+.datepicker table {
+    width: 100% !important;
+}

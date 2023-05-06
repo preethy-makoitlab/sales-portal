@@ -17,7 +17,7 @@
                         <button type="button" class="btn btn-error rounded-md" (click)="dialogShow()">Delete</button>
                     </div>
                     <div *ngIf="showDisable && isDisabled" class="flex justify-end">
-                        <button type="button" class="btn btn-primary enable-button"
+                        <button type="button" class="btn btn-success"
                             (click)="dialogShow()">Enable</button>
                     </div>
                     <div *ngIf="isAlert && !isDisabled">
@@ -97,7 +97,7 @@
             <div class="flex justify-between mt-8">
                 <div class="flex justify-end w-full">
                     <button type="button" class="btn btn-primary btn-block enable-button"
-                        [routerLink]="['/partner']">Cancel</button>
+                        [routerLink]="['/partner/managemember', member.partnerId]">Cancel</button>
                     <button *ngIf="!viewForm && !editMode" class="btn btn-primary btn-bigger"
                         [disabled]="!addMemberForm.valid">Create Member</button>
                     <button *ngIf="editMode" class="btn btn-primary btn-bigger" [disabled]="!addMemberForm.valid">Edit

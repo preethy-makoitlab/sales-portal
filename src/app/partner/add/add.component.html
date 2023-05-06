@@ -12,7 +12,7 @@
             <button type="button" class="btn btn-error rounded-md" (click)="dialogShow()">Disable</button>
         </div>
         <div *ngIf="showDisable && isDisabled" class="flex justify-end">
-            <button type="button" class="btn btn-primary enable-button" (click)="dialogShow()">Enable</button>
+            <button type="button" class="btn btn-success" (click)="dialogShow()">Enable</button>
         </div>
         <div *ngIf="isAlert && !isDisabled">
             <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
@@ -302,7 +302,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="flex justify-end mt-2">
                 <button *ngIf="gotonext && !viewForm" type="button" class="btn btn-primary btn-block enable-button"
                     (click)="previous()">Previous</button>

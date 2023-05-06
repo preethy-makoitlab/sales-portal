@@ -34,9 +34,12 @@ export class AddComponent {
   banner: any;
   default: string = ""; /////ngmodel
   formData = new FormData();
+  errorMessage = "";
   groups: any[] = [];
   difficulty: any[] = [];
   timings: any[] = [];
+  contentArray: any[] = [];
+  practiceNameArray: any[] = []
   categoryArray: any[] = [];
   genreArray: any[] = [];
   deepCopyCategoryArray: any[] = []
@@ -46,18 +49,22 @@ export class AddComponent {
   alertHeaderDisable: string = "Routine Deletion";
   alertBodyDisable: string = "Please make sure that you want to delete the routine permananently"
   @ViewChild('fileInput') fileInput: any;
-  compulsoryFields = ['group','routineName','timing','banner','difficulty','about','days'];
+  compulsoryFields = ['group','routineName','banner','about','days'];
 
   days: any = [
     {
       uid: uuidv4(),
       dayNumber: 1,
+      contentId: "",
       genre: "",
       category: "",
       practiceName: "",
-      estimatedTime: "7 minutes",
+      estimatedTime: 0,
       difficulty: "",
       instructor: [],
+      categoryArray: [],
+      contentArray: [],
+      practiceNameArray: [],
       intro: "",
       uploadRequired: ""
     }
@@ -182,12 +189,16 @@ export class AddComponent {
     var dayObject = {
       uid: uuidv4(),
       dayNumber: i+1,
+      contentId: "",
       genre: "",
       category: "",
       practiceName: "",
       estimatedTime: "7 minutes",
       difficulty: "",
       instructor: [],
+      categoryArray: [],
+      contentArray: [],
+      practiceNameArray: [],
       intro: "",
       uploadRequired: ""
     }
@@ -199,6 +210,7 @@ export class AddComponent {
     var flag = true;
     this.isSubmit = false;
     var isAllDaysPresent = false;
+    this.errorMessage = "";
     this.compulsoryFields.forEach((field: any) => {
       if(!this.routine[field] || this.routine[field].length == 0) {
         flag = false;
@@ -209,6 +221,7 @@ export class AddComponent {
           day.forEach(d => {
             if(!d) {
               flag = false;
+              this.errorMessage = "Please provide details for atleast one day; all fields within the module are mandatory"
             }
           })
         })
@@ -226,10 +239,18 @@ export class AddComponent {
     console.log(form.value);
     console.log(this.routine);
     var status: any[] = this.validation();
-    delete this.routine.instructor;
-    delete this.routine.days.genre;
-    delete this.routine.days.category;
     if(status[0] && status[1]) {
+      delete this.routine.instructor;
+      this.routine.days.forEach((data: { genre: any; category: any; categoryArray: any; practiceNameArray: any; contentArray: any; instructor: any; practiceName: any; estimatedTime: any; }) => {
+        delete data.genre;
+        delete data.category;
+        delete data.categoryArray;
+        delete data.practiceNameArray;
+        delete data.contentArray;
+        delete data.instructor;
+        delete data.practiceName;
+        delete data.estimatedTime;
+      })
       this.routineService.createRoutine(this.routine).subscribe({
         next: (value) => {
           console.log(value);
@@ -243,7 +264,12 @@ export class AddComponent {
     else {
       if(!status[0] && !status[1]) {
         this.isSubmit = true;
-        this.toastrService.showError("Please fill all the required fields");
+        if(this.errorMessage) {
+          this.toastrService.showError(this.errorMessage)
+        }
+        else {
+          this.toastrService.showError("Please fill all the required fields");
+        }
       }
       else {
         this.isSubmit = true;
@@ -260,7 +286,17 @@ export class AddComponent {
         categoryArray.push(cat);
       }
     })
-    this.categoryArray = categoryArray;
+    this.routine.days[index].categoryArray = categoryArray;
+  }
+
+  set(index: number) {
+    console.log(this.routine.days[index].practiceName);
+    this.routine.days[index].contentId = this.routine.days[index].practiceName;
+    this.routine.days[index].contentArray.forEach((data: { id: any; instructor: any; }) => {
+      if(data.id == this.routine.days[index].contentId) {
+        this.routine.days[index].instructor = data.instructor
+      }
+    })
   }
 
   fetchPracticeName(index: number) {
@@ -271,6 +307,14 @@ export class AddComponent {
     this.routineService.fetchPracticeName(filter).subscribe({
       next: (value) => {
         console.log(value);
+        value.forEach((data: { id: any; practiceName: any; }) => {
+          let obj = {
+            value: data.id,
+            label: data.practiceName
+          }
+          this.routine.days[index].practiceNameArray.push(obj);
+          this.routine.days[index].contentArray.push(data);
+        })
       },
       error: (err) => {
         console.log(err);

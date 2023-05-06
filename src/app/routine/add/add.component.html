@@ -49,8 +49,8 @@
                         </select>
                     </div>
                     <div class="flex-auto">
-                        <label class="form-label required">Choose Timing</label>
-                        <select [ngClass]="(isSubmit && routine.timing) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="time" 
+                        <label class="form-label">Choose Timing</label>
+                        <select class="select select-sm title-select" name="time" 
                             [disabled]="viewForm" [(ngModel)]="routine.timing" ngModel required>
                             <option value="" selected>Select</option>
                             <option *ngFor="let option of timings" [value]="option.value">
@@ -81,8 +81,8 @@
                         disabled> </select2>
                     </div>
                     <div class="flex-auto">
-                        <label class="form-label required">Choose Difficulty Level</label>
-                        <select [ngClass]="(isSubmit && routine.difficulty) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="difficulty" 
+                        <label class="form-label">Choose Difficulty Level</label>
+                        <select class="select select-sm title-select" name="difficulty" 
                             [disabled]="viewForm" [(ngModel)]="routine.difficulty" ngModel required>
                             <option value="" selected>Select</option>
                             <option *ngFor="let option of difficulty" [value]="option.value">
@@ -160,25 +160,25 @@
                                         <label class="form-label required">Category</label>
                                         <select class="select select-md title-select" name="category{{index}}" [(ngModel)]="item.category" (change)="fetchPracticeName(index)" ngModel>
                                             <option value="" selected>Select Category</option>
-                                            <option *ngFor="let option of categoryArray" [value]="option.id">
+                                            <option *ngFor="let option of item.categoryArray" [value]="option.id">
                                                 {{option.category}}
                                             </option>
                                         </select>
                                     </div>
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Practice Name</label>
-                                        <select class="select select-md title-select" name="practicename{{index}}" [(ngModel)]="item.practiceName" ngModel>
+                                        <select class="select select-md title-select" name="practicename{{index}}" [(ngModel)]="item.practiceName" (change)="set(index)" ngModel>
                                             <option value="" selected>Select Practice Name</option>
-                                            <option *ngFor="let option of [1,2,3,4,5]" [value]="option">
-                                                {{option}}
+                                            <option *ngFor="let option of item.practiceNameArray" [value]="option.value">
+                                                {{option.label}}
                                             </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                     <div class="flex-auto w-1/4">
-                                        <label class="form-label required">Estimated Time</label>
-                                        <input class="input small-text" name="estime{{index}}" placeholder="Estimated Time" [(ngModel)]="item.estimatedTime" ngModel disabled />
+                                        <label class="form-label required">Estimated Time (in Mins)</label>
+                                        <input type="number" class="input small-text" name="estime{{index}}" placeholder="Estimated Time" [(ngModel)]="item.estimatedTime" ngModel />
                                     </div>
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Choose difficulty level</label>
@@ -190,8 +190,8 @@
                                         </select>
                                     </div>
                                     <div class="flex-auto w-1/4">
-                                        <label class="form-label required">Choose Instructor</label>
-                                        <select2 name="instructor" [data]="instructors" [value]="item.instructor" multiple="true" [disabled]="viewForm" (update)="updateInstructor($event, index)"> </select2>
+                                        <label class="form-label required">Instructor</label>
+                                        <select2 name="instructor" [data]="instructors" [value]="item.instructor" multiple="true" [disabled]="viewForm" (update)="updateInstructor($event, index)" disabled> </select2>
                                     </div>
                                 </div>
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
@@ -223,7 +223,7 @@
                 <div class="flex justify-end w-full">
                     <button type="button" class="btn btn-primary btn-block enable-button"
                         [routerLink]="['/content']">Cancel</button>
-                    <button class="btn btn-primary btn-bigger" [disabled]="!isOriginal">Save Routine</button>
+                    <button class="btn btn-primary btn-bigger" >Save Routine</button>
                 </div>
             </div>
         </form>
