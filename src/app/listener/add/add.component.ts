@@ -139,20 +139,21 @@ export class AddComponent {
     const ageInMillis = now.getTime() - birthDate.getTime();
     const ageInYears = ageInMillis / (1000 * 60 * 60 * 24 * 365.25);
     return Math.floor(ageInYears);
-  }
+    }  
 
-  updateSpecialization(event: Select2UpdateEvent<any>) {
-    this.listener.specialization = event.value;
-  }
+    updateSpecialization(event: Select2UpdateEvent<any>) {
+      this.listener.specialization = event.value;
+    }
+  
+    updateLanguage(event: Select2UpdateEvent<any>) {
+      this.listener.languages = event.value;
+    }
+  
 
-  updateLanguage(event: Select2UpdateEvent<any>) {
-    this.listener.languages = event.value;
-  }
-
-  show() {
-    this.avtaarCard = !this.avtaarCard;
-    var commonCard = document.getElementById("card");
-    var choose = document.getElementById("chooseAvatar");
+    show() {
+      this.avtaarCard = !this.avtaarCard;
+      var commonCard = document.getElementById("card");
+      var choose = document.getElementById("chooseAvatar");  
       if(choose && commonCard) {
         if(this.avtaarCard) {
           const elementPosition = choose.getBoundingClientRect();
