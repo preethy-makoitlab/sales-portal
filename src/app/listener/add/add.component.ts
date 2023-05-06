@@ -59,6 +59,7 @@ export class AddComponent {
   submit(form: any) {
     this.isSubmit = false;
     console.log(form.value);
+    var errorMessage = "";
     console.log(this.listener);
     var flag = true;
     var listener: Array<any> = Object.values(this.listener);
@@ -67,6 +68,11 @@ export class AddComponent {
         flag = false;
       }
     })
+    var age = this.calculateAge(this.listener.dob);
+    if(age < 18) {
+      flag = false;
+      errorMessage = "Age must be more than 18 years";
+    }
     if(flag) {
       if (this.editMode) {
         let _id = String(this.activatedRoute.snapshot.params['id']);
@@ -80,13 +86,21 @@ export class AddComponent {
             }
           })
         }
+        var dob = this.listener.dob;
         this.listener.dob = new Date(this.listener.dob).toISOString();
+        console.log(dob, this.listener.dob);
         this.listenerService.updateListener(_id, this.listener).subscribe({
           next: (value) => {
             console.log(value);
             this.router.navigate(['/listener']);
           },
           error: (err) => {
+            this.listener.dob = dob;
+            this.avatarImages.forEach(avatar => {
+              if(this.listener.avtaar === avatar.value) {
+                this.listener.avtaar = avatar.label;
+              }
+            })
             console.log(err);
             this.toastrService.showError(err.error.message);
           }
@@ -109,8 +123,22 @@ export class AddComponent {
     }
     else {
       this.isSubmit = true;
-      this.toastrService.showError("Please fill all the required fields");
+      if(errorMessage) {
+        this.toastrService.showError(errorMessage);
+        errorMessage = "";
+      }
+      else {
+        this.toastrService.showError("Please fill all the required fields");
+      }
     }  
+  }
+
+  calculateAge(selectedDate: string): number {
+    const birthDate = new Date(selectedDate);
+    const now = new Date();
+    const ageInMillis = now.getTime() - birthDate.getTime();
+    const ageInYears = ageInMillis / (1000 * 60 * 60 * 24 * 365.25);
+    return Math.floor(ageInYears);
   }
 
   updateSpecialization(event: Select2UpdateEvent<any>) {

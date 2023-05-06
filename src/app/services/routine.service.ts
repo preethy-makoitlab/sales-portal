@@ -90,22 +90,23 @@ export class RoutineService {
   }
 
   public fetchPracticeName(
-    filter?:  Object,
+    filter?:  any,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-
-    queryParameters = queryParameters.set('filter',Object(filter));
+    if(filter){
+      queryParameters = queryParameters.set('filter',JSON.stringify( filter));
+    }
     console.log(filter);
     
     return this.httpClient.request<Object>(
       'get',
-      `${this.basePath}/routines/fetchPracticeName/${filter}`,
+      `${this.basePath}/routines/fetchPracticeName`,
       {
-        body: filter,
+         params:queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }

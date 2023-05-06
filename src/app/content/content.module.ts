@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { ManageComponent } from './manage/manage.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SecurePipe } from '../common/pipes/secure.pipe';
+import { Select2Module } from 'ng-select2-component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { SecurePipe } from '../common/pipes/secure.pipe';
     ContentRoutingModule,
     SharedModule,
     FormsModule, 
+    Select2Module,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

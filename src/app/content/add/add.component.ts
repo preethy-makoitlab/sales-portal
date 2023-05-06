@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/services/category.service';
 import { v4 as uuidv4 } from 'uuid';
+import { Select2Data, Select2UpdateEvent } from 'ng-select2-component';
+import { InstructorService } from 'src/app/services/instructor.service';
+import { ToastService } from 'src/app/common/services/toastr.service';
 
 
 @Component({
@@ -30,6 +33,7 @@ export class AddComponent {
     genre: "",
     emotion: "",
     energy: "",
+    instructor: [],
     practiceName: "",
     thumbnail: "",
     module: this.module
@@ -68,12 +72,16 @@ export class AddComponent {
   isReUpload: boolean = false;
   totalDelete: boolean = false;
   index!: number | undefined;
+  uploadedUrl: string  = ""
+  instructors: Select2Data = [];
 
   constructor(private router: Router,
     private contentService: ContentService,
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
     private activatedRoute: ActivatedRoute,
+    private toastrService: ToastService,
+    private instructorService: InstructorService,
     private cdr: ChangeDetectorRef) {
     this.addContentForm = this.formBuilder.group({
       category: ['', Validators.required],
@@ -195,10 +203,9 @@ export class AddComponent {
     console.log(form.value);
     if (this.content.module) {
       if (this.hasDuplicatePropertyValue(this.content.module, "moduleId")) {
-        window.alert("Please check Module Index field should be unique");
+        this.toastrService.showError("Please check Module Index field should be unique");
         return;
       }
-
     }
     this.content.category = this.selectedCategory.id;
     delete this.content.genre;
@@ -423,6 +430,7 @@ export class AddComponent {
           isLarge: false
         };
         console.log(id, index);
+        console.log(this.content.module);
         this.callUploadApi(this.formData, id, index, uid);
       }
       else if (file && file.size > this.maxSize) {
@@ -446,9 +454,26 @@ export class AddComponent {
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
     console.log(id, moduleIndex, thumbnail, uid);
-    this.contentService.uploadFile(id, "content", uid, file).subscribe( event =>{
-    console.log(event);
-    })
+    this.contentService.uploadFile(id, "content", uid, file).subscribe({
+      next: (value) => {
+        console.log(value);
+        if(thumbnail) {
+          this.content.thumbnail = value.url;
+        }
+        else {
+          if(uid) {
+            this.module.forEach((content: { uid: any; url: any; }) => {
+              if(content.uid == uid) {
+                content.url = value.url
+              }
+            })
+          }
+        }
+      },
+      error: (err) => {
+            console.log(err);
+      }
+  })
     // this.contentService.uploadFile(id, "content", uid, file).subscribe({
     //   next: (value) => {
     //     // console.log(value,moduleIndex,this.content.module);
@@ -528,6 +553,21 @@ export class AddComponent {
         console.log(err);
       }
     })
+    this.instructorService.instructorList().subscribe({
+      next: (value) => {
+        console.log(value);
+        value.forEach((data: { id: any; name: any; }) => {
+          let obj = {
+            value: data.id,
+            label: data.name
+          }
+          this.instructors.push(obj);
+        })
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   updateModule(event: any, id: any, index: number) {
@@ -540,6 +580,10 @@ export class AddComponent {
       }
     }
 
+  }
+
+  updateInstructor(event: Select2UpdateEvent<any>) {
+    this.content.instructor = event.value;
   }
 
   isValueInPropertyOfAllObjects(objects: [], property: string, value: any) {

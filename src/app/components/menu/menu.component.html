@@ -15,13 +15,13 @@
 
 		<ul class="menu-items">
 			<li class="menu-item" [routerLink]="['/']">
-				<img src="../../../assets/icons/dashboard.svg">
+				<img *ngIf="!isCollapsed" src="../../../assets/icons/dashboard.svg">
 				<span *ngIf="!isCollapsed">Dashboard</span>
 			</li>
 			<li>
 				<input type="checkbox" id="menu-1" class="menu-toggle" />
 				<label class="menu-item" for="menu-1">
-					<img src="../../../assets/icons/therapist.svg">
+					<img *ngIf="!isCollapsed" src="../../../assets/icons/therapist.svg">
 					<span *ngIf="!isCollapsed">Therapist</span>
 					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
@@ -37,14 +37,14 @@
 				<div class="menu-item-collapse">
 					<div *ngIf="!isCollapsed" class="min-h-0">
 						<label class="menu-item ml-6" [routerLink]="['/therapist']">Manage Therapists</label>
-						<label class="menu-item ml-6">Manage Appointments</label>
+						<!-- <label class="menu-item ml-6">Manage Appointments</label> -->
 					</div>
 				</div>
 			</li>
 			<li>
 				<input type="checkbox" id="menu-2" class="menu-toggle" />
 				<label class="menu-item" for="menu-2">
-					<img src="../../../assets/icons/listener.svg">
+					<img *ngIf="!isCollapsed" src="../../../assets/icons/listener.svg">
 					<span *ngIf="!isCollapsed">Listeners</span>
 					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
@@ -67,7 +67,7 @@
 			<li>
 				<input type="checkbox" id="menu-3" class="menu-toggle" />
 				<label class="menu-item" for="menu-3">
-					<img src="../../../assets/icons/content.svg">
+					<img *ngIf="!isCollapsed" src="../../../assets/icons/content.svg">
 					<span *ngIf="!isCollapsed">Content Library</span>
 					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
@@ -89,7 +89,7 @@
 			<li>
 				<input type="checkbox" id="menu-4" class="menu-toggle" />
 				<label class="menu-item" for="menu-4">
-					<img src="../../../assets/icons/corporate.svg">
+					<img *ngIf="!isCollapsed" src="../../../assets/icons/corporate.svg">
 					<span *ngIf="!isCollapsed">Partners</span>
 					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
@@ -111,7 +111,7 @@
 			<li>
 				<input type="checkbox" id="menu-5" class="menu-toggle" />
 				<label class="menu-item" for="menu-5">
-					<img src="../../../assets/icons/challenge.svg">
+					<img *ngIf="!isCollapsed" src="../../../assets/icons/challenge.svg">
 					<span *ngIf="!isCollapsed">Routines</span>
 					<span *ngIf="!isCollapsed" class="menu-icon mr-0 ml-auto">
 						<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 stroke-content3">
@@ -126,7 +126,7 @@
 				</label>
 				<div *ngIf="!isCollapsed" class="menu-item-collapse">
 					<div class="min-h-0">
-						<label class="menu-item ml-6" [routerLink]="['/routine']">Manage Routines</label>
+						<label class="menu-item ml-6" [routerLink]="['/routine/add']">Manage Routines</label>
 					</div>
 				</div>
 			</li>

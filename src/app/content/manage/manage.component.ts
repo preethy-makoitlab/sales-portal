@@ -22,7 +22,7 @@ export class ManageComponent {
   placeholder: string = "Enter Practice Name";
   icon: string = "../../../assets/icons/success-tick.svg";
   pageNo: number = 0;
-  pageSize: number = 4;
+  pageSize: number = 12;
   contentLength!: number;
   isAlert: boolean = false;
   isDisabled: boolean = false;

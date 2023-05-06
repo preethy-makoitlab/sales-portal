@@ -12,7 +12,7 @@
       <button type="button" class="btn btn-error previous" (click)="dialogShow('therapist')">Disable</button>
     </div>
     <div *ngIf="(viewForm || editMode) && isDisabled" class="flex justify-end">
-      <button type="button" class="btn btn-primary enable-button" (click)="dialogShow('therapist')">Enable</button>
+      <button type="button" class="btn btn-success" (click)="dialogShow('therapist')">Enable</button>
     </div>
     <div *ngIf="viewForm" class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
       <div>
