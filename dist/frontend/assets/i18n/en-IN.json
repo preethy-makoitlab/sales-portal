@@ -1,0 +1,35 @@
+{
+    "welcome": {
+        "title": "Welcome to ANYO"
+    },
+    "titles": {
+        "manageTherapist": "Manage Therapist",
+        "addTherapist": "Add Therapist",
+        "addListener": "Add Listener"
+    },
+    "labels": {
+        "hello": "Hello",
+        "title": "Title",
+        "email": "Email ID",
+        "fullName": "Full Name",
+        "mobile": "Mobile Number",
+        "avtaarName": "Avtaar Name",
+        "otherDetails": "Other Details",
+        "dob": "Date of Birth",
+        "areasOfSpecialization": "Areas of Specialization",
+        "about": "About",
+        "languagesKnown": "Languages known"
+    },
+    "placeholders": {
+        
+    },
+    "buttons": {
+        "cancel": "Cancel",
+        "upload": "Upload",
+        "saveListener": "Save Listener",
+        "editListener": "Edit Listener"
+    },
+    "instructions": {
+        
+    }
+}
