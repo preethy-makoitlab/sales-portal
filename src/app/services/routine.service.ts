@@ -13,6 +13,40 @@ export class RoutineService {
   protected uploadBasePath = environment.contentServiceUrl;
   constructor(protected httpClient: HttpClient) { }
 
+  public routineList(
+    filter?: Object | null,
+    page?: number,
+    numberOfRecords?: number,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    if(filter !== undefined) {
+      queryParameters = queryParameters.set('filter', JSON.stringify(filter));
+    }
+    if (numberOfRecords !== undefined && numberOfRecords !== null) {
+      queryParameters = queryParameters.set(
+        'limit',
+        <any>numberOfRecords
+      );
+    }
+    if (page !== undefined && page !== null) {
+      queryParameters = queryParameters.set('page', <any>page);
+    } 
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/routines`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
   public createRoutine(
     body?: Object,
     observe: any = 'body',
@@ -107,6 +141,52 @@ export class RoutineService {
       `${this.basePath}/routines/fetchPracticeName`,
       {
          params:queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public getRoutine(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    console.log(queryParameters);
+  
+    return this.httpClient.request<Object>(
+      'get',
+      `${this.basePath}/routines/${String(id)}`,
+      {
+        params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public updateRoutine(
+    id:  String,
+    body?: Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    queryParameters = queryParameters.set('id',String(id));
+
+    return this.httpClient.request<Object>(
+      'patch',
+      `${this.basePath}/routines/${String(id)}`,
+      {
+        body: body,
+        // params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }

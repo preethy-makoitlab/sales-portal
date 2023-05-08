@@ -1,0 +1,188 @@
+@import 'src/styles/constants.scss';
+
+.add-therapist-flexbox {
+    display: flex;
+    margin: 2rem;
+    align-items: center;
+}
+
+.left-arrow {
+    margin-right: 10px;
+}
+
+.card {
+    background-color: #C6D7ED;
+    box-shadow: 0px 0px 13px rgba(21, 21, 76, 0.18);
+    max-width: 100%;
+}
+
+.thumbnail {
+    border-top-left-radius: .75rem/* 12px */;
+    border-top-right-radius: .75rem/* 12px */;
+    // width: 20rem;
+    // height: 10rem;
+}
+
+.icon {
+    height: auto;
+}
+
+.card-body {
+    padding: 0.5rem;
+}
+
+.card p {
+    color: $clr-text-secondary;
+    font-style: normal;
+    font-weight: $ft-semi-bold;
+    font-size: $ft-size-small;
+    line-height: 15px;
+}
+
+.custom-card {
+    width: 100%;
+    height: fit-content;
+}
+
+.switch {
+    margin: 7px;
+}
+
+.width {
+    width: 100% !important;
+}
+
+.title-select {
+    background: $background-primary;
+    border: 1px solid $clr-text-muted;
+    border-radius: 6px;
+    background-image: url("../../../assets/icons/dropdown-arrow.svg");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    color: #6F6F6F;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 120%;
+    letter-spacing: 0.25px;
+}
+
+.radio {
+    --checkline-color: #15154C;
+    --radio-bg: $background-primary;
+    --radio-bg-hover: transparent;
+}
+
+.radio:checked {
+    background-color: $background-primary;
+    border-color: #15154C;
+}
+
+.btn-bigger {
+    width: 35%;
+    margin: 5px;
+    border: 6px;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    border-radius: 6px;
+    background-color: #15154C;
+}
+
+.upload-pic {
+    border: 1.4px dashed #E8E8E8;
+}
+
+.text-xs {
+    font-size: 8px;
+    font-weight: 400;
+    line-height: 12px;
+}
+
+.btn-block {
+    width: 15%;
+    margin: 5px;
+    border: 6px;
+    font-weight: $ft-medium;
+    font-size: $ft-size-small;
+    line-height: 120%;
+    border-radius: 6px;
+}
+
+tag {
+    background: green !important;
+}
+
+.example-chip-list {
+    width: 100%;
+}
+
+::placeholder {
+    color: $clr-text-placeholder;
+    font-size: $ft-size-small;
+    font-weight: $ft-light;
+}
+
+.textarea {
+    min-width: 100%
+}
+
+.btn-discard {
+    background-color: $background-primary;
+    border: 1px solid $clr-text-secondary;
+    border-radius: 6px;
+    color: $clr-text-secondary;
+    font-weight: $ft-semi-bold;
+}
+
+.checkbox-sm {
+    background-color: transparent;
+    border: 2px solid #15154C;
+    --checkbox-bg-hover: #FFFFFF;
+    border-radius: 0px;
+}
+
+.checkbox:checked {
+    background-color: #15154C;
+    border: 1px solid #15154C;
+}
+
+.checkbox-span {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #6F6F6F;
+}
+
+.reset-button {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    color: #15154C;
+    border: 2px solid #15154C;
+    width: 100%;
+}
+
+.enable-button {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+    color: #15154C;
+    border: 2px solid #15154C;
+}
+
+.switch {
+    --switch-bg: #E1E1FD;
+    --switch-bg-hover: #E1E1FD;
+    --circle-color: #FFFFFF;
+    border-color: transparent;
+    border-radius: 200px;
+    border-width: 0px;
+    --switch-bg-checked: #15154C;
+}
+
+.btn-error {
+    background-color: #c62828;
+    border-radius: 6px;
+}
+
+.input:disabled {
+    opacity: unset;
+}

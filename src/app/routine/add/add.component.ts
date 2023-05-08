@@ -255,6 +255,7 @@ export class AddComponent {
         next: (value) => {
           console.log(value);
           this.toastrService.showSuccess("Success");
+          this.router.navigate(['/routine']);
         },
         error: (err) => {
           console.log(err);
@@ -300,6 +301,8 @@ export class AddComponent {
   }
 
   fetchPracticeName(index: number) {
+    this.routine.days[index].practiceNameArray = [];
+    this.routine.days[index].contentArray = [];
     let filter = {
       "category": this.routine.days[index].category
     }
@@ -398,15 +401,77 @@ export class AddComponent {
 
   }
 
+  populate(id: string, mode: string) {
+    console.log(id);
+    if(mode == 'view') {
+      this.viewForm = true;
+      this.showDisable = true;
+    }
+    else {
+      this.viewForm = false;
+      this.showDisable = true;
+      this.editMode = true;
+    }
+    let instructor: any[] = [];
+    this.routineService.getRoutine(id).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.routine = value.data;
+        var masterdata: Array<Array<any>> = Object.values(value.masterdata);
+        masterdata.forEach((master: any, index) => {
+          master.forEach((data: { status: Status; m_id: any; data: any; id: any; name: any; }) => {
+            if(index == 3) {
+              let obj = {
+                value: data.id,
+                label: data.name
+              }
+              this.instructors.push(obj);
+            }
+            else if(data.status == Status.Active) {
+              let obj = {
+                value: data.m_id,
+                label: data.data
+              }
+              if(index == 0) {
+                this.groups.push(obj)
+              } 
+              else if(index == 1) {
+                this.difficulty.push(obj)
+              }
+              else {
+                this.timings.push(obj)
+              }
+            }
+          })
+        })
+        this.days = this.routine.days;
+        this.days.forEach((day: { instructor: any[]; }) => {
+          day.instructor.forEach((data: any) => {
+             if(!instructor.includes(data)) {
+                instructor.push(data)
+              }
+          })
+        })
+        this.routine.instructor = instructor;
+        this.genreArray = value.data.genreArray;
+        this.isOriginal = true;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   ngOnInit(): void {
-    this.loadCategories();
     if (this.activatedRoute.snapshot.params) {
       console.log(this.activatedRoute.snapshot.params);
+      let pathname = window.location.pathname.split('/');
       let value = this.activatedRoute.snapshot.params['id'];
       if (value) {
-        // this.populate(value)
+        this.populate(value, pathname[2])
       }
       else {
+        this.loadCategories();
         this.loadMasterData();
       }
     }
