@@ -20,7 +20,8 @@ export class ManageMemberComponent {
   partnerId!: string;
   subscriptionCount: ISubscriptionCount = { total: 0 };
 
-  fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
+  // fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
+  fields: any[] = ['Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
   actionField: Object = {
     label: 'Actions',
     colspan: '3'
@@ -99,15 +100,15 @@ export class ManageMemberComponent {
           var branch = d.branch;
           var lastActive = isoToDDMMYYYY(new Date().toISOString());
           var data = [
-            {
-              data: null,
-              isImage: true,
-              imageFile: 'default-user.svg',
-              isButton: false,
-              isEditable: false,
-              isClickable: false,
-              isCheckbox: false
-            },
+            // {
+            //   data: null,
+            //   isImage: true,
+            //   imageFile: 'default-user.svg',
+            //   isButton: false,
+            //   isEditable: false,
+            //   isClickable: false,
+            //   isCheckbox: false
+            // },
             {
               data: name,
               isImage: false,

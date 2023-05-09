@@ -29,6 +29,7 @@ export class AddComponent {
   editMode: boolean = false;
   isSubscription: boolean = false;
   isAlert: boolean = false;
+  errorMessage: string = "";
   alertHeaderDisable: string = "Partner Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the partner"
   alertHeaderEnable: string = "Partner Enable"
@@ -106,6 +107,7 @@ export class AddComponent {
   validation() {
     this.isSubmit = false;
     var flag = true;
+    this.errorMessage = "";
     this.compulsoryFields.forEach((field: any) => {
       if(!this.partner[field] || this.partner[field].length == 0) {
         flag = false;
@@ -113,6 +115,24 @@ export class AddComponent {
       if(field == 'spocDetails') {
         if(!this.partner[field][0].name || !this.partner[field][0].email || !this.partner[field][0].mobile) {
           flag = false;
+        }
+        else {
+          const mobileRegex = /^(\d{10}|\d{16})$/;
+          var phoneFlag = mobileRegex.test(this.partner[field][0].mobile);
+          const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          var emailFlag = pattern.test(this.partner[field][0].email);
+          if(!phoneFlag && !emailFlag) {
+            this.errorMessage = "Invalid Email and Mobile Number";
+            flag = false;
+          }
+          else if(!phoneFlag && emailFlag) {
+            this.errorMessage = "Invalid Mobile Number";
+            flag = false;
+          }
+          else if(phoneFlag && !emailFlag) {
+            this.errorMessage = "Invalid Email";
+            flag = false;
+          }
         }
       }
     })
@@ -157,7 +177,12 @@ export class AddComponent {
     }
     else {
       this.isSubmit = true;
-      this.toastrService.showError("Please fill all the required fields");
+      if(this.errorMessage) {
+        this.toastrService.showError(this.errorMessage);
+      }
+      else {
+        this.toastrService.showError("Please fill all the required fields");
+      }
     }
     
   }

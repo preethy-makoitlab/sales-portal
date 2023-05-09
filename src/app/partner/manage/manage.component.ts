@@ -46,6 +46,7 @@ export class ManageComponent {
         console.log(value);
         value.forEach((d: { partner: { id: any; companyName: any; partnerId: any; city: any; state: any; status: string; }; subscription: { noOfSubscriptions: string; noOfTherapySessions: string; subscriptionStart: string; subscriptionEnd: string; }; }) => {
           var partnerData: any = {};
+          var dataIcon = "";
           var _id = d.partner.id;
           var partnerName = d.partner.companyName;
           var partnerId = d.partner.partnerId;
@@ -53,6 +54,22 @@ export class ManageComponent {
           var state = d.partner.state
           var noSubscriptions = (d.subscription?.noOfSubscriptions ? "0 / " + d.subscription?.noOfSubscriptions : "");
           var noSessions = (d.subscription?.noOfTherapySessions ? "0 / " + d.subscription?.noOfTherapySessions : "");
+          var planStatus;
+          if(d.subscription?.subscriptionStart && d.subscription?.subscriptionEnd) {
+            planStatus = this.isDateInRange(d.subscription?.subscriptionStart, d.subscription?.subscriptionEnd);
+            if(planStatus == "early") {
+              dataIcon = "inactive.svg"
+            }
+            else if(planStatus ==  true) {
+              dataIcon = "active.svg"
+            }
+            else if(planStatus ==  false) {
+              dataIcon = "expired.svg"
+            }
+            else {
+              dataIcon = ""
+            }
+          }
           var startDate = (d.subscription?.subscriptionStart ? isoToDDMMYYYY(d.subscription?.subscriptionStart) : "");
           var endDate = (d.subscription?.subscriptionEnd ? isoToDDMMYYYY(d.subscription?.subscriptionEnd) : "");
           var data = [
@@ -98,6 +115,7 @@ export class ManageComponent {
             },
             {
               data: [startDate, endDate],
+              dataIcon: dataIcon,
               isImage: false,
               isButton: false,
               isEditable: false,
@@ -144,6 +162,18 @@ export class ManageComponent {
         console.log(err);
       }
     })
+  }
+
+  isDateInRange(startDateISO: string, endDateISO: string): boolean | string{
+    const currentDate = new Date();
+    const startDate = new Date(startDateISO);
+    const endDate = new Date(endDateISO);
+    if(currentDate < startDate) {
+      return "early";
+    }
+    else {
+      return currentDate >= startDate && currentDate <= endDate;
+    }
   }
 
   ngOnInit(): void {
