@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
 import { PartnerService } from 'src/app/services/partner.service';
-import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
+import { isDateInRange, isoToDDMMYYYY } from 'src/app/common/utils/utils';
+import { MemberService } from 'src/app/services/member.service';
 
 @Component({
   selector: 'app-manage',
@@ -12,6 +13,7 @@ export class ManageComponent {
 
   totalCount: number = 0;
   activeCount: number = 0;
+  passes: number = 0;
   fields: any[] = ['Partner', 'City', 'State', 'No of Passes', 'No of Therapy Sessions', 'Plan Status', 'Expiry Date'];
   actionField: Object = {
     label: 'Actions',
@@ -20,7 +22,8 @@ export class ManageComponent {
   tableData: any[] = [];
 
   constructor(private translate: AnyoTranslateService,
-    private partnerService: PartnerService) {
+    private partnerService: PartnerService,
+    private memberService: MemberService) {
   }
 
   getCount() {
@@ -44,19 +47,21 @@ export class ManageComponent {
     this.partnerService.partnerList().subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((d: { partner: { id: any; companyName: any; partnerId: any; city: any; state: any; status: string; }; subscription: { noOfSubscriptions: string; noOfTherapySessions: string; subscriptionStart: string; subscriptionEnd: string; }; }) => {
+        value.forEach((d: { partner: { id: any; companyName: any; partnerId: any; city: any; state: any; status: string; }; memberCount: { count: any; }; subscription: { noOfSubscriptions: string; noOfTherapySessions: string; subscriptionStart: string; subscriptionEnd: string; }; }) => {
           var partnerData: any = {};
+          this.passes = 0;
           var dataIcon = "";
           var _id = d.partner.id;
           var partnerName = d.partner.companyName;
           var partnerId = d.partner.partnerId;
           var city = d.partner.city;
-          var state = d.partner.state
-          var noSubscriptions = (d.subscription?.noOfSubscriptions ? "0 / " + d.subscription?.noOfSubscriptions : "");
-          var noSessions = (d.subscription?.noOfTherapySessions ? "0 / " + d.subscription?.noOfTherapySessions : "");
+          var state = d.partner.state;
+          var noOfPasses = d.memberCount.count;
+          var noSubscriptions = (d.subscription?.noOfSubscriptions ? noOfPasses + " / " + d.subscription?.noOfSubscriptions : "");
+          var noSessions = (d.subscription?.noOfTherapySessions ? noOfPasses  + " / " + d.subscription?.noOfTherapySessions : "");
           var planStatus;
           if(d.subscription?.subscriptionStart && d.subscription?.subscriptionEnd) {
-            planStatus = this.isDateInRange(d.subscription?.subscriptionStart, d.subscription?.subscriptionEnd);
+            planStatus = isDateInRange(d.subscription?.subscriptionStart, d.subscription?.subscriptionEnd);
             if(planStatus == "early") {
               dataIcon = "inactive.svg"
             }
@@ -164,17 +169,17 @@ export class ManageComponent {
     })
   }
 
-  isDateInRange(startDateISO: string, endDateISO: string): boolean | string{
-    const currentDate = new Date();
-    const startDate = new Date(startDateISO);
-    const endDate = new Date(endDateISO);
-    if(currentDate < startDate) {
-      return "early";
-    }
-    else {
-      return currentDate >= startDate && currentDate <= endDate;
-    }
-  }
+  // isDateInRange(startDateISO: string, endDateISO: string): boolean | string{
+  //   const currentDate = new Date();
+  //   const startDate = new Date(startDateISO);
+  //   const endDate = new Date(endDateISO);
+  //   if(currentDate < startDate) {
+  //     return "early";
+  //   }
+  //   else {
+  //     return currentDate >= startDate && currentDate <= endDate;
+  //   }
+  // }
 
   ngOnInit(): void {
     this.getCount();

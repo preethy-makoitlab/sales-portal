@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AnyoTranslateService } from 'src/app/services/anyo-translate.service';
 import { MemberService } from 'src/app/services/member.service';
-import { ISubscriptionCount, Status } from 'src/app/stores/types';
-import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
+import { ISubscriptionCount, ISubscriptionDetails, Status } from 'src/app/stores/types';
+import { isDateInRange, isoToDDMMYYYY } from 'src/app/common/utils/utils';
+import { ToastService } from 'src/app/common/services/toastr.service';
 @Component({
   selector: 'app-manage-member',
   templateUrl: './manage-member.component.html',
@@ -12,13 +13,16 @@ import { isoToDDMMYYYY } from 'src/app/common/utils/utils';
 export class ManageMemberComponent {
 
   constructor(private translate: AnyoTranslateService,
+    private router: Router,
     private activatedRoute: ActivatedRoute,
+    private toastrService: ToastService,
     private memberService: MemberService) { }
 
   totalCount: number = 0;
   activeCount: number = 0;
   partnerId!: string;
   subscriptionCount: ISubscriptionCount = { total: 0 };
+  subscriptionDetails!: ISubscriptionDetails;
 
   // fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
   fields: any[] = ['Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
@@ -74,6 +78,20 @@ export class ManageMemberComponent {
     this.memberId = id;
   }
 
+  check() {
+    if(this.subscriptionCount.total == 0) {
+      this.toastrService.showError("Please provide subscription details to add members");
+    }
+    else {
+      if(isDateInRange(String(this.subscriptionDetails.startDate), String(this.subscriptionDetails.endDate) ) == false) {
+        this.toastrService.showError("You must have an active subscription to add members");
+      }
+      else {
+        this.router.navigate(['/partner/addmember/'+this.partnerId]);
+      }
+    }
+  }
+
   getCount() {
     this.memberService.memberCount(this.partnerId).subscribe({
       next: (value) => {
@@ -90,6 +108,7 @@ export class ManageMemberComponent {
     this.memberService.memberList(this.partnerId).subscribe({
       next: (value) => {
         this.subscriptionCount = value?.subscriptionCount;
+        this.subscriptionDetails = value?.subscriptionDetails;
         console.log(value);
         value?.members?.forEach((d: { id: any; partnerId: any; name: any; email: any; department: any; branch: any; status: string; }) => {
           var memberData: any = {};

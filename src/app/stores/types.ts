@@ -14,6 +14,11 @@ export interface ISubscriptionCount {
   active?: number
 }
 
+export interface ISubscriptionDetails {
+  startDate: Date | null
+  endDate: Date | null
+}
+
 export interface IListenerCount {
   totalChats: number
   totalMins: number

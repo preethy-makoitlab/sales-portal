@@ -183,10 +183,10 @@ export class RoutineService {
 
     return this.httpClient.request<Object>(
       'patch',
-      `${this.basePath}/routines/${String(id)}`,
+      `${this.basePath}/routines/${id}`,
       {
         body: body,
-        // params: queryParameters,
+        params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }

@@ -46,8 +46,10 @@ export class AddComponent {
   instructors: Select2Data = [];
   icon: string = "../../../assets/icons/success-tick.svg";
   placeholder: string = "Enter Routine Name";
-  alertHeaderDisable: string = "Routine Deletion";
-  alertBodyDisable: string = "Please make sure that you want to delete the routine permananently"
+  alertHeaderDisable: string = "Routine Delete";
+  alertBodyDisable: string = "Please make sure that you want to delete the routine";
+  alertHeaderEnable: string = "Routine Enable";
+  alertBodyEnable: string = "Please make sure that you want to enable the routine";
   @ViewChild('fileInput') fileInput: any;
   compulsoryFields = ['group','routineName','banner','about','days'];
 
@@ -166,9 +168,44 @@ export class AddComponent {
     })
   }
 
-  deleteRoutine() {
+  disableRoutine() {
+    this.routine.status = Status.Inactive;
+    let req = {
+      status: this.routine.status
+    }
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.routineService.updateRoutine(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.toastrService.showSuccess("Routine disabled");
+        this.router.navigate(['/routine']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
     this.isAlert = false;
     this.isDisabled = true;
+  }
+
+  enableRoutine() {
+    this.routine.status = Status.Active;
+    let req = {
+      status: this.routine.status
+    }
+    let _id = String(this.activatedRoute.snapshot.params['id']);
+    this.routineService.updateRoutine(_id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.toastrService.showSuccess("Routine enabled");
+        this.router.navigate(['/routine']);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.isAlert = false;
+    this.isDisabled = false;
   }
 
   updateInstructor(event: Select2UpdateEvent<any>, index: number) {
@@ -193,7 +230,7 @@ export class AddComponent {
       genre: "",
       category: "",
       practiceName: "",
-      estimatedTime: "7 minutes",
+      estimatedTime: 0,
       difficulty: "",
       instructor: [],
       categoryArray: [],
@@ -251,16 +288,32 @@ export class AddComponent {
         delete data.practiceName;
         delete data.estimatedTime;
       })
-      this.routineService.createRoutine(this.routine).subscribe({
-        next: (value) => {
-          console.log(value);
-          this.toastrService.showSuccess("Success");
-          this.router.navigate(['/routine']);
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      })
+      if(this.editMode) {
+        delete this.routine.genreArray;
+        let _id = String(this.activatedRoute.snapshot.params['id']);
+        this.routineService.updateRoutine(_id, this.routine).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.toastrService.showSuccess("Successfully updated");
+            this.router.navigate(['/routine']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
+      else {
+        this.routineService.createRoutine(this.routine).subscribe({
+          next: (value) => {
+            console.log(value);
+            this.toastrService.showSuccess("Successfully created");
+            this.router.navigate(['/routine']);
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        })
+      }
     }
     else {
       if(!status[0] && !status[1]) {
@@ -417,6 +470,9 @@ export class AddComponent {
       next: (value) => {
         console.log(value);
         this.routine = value.data;
+        if(this.routine.status == Status.Inactive) {
+          this.isDisabled = true;
+        }
         var masterdata: Array<Array<any>> = Object.values(value.masterdata);
         masterdata.forEach((master: any, index) => {
           master.forEach((data: { status: Status; m_id: any; data: any; id: any; name: any; }) => {
@@ -455,6 +511,15 @@ export class AddComponent {
         this.routine.instructor = instructor;
         this.genreArray = value.data.genreArray;
         this.isOriginal = true;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+    this.categoryService.getCategory().subscribe({
+      next: (value) => {
+        console.log(value);
+        this.deepCopyCategoryArray  = JSON.parse(JSON.stringify(value));
       },
       error: (err) => {
         console.log(err);

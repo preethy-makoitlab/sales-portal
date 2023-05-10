@@ -15,8 +15,7 @@
     <!-- <div>
         <app-search></app-search>
     </div> -->
-    <div class="flex flex-row justify-between btn custom-btn-primary gap-1"
-        [routerLink]="['/partner/addmember/'+partnerId]">
+    <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="check()">
         <div>
             <img class="add-icon" src="../../../assets/icons/add-icon.svg">
         </div>
@@ -44,7 +43,7 @@
             <div class="flex flex-row justify-between items-center">
                 <div class="flex flex-col">
                     <div class="large-text">{{ subscriptionCount.available }}</div>
-                    <div class="xs-text">Available Subscriptions</div>
+                    <div class="xs-text">Available Passes</div>
                 </div>
                 <div><img src="../../../assets/icons/subscription-icon.svg"></div>
             </div>
@@ -53,7 +52,7 @@
             <div class="flex flex-row justify-between items-center">
                 <div class="flex flex-col">
                     <div class="large-text">{{ subscriptionCount.active }}</div>
-                    <div class="xs-text">Acive Members</div>
+                    <div class="xs-text">Availed Passes</div>
                 </div>
                 <div><img src="../../../assets/icons/members-icon.svg"></div>
             </div>

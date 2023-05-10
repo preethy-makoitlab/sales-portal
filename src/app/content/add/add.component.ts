@@ -201,7 +201,17 @@ export class AddComponent {
 
   submit(form: any) {
     console.log(form.value);
-    if (this.content.module) {
+    var tempModule  = JSON.parse(JSON.stringify(this.content.module));
+    if(this.editMode){
+      this.module.forEach((mod: any) => {
+        tempModule.push(mod);
+      })
+      if (this.hasDuplicatePropertyValue(tempModule, "moduleId")) {
+        this.toastrService.showError("Please check Module Index field should be unique");
+        return;
+      }
+    }
+    else if (this.content.module) {
       if (this.hasDuplicatePropertyValue(this.content.module, "moduleId")) {
         this.toastrService.showError("Please check Module Index field should be unique");
         return;

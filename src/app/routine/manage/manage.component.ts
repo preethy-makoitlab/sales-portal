@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/common/services/toastr.service';
 import { MasterdataService } from 'src/app/services/masterdata.service';
 import { RoutineService } from 'src/app/services/routine.service';
 import { Status } from 'src/app/stores/types';
@@ -23,15 +24,36 @@ export class ManageComponent {
   isAlert: boolean = false;
   isDisabled: boolean = false;
   alertHeaderDisable: string = "Routine Delete"
-  alertBodyDisable: string = "Please make sure that you want to delete the routine permanently"
-
+  alertBodyDisable: string = "Please make sure that you want to delete the routine"
 
   constructor(private router: Router,
     private routineService: RoutineService,
-    private masterdataService: MasterdataService) {}
+    private masterdataService: MasterdataService,
+    private toastrService: ToastService) {}
 
   dialogShow() {
     this.isAlert = !this.isAlert;
+  }
+
+  availability(id: string, isAvailable: boolean, index: number) {
+    let req = {
+      isAvailable: !isAvailable
+    }
+    this.routineData[index].isAvailable = !isAvailable;
+    this.routineService.updateRoutine(id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+        if(isAvailable){
+          this.toastrService.showSuccess("Marked as unavailable");
+        }
+        else {
+          this.toastrService.showSuccess("Marked as available");
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   onScroll() {
@@ -85,20 +107,24 @@ export class ManageComponent {
     })
   }
 
-  disableRoutine(id: string) {
-    // this.contentService.deleteContent(id).subscribe({
-    //   next: (value) => {
-    //     console.log(value);
-    //     this.filter();
-    //     // this.listContent();
-        
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   }
-    // })
+  disableRoutine(id: string, index: number) {
+    let req = {
+      status: Status.Inactive
+    }
+    this.routineService.updateRoutine(id, req).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.toastrService.showSuccess("Routine deleted");
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
     this.isAlert = false;
     this.isDisabled = true;
+    this.routineData.splice(index, 1);
+    this.totalCount = this.totalCount - 1;
+    this.routineLength = this.routineData.length;
   }
 
   listRoutine() {
