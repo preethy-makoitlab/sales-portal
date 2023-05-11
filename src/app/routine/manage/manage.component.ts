@@ -20,6 +20,8 @@ export class ManageComponent {
   pageNo: number = 0;
   pageSize: number = 12;
   group: string = "";
+  disableId: string = "";
+  disableIndex!: number;
   routineName: string = "";
   isAlert: boolean = false;
   isDisabled: boolean = false;
@@ -31,8 +33,14 @@ export class ManageComponent {
     private masterdataService: MasterdataService,
     private toastrService: ToastService) {}
 
-  dialogShow() {
+  dialogShow(id: string, index: number) {
     this.isAlert = !this.isAlert;
+    this.disableId = id;
+    this.disableIndex = index;
+  }
+
+  closeAlert() {
+    this.isAlert = false;
   }
 
   availability(id: string, isAvailable: boolean, index: number) {
@@ -107,11 +115,11 @@ export class ManageComponent {
     })
   }
 
-  disableRoutine(id: string, index: number) {
+  disableRoutine() {
     let req = {
       status: Status.Inactive
     }
-    this.routineService.updateRoutine(id, req).subscribe({
+    this.routineService.updateRoutine(this.disableId, req).subscribe({
       next: (value) => {
         console.log(value);
         this.toastrService.showSuccess("Routine deleted");
@@ -122,9 +130,11 @@ export class ManageComponent {
     })
     this.isAlert = false;
     this.isDisabled = true;
-    this.routineData.splice(index, 1);
+    this.routineData.splice(this.disableIndex, 1);
     this.totalCount = this.totalCount - 1;
     this.routineLength = this.routineData.length;
+    this.disableId = "";
+    this.disableIndex = -1;
   }
 
   listRoutine() {

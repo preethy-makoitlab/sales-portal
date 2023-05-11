@@ -15,6 +15,7 @@ export class ManageComponent {
   contentData: any[] = [];
   category: string = "";
   genre: string = "";
+  deleteId: string = "";
   practiceName: string = "";
   categoryArray: any[] = [];
   deepCopyCategoryArray: any[] = [];
@@ -49,13 +50,17 @@ export class ManageComponent {
     this.practiceName = name;
   }
 
-  dialogShow() {
+  dialogShow(id: string) {
     this.isAlert = !this.isAlert;
-    
+    this.deleteId = id;
   }
 
-  deleteContent(id: string) {
-    this.contentService.deleteContent(id).subscribe({
+  closeAlert() {
+    this.isAlert = false;
+  }
+
+  deleteContent() {
+    this.contentService.deleteContent(this.deleteId).subscribe({
       next: (value) => {
         console.log(value);
         this.filter();
@@ -66,6 +71,7 @@ export class ManageComponent {
         console.log(err);
       }
     })
+    this.deleteId = "";
     this.isAlert = false;
     this.isDisabled = true;
   }

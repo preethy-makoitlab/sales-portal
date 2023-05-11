@@ -43,23 +43,25 @@
                 </div>
             </div>
 
+            <div *ngIf="isAlert">
+                <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="closeAlert()"
+                (isDisable)="disableRoutine()"></app-alert-box>
+            </div>
+
             <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap w-full md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                 <div *ngFor="let data of routineData; index as index" class="cursor-pointer card sm:w-1/2 md:w-1/2 lg:w-1/5 xl:w-1/5 2xl:w-1/5"> 
                     <div class="flex h-40" [routerLink]="['/routine/view/', data.id]">
                         <img *ngIf="data.banner" class="thumbnail" [src]="data.banner | secure | async" alt="thumbnail" />
                         <img *ngIf="!data.banner" class="thumbnail" src="../../../assets/icons/dummy.svg" alt="dummy" />
                     </div>
-                    <div *ngIf="isAlert">
-                        <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
-                        (isDisable)="disableRoutine(data.id, index)"></app-alert-box>
-                    </div>
+                    
                     <div class="card-body">
                         <!-- <p class="text-content2">{{data.routineName}}</p> -->
                         <div class="flex justify-between items-center">
                             <p class="text-content2">{{data.routineName}}</p>
                             <div class="flex gap-2 items-center">
                                 <input type="checkbox" class="switch switch-xs" title="Routine availability" [checked]="data.isAvailable" (click)="availability(data.id, data.isAvailable, index)" />
-                                <img class="cursor-pointer icon" src="../../../assets/icons/delete-routine.svg" (click)="dialogShow()">
+                                <img class="cursor-pointer icon" src="../../../assets/icons/delete-routine.svg" (click)="dialogShow(data.id, index)">
                                 <img class="cursor-pointer icon" src="../../../assets/icons/edit-routine.svg" [routerLink]="['/routine/edit/', data.id]"/>
                             </div>
                         </div>

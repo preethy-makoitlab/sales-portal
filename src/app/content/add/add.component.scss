@@ -101,7 +101,8 @@ tag {
 }
 
 .textarea {
-    min-width: 100%
+    min-width: 100%;
+    font-size: $ft-size-small;
 }
 
 .btn-discard {

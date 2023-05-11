@@ -35,6 +35,7 @@ export class AddComponent {
     energy: "",
     instructor: [],
     practiceName: "",
+    about: "",
     thumbnail: "",
     module: this.module
   }
@@ -309,7 +310,9 @@ export class AddComponent {
       moduleName: "",
       file: "",
       url: "",
-      type: ""
+      type: "",
+      estimatedTime: Number,
+      isMandatory: false
     }
     console.log(this.content.module, this.module, this.statusArray);
 
@@ -328,17 +331,17 @@ export class AddComponent {
     console.log(index);
     if (type === "module") {
       console.log(this.statusArray, index);
-      if (this.editMode) {
-        console.log(this.content.module);
-        this.content.module.splice(index, 1);
-        console.log(this.content.module);
+      // if (this.editMode) {
+      //   console.log(this.content.module);
+      //   this.content.module.splice(index, 1);
+      //   console.log(this.content.module);
 
 
-      } else {
-        console.log("EDIT ELSE");
+      // } else {
+      //   console.log("EDIT ELSE");
 
-        this.module = this.module.splice(index, 1);
-      }
+        this.module.splice(index, 1);
+      // }
       this.statusArray.splice(index, 1);
       console.log(this.statusArray, this.module);
     }
@@ -397,15 +400,15 @@ export class AddComponent {
   }
 
 
-  uploadFile(event: any) {
+  async uploadFile(event: any) {
     this.formData = new FormData();
     const file: File = event.target?.files[0];
     if (file && file.size < this.maxSize) {
       this.formData.append('file', file);
       console.log(file);
-      this.isUploaded = true;
-      this.isLarge = false;
-      this.callUploadApi(this.formData, this.content.id, undefined, null, true);
+      // this.isUploaded = true;
+      // this.isLarge = false;
+      await this.callUploadApi(this.formData, this.content.id, undefined, null, true);
     }
     else if (file && file.size > this.maxSize) {
       this.isLarge = true;
@@ -416,7 +419,7 @@ export class AddComponent {
     }
   }
 
-  uploadModule(event: any, id: string, moduleIndex: any, index: any, uid?: string) {
+  async uploadModule(event: any, id: string, moduleIndex: any, index: any, uid?: string) {
     console.log(id, moduleIndex, index, uid);
     moduleIndex = Number(moduleIndex);
     this.formData = new FormData();
@@ -435,13 +438,13 @@ export class AddComponent {
       if (file && file.size < this.maxSize) {
         this.formData.append('file', file);
         console.log(file);
-        this.statusArray[index] = {
-          isUploaded: true,
-          isLarge: false
-        };
+        // this.statusArray[index] = {
+        //   isUploaded: true,
+        //   isLarge: false
+        // };
         console.log(id, index);
         console.log(this.content.module);
-        this.callUploadApi(this.formData, id, index, uid);
+        await this.callUploadApi(this.formData, id, index, uid);
       }
       else if (file && file.size > this.maxSize) {
         this.statusArray[index] = {
@@ -459,7 +462,7 @@ export class AddComponent {
   };
 
 
-  callUploadApi(file: any, id: string, moduleIndex?: string, uid?: any, thumbnail: boolean = false) {
+  async callUploadApi(file: any, id: string, moduleIndex?: number, uid?: any, thumbnail: boolean = false) {
     // let formData = new FormData();
     // let fileToserver: File = file.target?.files[0];
     // formData.append('file',fileToserver);
@@ -469,6 +472,8 @@ export class AddComponent {
         console.log(value);
         if(thumbnail) {
           this.content.thumbnail = value.url;
+          this.isUploaded = true;
+          this.isLarge = false;
         }
         else {
           if(uid) {
@@ -477,6 +482,12 @@ export class AddComponent {
                 content.url = value.url
               }
             })
+            if(moduleIndex || moduleIndex==0) {
+              this.statusArray[moduleIndex] = {
+                isUploaded: true,
+                isLarge: false
+              };
+            }
           }
         }
       },
