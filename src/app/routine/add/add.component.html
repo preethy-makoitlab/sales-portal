@@ -103,7 +103,7 @@
                         </select>
                     </div>
                     <div class="flex-auto">
-                        <label class="form-label required">{{ 'labels.about' | translate }}</label>
+                        <label class="form-label required">Description</label>
                         <textarea [ngClass]="(isSubmit && routine.about) || !isSubmit ? 'textarea' : 'textarea input-error'" name="about" placeholder="Enter short description here"
                         ngModel required [(ngModel)]="routine.about" [disabled]="viewForm" maxlength="400"></textarea>
                     </div>
@@ -145,13 +145,13 @@
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                         <div class="flex flex-row items-center">
                                             <label class="form-label required">Day number</label>
-                                            <input type="number" min="1" class="input small-text small-width" name="dayNumber{{index}}" [(ngModel)]="item.dayNumber" ngModel [required]="index == 0" [disabled]="viewForm" />
+                                            <input type="number" min="1" [ngClass]="(isSubmit && item.dayNumber) || !isSubmit ? 'input small-text small-width' : 'input small-text small-width input-error'" name="dayNumber{{index}}" [(ngModel)]="item.dayNumber" ngModel [required]="index == 0" [disabled]="viewForm" />
                                         </div>
                                 </div>
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Genre</label>
-                                        <select class="select select-md title-select" name="genre{{index}}" [(ngModel)]="item.genre" (change)="fetch(index)" ngModel>
+                                        <select [ngClass]="(isSubmit && item.genre) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="genre{{index}}" [(ngModel)]="item.genre" (change)="fetch(index)"  [disabled]="viewForm" ngModel>
                                             <option value="" selected>Select Genre</option>
                                             <option *ngFor="let option of genreArray" [value]="option.id">
                                                 {{option.genre}}
@@ -160,7 +160,7 @@
                                     </div>
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Category</label>
-                                        <select class="select select-md title-select" name="category{{index}}" [(ngModel)]="item.category" (change)="fetchPracticeName(index)" ngModel>
+                                        <select [ngClass]="(isSubmit && item.category) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="category{{index}}" [(ngModel)]="item.category" (change)="fetchPracticeName(index)"  [disabled]="viewForm" ngModel>
                                             <option value="" selected>Select Category</option>
                                             <option *ngFor="let option of item.categoryArray" [value]="option.id">
                                                 {{option.category}}
@@ -169,7 +169,7 @@
                                     </div>
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Practice Name</label>
-                                        <select class="select select-md title-select" name="practicename{{index}}" [(ngModel)]="item.practiceName" (change)="set(index)" ngModel>
+                                        <select [ngClass]="(isSubmit && item.practiceName) || !isSubmit ? 'select select-sm title-select' : 'select select-sm title-select input-error'" name="practicename{{index}}" [(ngModel)]="item.practiceName" (change)="set(index)"  [disabled]="viewForm" ngModel>
                                             <option value="" selected>Select Practice Name</option>
                                             <option *ngFor="let option of item.practiceNameArray" [value]="option.value">
                                                 {{option.label}}
@@ -180,11 +180,11 @@
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                     <div class="flex-auto w-1/4">
                                         <label class="form-label required">Estimated Time (in Mins)</label>
-                                        <input type="number" class="input small-text" name="estime{{index}}" placeholder="Estimated Time" [(ngModel)]="item.estimatedTime" ngModel />
+                                        <input type="number" [ngClass]="(isSubmit && item.estimatedTime) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="estime{{index}}" placeholder="Estimated Time" [(ngModel)]="item.estimatedTime" ngModel disabled />
                                     </div>
                                     <div class="flex-auto w-1/4">
-                                        <label class="form-label required">Choose difficulty level</label>
-                                        <select class="select select-md title-select" name="difficulty{{index}}" [(ngModel)]="item.difficulty" ngModel>
+                                        <label class="form-label">Choose difficulty level</label>
+                                        <select class="select select-md title-select" name="difficulty{{index}}" [(ngModel)]="item.difficulty"  [disabled]="viewForm" ngModel>
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let option of difficulty" [value]="option.value">
                                                 {{option.label}}
@@ -198,8 +198,8 @@
                                 </div>
                                 <div class="flex items-center flex-wrap md:gap-4 lg:gap-4 sm:gap-2">
                                     <div class="flex-auto">
-                                        <label class="form-label required">Introduction</label>
-                                        <textarea class="textarea" name="intro{{index}}" placeholder="Enter introduction" [(ngModel)]="item.intro" ngModel [disabled]="viewForm" maxlength="400"></textarea>
+                                        <label class="form-label required">Description</label>
+                                        <textarea [ngClass]="(isSubmit && item.description) || !isSubmit ? 'textarea' : 'textarea input-error'" class="textarea" name="intro{{index}}" placeholder="Enter introduction" [(ngModel)]="item.description" ngModel [disabled]="viewForm" maxlength="400"></textarea>
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label class="form-label required">Upload required</label>
@@ -212,9 +212,9 @@
                                     </div>
                                 </div>       
                             </div>
-                            <img src="../../../assets/icons/spoc-add.svg" class="cursor-pointer"
+                            <img *ngIf="!viewForm" src="../../../assets/icons/spoc-add.svg" class="cursor-pointer"
                                 (click)="!viewForm && addDay()">
-                            <img *ngIf="days.length > 1" class="cursor-pointer" 
+                            <img *ngIf="days.length > 1 && !viewForm" class="cursor-pointer" 
                                 src="../../../assets/icons/delete-spoc.svg" (click)="!viewForm && removeDay(item.uid)">
                     </div>
                 </div>

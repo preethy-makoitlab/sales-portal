@@ -52,6 +52,7 @@ export class AddComponent {
   alertBodyEnable: string = "Please make sure that you want to enable the routine";
   @ViewChild('fileInput') fileInput: any;
   compulsoryFields = ['group','routineName','banner','about','days'];
+  dayWiseCompulsoryFields = ['dayNumber', 'contentId', 'description', 'uploadRequired']
 
   days: any = [
     {
@@ -67,7 +68,7 @@ export class AddComponent {
       categoryArray: [],
       contentArray: [],
       practiceNameArray: [],
-      intro: "",
+      description: "",
       uploadRequired: ""
     }
   ]
@@ -236,7 +237,6 @@ export class AddComponent {
       categoryArray: [],
       contentArray: [],
       practiceNameArray: [],
-      intro: "",
       uploadRequired: ""
     }
     this.days.push(dayObject);
@@ -254,11 +254,10 @@ export class AddComponent {
       }
       if(field == 'days') {
         this.routine[field].forEach((item: any) => {
-          var day: Array<any> = Object.values(item);
-          day.forEach(d => {
-            if(!d) {
+          this.dayWiseCompulsoryFields.forEach(f => {
+            if(!item[f] || item[f].length == 0) {
               flag = false;
-              this.errorMessage = "Please provide details for atleast one day; all fields within the module are mandatory"
+              this.errorMessage = "Please fill all mandatory fields; Provide details for atleast one day"
             }
           })
         })
@@ -341,14 +340,26 @@ export class AddComponent {
       }
     })
     this.routine.days[index].categoryArray = categoryArray;
+    this.routine.days[index].practiceNameArray = [];
+    this.routine.days[index].contentArray = [];
+    this.routine.days[index].category = "";
+    this.routine.days[index].instructor = [];
+    this.routine.days[index].practiceName = "";
+    this.routine.days[index].estimatedTime = 0;
   }
 
   set(index: number) {
     console.log(this.routine.days[index].practiceName);
     this.routine.days[index].contentId = this.routine.days[index].practiceName;
-    this.routine.days[index].contentArray.forEach((data: { id: any; instructor: any; }) => {
+    var time = 0;
+    this.routine.days[index].contentArray.forEach((data: { id: any; instructor: any; about: any; module: { estimatedTime: number; }[]; }) => {
       if(data.id == this.routine.days[index].contentId) {
         this.routine.days[index].instructor = data.instructor
+        this.routine.days[index].description = data.about;
+        data.module.forEach((m: { estimatedTime: number; }) => {
+            time += m.estimatedTime;
+          })  
+        this.routine.days[index].estimatedTime = time;
       }
     })
   }
@@ -363,7 +374,8 @@ export class AddComponent {
     this.routineService.fetchPracticeName(filter).subscribe({
       next: (value) => {
         console.log(value);
-        value.forEach((data: { id: any; practiceName: any; }) => {
+        value.forEach((data: { id: any; practiceName: any; about: any; module: { estimatedTime: number; }[]; }) => {
+          var time = 0;
           let obj = {
             value: data.id,
             label: data.practiceName
@@ -371,6 +383,9 @@ export class AddComponent {
           this.routine.days[index].practiceNameArray.push(obj);
           this.routine.days[index].contentArray.push(data);
         })
+        this.routine.days[index].instructor = [];
+        this.routine.days[index].practiceName = "";
+        this.routine.days[index].estimatedTime = 0;
       },
       error: (err) => {
         console.log(err);

@@ -20,38 +20,57 @@ export class ManageComponent {
   pageNo: number = 0;
   pageSize: number = 12;
   group: string = "";
-  disableId: string = "";
-  disableIndex!: number;
+  id: string = "";
+  index!: number;
+  isAvailable!: boolean | undefined;
   routineName: string = "";
+  isDelete: boolean = false;
   isAlert: boolean = false;
   isDisabled: boolean = false;
   alertHeaderDisable: string = "Routine Delete"
   alertBodyDisable: string = "Please make sure that you want to delete the routine"
+  alertHeaderAvailable: string = "Routine Availability"
+  alertBodyAvailable: string = "Please make sure that you want make the routine available"
+  alertHeaderUnavailable: string = "Routine Unavailability"
+  alertBodyUnavailable: string = "Please make sure that you want make the routine unavailable"
 
   constructor(private router: Router,
     private routineService: RoutineService,
     private masterdataService: MasterdataService,
     private toastrService: ToastService) {}
 
-  dialogShow(id: string, index: number) {
+  dialogShow(id: string, type: string, index: number, isAvailable?: boolean, event?: any) {
+    if(event) {
+      event.preventDefault();
+    }
     this.isAlert = !this.isAlert;
-    this.disableId = id;
-    this.disableIndex = index;
+    this.id = id;
+    this.index = index;
+    if(type == 'delete') {
+      this.isDelete = true;
+    }
+    else {
+      this.isAvailable = isAvailable;
+      this.isDelete = false;
+    } 
   }
 
   closeAlert() {
     this.isAlert = false;
   }
 
-  availability(id: string, isAvailable: boolean, index: number) {
+  availability() {
     let req = {
-      isAvailable: !isAvailable
+      isAvailable: !this.isAvailable
     }
-    this.routineData[index].isAvailable = !isAvailable;
-    this.routineService.updateRoutine(id, req).subscribe({
+    if(this.index || this.index == 0) {
+      this.routineData[this.index].isAvailable = !this.isAvailable;
+    }
+    this.isAlert = false;
+    this.routineService.updateRoutine(this.id, req).subscribe({
       next: (value) => {
         console.log(value);
-        if(isAvailable){
+        if(this.isAvailable){
           this.toastrService.showSuccess("Marked as unavailable");
         }
         else {
@@ -119,9 +138,10 @@ export class ManageComponent {
     let req = {
       status: Status.Inactive
     }
-    this.routineService.updateRoutine(this.disableId, req).subscribe({
+    this.routineService.updateRoutine(this.id, req).subscribe({
       next: (value) => {
         console.log(value);
+        this.isAlert = false;
         this.toastrService.showSuccess("Routine deleted");
       },
       error: (err) => {
@@ -130,11 +150,11 @@ export class ManageComponent {
     })
     this.isAlert = false;
     this.isDisabled = true;
-    this.routineData.splice(this.disableIndex, 1);
+    this.routineData.splice(this.index, 1);
     this.totalCount = this.totalCount - 1;
     this.routineLength = this.routineData.length;
-    this.disableId = "";
-    this.disableIndex = -1;
+    this.id = "";
+    this.index = -1;
   }
 
   listRoutine() {

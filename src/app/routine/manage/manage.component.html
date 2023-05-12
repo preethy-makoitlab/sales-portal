@@ -43,9 +43,19 @@
                 </div>
             </div>
 
-            <div *ngIf="isAlert">
+            <div *ngIf="isAlert && isDelete">
                 <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="closeAlert()"
                 (isDisable)="disableRoutine()"></app-alert-box>
+            </div>
+
+            <div *ngIf="isAlert && !isDelete && isAvailable">
+                <app-alert-box [alertHeader]="alertHeaderUnavailable" [alertBody]="alertBodyUnavailable" (closeAlert)="closeAlert()"
+                (isDisable)="availability()"></app-alert-box>
+            </div>
+
+            <div *ngIf="isAlert && !isDelete && !isAvailable">
+                <app-alert-box [alertHeader]="alertHeaderAvailable" [alertBody]="alertBodyAvailable" (closeAlert)="closeAlert()"
+                (isDisable)="availability()"></app-alert-box>
             </div>
 
             <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()" class="flex items-center justify-start flex-wrap w-full md:gap-4 lg:gap-4 sm:gap-2 gap-2">
@@ -60,8 +70,8 @@
                         <div class="flex justify-between items-center">
                             <p class="text-content2">{{data.routineName}}</p>
                             <div class="flex gap-2 items-center">
-                                <input type="checkbox" class="switch switch-xs" title="Routine availability" [checked]="data.isAvailable" (click)="availability(data.id, data.isAvailable, index)" />
-                                <img class="cursor-pointer icon" src="../../../assets/icons/delete-routine.svg" (click)="dialogShow(data.id, index)">
+                                <input type="checkbox" class="switch switch-xs" title="Routine availability" [checked]="data.isAvailable" (click)="dialogShow(data.id, 'available', index, data.isAvailable, $event)" />
+                                <img class="cursor-pointer icon" src="../../../assets/icons/delete-routine.svg" (click)="dialogShow(data.id, 'delete', index)">
                                 <img class="cursor-pointer icon" src="../../../assets/icons/edit-routine.svg" [routerLink]="['/routine/edit/', data.id]"/>
                             </div>
                         </div>
