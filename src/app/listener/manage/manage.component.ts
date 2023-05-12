@@ -44,6 +44,7 @@ export class ManageComponent {
     this.listenerService.listenerList(this.pageNo, this.pageSize).subscribe({
       next: (value) => {
         console.log(value);
+        this.totalCount = this.activeCount = 0;
         value.count.forEach((v: { _id: string, count: number; }) => {
           this.totalCount += v.count;
           if(v._id === 'active') {
