@@ -39,6 +39,7 @@ export class AddComponent {
   planDuration: any[] = []
   showDisable: boolean = false;
   isSubmit: boolean = false;
+  isUnique: boolean = true;
   compulsoryFields = ['partnerType','companyName','companyBranch','websiteLink','address','city','state','spocDetails'];
   
   constructor(private router: Router,
@@ -106,6 +107,7 @@ export class AddComponent {
 
   validation() {
     this.isSubmit = false;
+    this.isUnique = true;
     var flag = true;
     this.errorMessage = "";
     this.compulsoryFields.forEach((field: any) => {
@@ -136,6 +138,7 @@ export class AddComponent {
         }
       }
     })
+    this.isUnique = this.checkUnique(this.partner.spocDetails);
     return flag;
   }
 
@@ -144,7 +147,7 @@ export class AddComponent {
     console.log(this.partner);
     let req = this.partner;
     var flag = this.validation()
-    if (flag) {
+    if (flag && this.isUnique) {
       if (this.editMode) {
         let _id = String(this.activatedRoute.snapshot.params['id']);
         this.partnerService.updatePartner(_id, req).subscribe({
@@ -179,6 +182,9 @@ export class AddComponent {
       this.isSubmit = true;
       if(this.errorMessage) {
         this.toastrService.showError(this.errorMessage);
+      }
+      else if(!this.isUnique) {
+        this.toastrService.showError("Spoc details must be unique");
       }
       else {
         this.toastrService.showError("Please fill all the required fields");
@@ -397,6 +403,21 @@ export class AddComponent {
         console.log(err);
       }
     })
+  }
+
+  checkUnique(arr: any[]): boolean {
+    let set = new Set();
+    for (let i = 0; i < arr.length; i++) {
+      // var obj: Array<any> = Object.values(arr[i]);
+      var obj = arr[i]
+        if (set.has(obj.email) || set.has(obj.mobile)) {
+          return false;
+        } else {
+          set.add(obj.email);
+          set.add(obj.mobile);
+        }
+    }
+    return true;
   }
 
   ngOnInit(): void {

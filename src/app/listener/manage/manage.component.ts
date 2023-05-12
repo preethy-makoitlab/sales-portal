@@ -17,7 +17,7 @@ export class ManageComponent {
   tableData: any[] = [];
   isAlert: boolean = false;
   pageNo: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 12;
   contentLength!: number;
   fields: any[] = ['Listeners', 'Phone Number', 'Email ID', 'Last Active On', {label: 'Total Chats (Min)', icon: "table-sort.svg"}, {label: 'No of Min Chats', icon: "table-sort.svg"}, 'Rating']
   actionField: Object = {

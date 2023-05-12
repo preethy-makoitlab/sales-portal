@@ -98,12 +98,23 @@ export class AddComponent {
     this.viewForm = false;
     this.editMode = true;
   }
+
   hasDuplicatePropertyValue(objects: any[], property: string) {
     const ids = objects.map(function (object) {
       return object[property];
     });
 
     return (new Set(ids)).size !== ids.length;
+  }
+
+  checkModuleId(modules: any[]) {
+    modules.forEach(mod => {
+      if(mod.moduleId < 0) {
+        return false;
+      }
+      return true;
+    })
+    return true
   }
 
 
@@ -211,11 +222,17 @@ export class AddComponent {
         this.toastrService.showError("Please check Module Index field should be unique");
         return;
       }
+      if(!this.checkModuleId(tempModule)) {
+        this.toastrService.showError("Module ID can't be negative");
+      }
     }
     else if (this.content.module) {
       if (this.hasDuplicatePropertyValue(this.content.module, "moduleId")) {
         this.toastrService.showError("Please check Module Index field should be unique");
         return;
+      }
+      if(!this.checkModuleId(this.content.module)) {
+        this.toastrService.showError("Module ID can't be negative");
       }
     }
     this.content.category = this.selectedCategory.id;

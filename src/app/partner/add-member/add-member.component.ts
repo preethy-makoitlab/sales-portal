@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastService } from 'src/app/common/services/toastr.service';
 import { MemberService } from 'src/app/services/member.service';
 import { Status } from 'src/app/stores/types';
 
@@ -25,6 +26,7 @@ export class AddMemberComponent {
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private toastrService: ToastService,
     private memberService: MemberService) {
     this.addMemberForm = this.formBuilder.group({
       membername: ['', Validators.required],
@@ -98,8 +100,8 @@ export class AddMemberComponent {
           this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
-          alert("error updating member");
           console.log(err);
+          this.toastrService.showError(err.error.message);
         }
       })
     }
@@ -110,8 +112,8 @@ export class AddMemberComponent {
           this.router.navigate(['/partner/managemember/' + this.member.partnerId]);
         },
         error: (err) => {
-          alert("error creating member");
           console.log(err);
+          this.toastrService.showError(err.error.message);
         }
       })
     }
