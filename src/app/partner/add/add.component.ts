@@ -158,7 +158,8 @@ export class AddComponent {
             }
           },
           error: (err) => {
-            console.log(err);
+            console.log(err);  
+            this.toastrService.showError("Do not enter spoc with emailId that already exists");
           }
         })
       }
@@ -174,6 +175,7 @@ export class AddComponent {
           },
           error: (err) => {
             console.log(err);
+            this.toastrService.showError("Do not enter spoc with emailId that already exists");
           }
         })
       }

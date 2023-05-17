@@ -225,7 +225,7 @@
                 <div class="flex justify-end w-full">
                     <button type="button" class="btn btn-primary btn-block enable-button"
                         [routerLink]="['/routine']">Cancel</button>
-                    <button class="btn btn-primary btn-bigger" >Save Routine</button>
+                    <button class="btn btn-primary btn-bigger" *ngIf="!viewForm">Save Routine</button>
                 </div>
             </div>
         </form>
