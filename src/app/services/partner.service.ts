@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class PartnerService {
   protected basePath = environment.serviceUrl;
+  protected authPath = environment.serviceUrl3;
   constructor(protected httpClient: HttpClient) { }
 
   public partnerCount(
@@ -139,6 +140,28 @@ export class PartnerService {
       {
         body: body,
         // params: queryParameters,
+        observe: observe,
+        reportProgress: reportProgress,
+      }
+    );
+  }
+
+  public deleteSpoc(
+    id?:  Object,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+    
+    queryParameters = queryParameters.set('id',String(id));
+  
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.authPath}/auth/delete/${String(id)}`,
+      {
+        params: queryParameters,
         observe: observe,
         reportProgress: reportProgress,
       }

@@ -14,11 +14,15 @@
         <div *ngIf="showDisable && isDisabled" class="flex justify-end">
             <button type="button" class="btn btn-success" (click)="dialogShow()">Enable</button>
         </div>
-        <div *ngIf="isAlert && !isDisabled">
+        <div *ngIf="isAlert && isSpocDelete">
+            <app-alert-box [alertHeader]="alertHeaderDelete" [alertBody]="alertBodyDelete" (closeAlert)="dialogShow()"
+                (isDisable)="spocAuthDelete()"></app-alert-box>
+        </div>
+        <div *ngIf="isAlert && !isDisabled && !isSpocDelete">
             <app-alert-box [alertHeader]="alertHeaderDisable" [alertBody]="alertBodyDisable" (closeAlert)="dialogShow()"
                 (isDisable)="disablePartner()"></app-alert-box>
         </div>
-        <div *ngIf="isAlert && isDisabled">
+        <div *ngIf="isAlert && isDisabled && !isSpocDelete">
             <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable" (closeAlert)="dialogShow()"
                 (isDisable)="enablePartner()"></app-alert-box>
         </div>

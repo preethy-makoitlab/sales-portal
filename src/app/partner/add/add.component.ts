@@ -23,15 +23,19 @@ export class AddComponent {
   steppertitle2: string = "Subsription";
   partnerId: string = "";
   subscriptionId: string = "";
+  spocId: string = "";
   endDate!: Date;
   viewForm: boolean = false;
   isDisabled: boolean = false;
+  isSpocDelete: boolean = false;
   editMode: boolean = false;
   isSubscription: boolean = false;
   isAlert: boolean = false;
   errorMessage: string = "";
   alertHeaderDisable: string = "Partner Disable"
   alertBodyDisable: string = "Please make sure that you want to disable the partner"
+  alertHeaderDelete: string = "SPOC Delete"
+  alertBodyDelete: string = "Please make sure that you want to permanently delete the SPOC"
   alertHeaderEnable: string = "Partner Enable"
   alertBodyEnable: string = "Please make sure that you want to enable the partner"
   partnerSector: any[] = [];
@@ -253,9 +257,36 @@ export class AddComponent {
     console.log(this.spoc);
   }
 
+  spocAuthDelete() {
+    this.partnerService.deleteSpoc(this.spocId).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.isSpocDelete = false;
+        this.isAlert = false;
+        this.partner.spocDetails.forEach((spoc: { u_id: string; }, index: any) => {
+          if(spoc.u_id == this.spocId) {
+            this.spoc.splice(index, 1)
+          }
+        })
+        console.log(this.spoc);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   removeSpoc(index: number) {
-    this.spoc.splice(index, 1)
-    console.log(this.spoc);
+    if(this.spoc[index].u_id) {
+      console.log(this.spoc[index]);
+      this.isSpocDelete = true;
+      this.isAlert = true;
+      this.spocId = this.spoc[index].u_id;
+    }
+    else{
+      this.spoc.splice(index, 1)
+      console.log(this.spoc);
+    }
   }
 
   next(form: any) {
