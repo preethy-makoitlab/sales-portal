@@ -9,11 +9,11 @@ import { environment } from '../../environments/environment';
 })
 export class PartnerService {
   protected basePath = environment.serviceUrl;
-  protected authPath = environment.serviceUrl3;
+  protected authPath = environment.serviceUrl2;
   constructor(protected httpClient: HttpClient) { }
 
   public partnerCount(
-    body?: Object ,
+    body?: Object,
     observe: any = 'body',
     numberOfRecords?: number,
     page?: number,
@@ -30,8 +30,8 @@ export class PartnerService {
     }
     if (page !== undefined && page !== null) {
       queryParameters = queryParameters.set('page', <any>page);
-    } 
-  
+    }
+
     return this.httpClient.request<Object>(
       'get',
       `${this.basePath}/partners/count`,
@@ -45,7 +45,7 @@ export class PartnerService {
   }
 
   public partnerList(
-    body?: Object ,
+    body?: Object,
     observe: any = 'body',
     numberOfRecords?: number,
     page?: number,
@@ -62,8 +62,8 @@ export class PartnerService {
     }
     if (page !== undefined && page !== null) {
       queryParameters = queryParameters.set('page', <any>page);
-    } 
-  
+    }
+
     return this.httpClient.request<Object>(
       'get',
       `${this.basePath}/partners/getAll`,
@@ -84,8 +84,8 @@ export class PartnerService {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-    
-  
+
+
     return this.httpClient.request<Object>(
       'post',
       `${this.basePath}/partners`,
@@ -99,16 +99,16 @@ export class PartnerService {
   }
 
   public getPartner(
-    id?:  Object,
+    id?: Object,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-    
+
     console.log(queryParameters);
-  
+
     return this.httpClient.request<Object>(
       'get',
       `${this.basePath}/partners/${String(id)}`,
@@ -121,7 +121,7 @@ export class PartnerService {
   }
 
   public updatePartner(
-    id:  String,
+    id: String,
     body?: Object,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -130,10 +130,10 @@ export class PartnerService {
       encoder: new CustomHttpUrlEncodingCodec(),
     });
 
-    queryParameters = queryParameters.set('id',String(id));
+    queryParameters = queryParameters.set('id', String(id));
 
     console.log(id, body);
-    
+
     return this.httpClient.request<Object>(
       'patch',
       `${this.basePath}/partners/${String(id)}`,
@@ -147,16 +147,16 @@ export class PartnerService {
   }
 
   public deleteSpoc(
-    id?:  Object,
+    id?: Object,
     observe: any = 'body',
     reportProgress: boolean = false
   ): Observable<any> {
     let queryParameters = new HttpParams({
       encoder: new CustomHttpUrlEncodingCodec(),
     });
-    
-    queryParameters = queryParameters.set('id',String(id));
-  
+
+    queryParameters = queryParameters.set('id', String(id));
+
     return this.httpClient.request<Object>(
       'delete',
       `${this.authPath}/auth/delete/${String(id)}`,
