@@ -46,6 +46,7 @@ export class BulkUploadComponent {
     else {
       this.isUploaded = false;
     }
+    this.fileInput.nativeElement.value = "";
     if (this.isUploaded) {
       this.validate()
     }

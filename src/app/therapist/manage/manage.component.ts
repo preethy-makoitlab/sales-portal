@@ -68,6 +68,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -76,6 +77,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -84,6 +86,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -92,6 +95,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -100,6 +104,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -108,6 +113,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -118,6 +124,7 @@ export class ManageComponent {
               isEditable: false,
               isClickable: true,
               route: '/therapist/add/',
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -126,7 +133,8 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
-              isCheckbox: true,
+              isSwitch: true,
+              isCheckbox: false,
               tooltip: "Therapist Availability"
             }
           ]

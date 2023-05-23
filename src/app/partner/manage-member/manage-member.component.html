@@ -58,13 +58,19 @@
             </div>
         </div>
     </div>
-    <div class="mt-auto">
-        <div class="flex flex-row justify-between btn custom-btn-primary gap-1">
-            <div>
-                <img class="add-icon" src="../../../assets/icons/paper-plane.svg">
+    <div *ngIf="selectedMembersArray && selectedMembersArray.length > 0" class="flex justify-end items-center gap-2">
+        <div class="mt-auto">
+            <div class="flex flex-row justify-between btn custom-btn-primary w-full">
+                <div>
+                    <img class="w-full" src="../../../assets/icons/bulk-delete.svg" (click)="deleteMembers()">
+                </div>
             </div>
-            <div>
-                <span class="">Resend Invite</span>
+        </div>
+        <div class="mt-auto">
+            <div class="flex flex-row justify-between btn custom-btn-primary w-full">
+                <div>
+                    <img class="w-full" src="../../../assets/icons/resend-invite.svg">
+                </div>
             </div>
         </div>
     </div>
@@ -72,4 +78,4 @@
 <div class="flex gradual-fade" *ngIf="show">
     <app-success-alert></app-success-alert>
 </div>
-<app-table [fields]="fields" [actionField]="actionField" [data]="tableData" (call)="call($event)"></app-table>
+<app-table [fields]="fields" [actionField]="actionField" [data]="tableData" (call)="call($event)" (membersArray)="selectedMembers($event)"></app-table>

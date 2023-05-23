@@ -84,6 +84,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -92,6 +93,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -100,6 +102,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -108,6 +111,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -116,6 +120,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -125,6 +130,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -135,6 +141,7 @@ export class ManageComponent {
               isEditable: false,
               isClickable: true,
               route: '/partner/add/',
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -145,6 +152,7 @@ export class ManageComponent {
               route: '/partner/managemember/' + partnerId,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             }
           ]

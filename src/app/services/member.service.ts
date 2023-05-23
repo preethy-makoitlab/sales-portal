@@ -173,6 +173,23 @@ export class MemberService {
     );
   }
 
+  public bulkDeleteMember(
+    body: Object,
+  ): Observable<any> {
+    let queryParameters = new HttpParams({
+      encoder: new CustomHttpUrlEncodingCodec(),
+    });
+
+    return this.httpClient.request<Object>(
+      'delete',
+      `${this.basePath}/members/`,
+      {
+        body: body,
+        params: queryParameters,
+      }
+    );
+  }
+
   public downloadSampleTemplate(
     observe: any = 'body',
     reportProgress: boolean = false

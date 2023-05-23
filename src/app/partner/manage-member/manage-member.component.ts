@@ -24,13 +24,13 @@ export class ManageMemberComponent {
   subscriptionCount: ISubscriptionCount = { total: 0 };
   subscriptionDetails!: ISubscriptionDetails;
 
-  // fields: any[] = ['', 'Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
-  fields: any[] = ['Name', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
+  fields: any[] = ['checkbox', 'EmailID', 'Department Name', 'Branch', 'Last Active On'];
   actionField: Object = {
     label: 'Actions',
     colspan: '3'
   };
   tableData: any[] = [];
+  selectedMembersArray!: string[];
   isAlert: boolean = false;
   show: boolean = false;
   memberId!: String;
@@ -92,6 +92,32 @@ export class ManageMemberComponent {
     }
   }
 
+  selectedMembers(event: any) {
+    this.selectedMembersArray = event;
+  }
+
+  deleteMembers() {
+    console.log(this.selectedMembersArray);
+    let req = {
+      data: this.selectedMembersArray
+    };
+    this.memberService.bulkDeleteMember(req).subscribe({
+      next: (value) => {
+        console.log(value);
+        this.selectedMembersArray.forEach(member => {
+          const newArray = this.tableData.filter(obj => obj.id !== member);
+          this.tableData = newArray;
+        })
+        this.totalCount = this.tableData.length;
+        this.subscriptionCount.available = Number(this.subscriptionCount.total) - this.totalCount;
+        this.subscriptionCount.active = this.totalCount;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   getCount() {
     this.memberService.memberCount(this.partnerId).subscribe({
       next: (value) => {
@@ -119,22 +145,14 @@ export class ManageMemberComponent {
           var branch = d.branch;
           var lastActive = isoToDDMMYYYY(new Date().toISOString());
           var data = [
-            // {
-            //   data: null,
-            //   isImage: true,
-            //   imageFile: 'default-user.svg',
-            //   isButton: false,
-            //   isEditable: false,
-            //   isClickable: false,
-            //   isCheckbox: false
-            // },
             {
-              data: name,
+              data: null,
               isImage: false,
               isButton: false,
               isEditable: false,
               isClickable: false,
-              isCheckbox: false
+              isCheckbox: true,
+              isSwitch: false
             },
             {
               data: email,
@@ -142,6 +160,7 @@ export class ManageMemberComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -150,6 +169,7 @@ export class ManageMemberComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -158,6 +178,7 @@ export class ManageMemberComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -166,6 +187,7 @@ export class ManageMemberComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -176,6 +198,7 @@ export class ManageMemberComponent {
               isEditable: false,
               isClickable: true,
               route: '/partner/addmember/',
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -186,19 +209,9 @@ export class ManageMemberComponent {
               isEditable: false,
               isClickable: true,
               route: '',
+              isSwitch: false,
               isCheckbox: false
-            },
-            // {
-            //   data: null,
-            //   isImage: false,
-            //   isButton: true,
-            //   buttonLabel: 'Resend Invite',
-            //   buttonIcon: 'paper-plane.svg',
-            //   route: '',
-            //   isEditable: false,
-            //   isClickable: true,
-            //   isCheckbox: false
-            // }
+            }
           ]
           memberData.id = _id;
           memberData.data = data;

@@ -71,6 +71,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -79,6 +80,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -87,6 +89,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -95,6 +98,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -103,6 +107,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -111,6 +116,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -119,6 +125,7 @@ export class ManageComponent {
               isButton: false,
               isEditable: false,
               isClickable: false,
+              isSwitch: false,
               isCheckbox: false
             },
             {
@@ -129,6 +136,7 @@ export class ManageComponent {
               isEditable: false,
               isClickable: true,
               route: '/listener/add/',
+              isSwitch: false,
               isCheckbox: false
             }
           ]

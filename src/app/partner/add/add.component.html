@@ -180,13 +180,13 @@
                                             <label class="form-label required">E-mail ID</label>
                                             <input [ngClass]="(isSubmit && partner.spocDetails[0].email) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="email{{index}}"
                                                 placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel
-                                                [required]="index == 0" [disabled]="viewForm" />
+                                                [required]="index == 0" [disabled]="viewForm || partner.spocDetails[0].u_id" />
                                         </div>
                                         <div class="flex-auto">
                                             <label class="form-label required">Mobile Number</label>
                                             <input [ngClass]="(isSubmit && partner.spocDetails[0].mobile) || !isSubmit ? 'input small-text' : 'input small-text input-error'" name="mobile{{index}}"
                                                 placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile"
-                                                ngModel [required]="index == 0" [disabled]="viewForm" />
+                                                ngModel [required]="index == 0" [disabled]="viewForm || partner.spocDetails[0].u_id" />
                                         </div>
                                 </div>
                                     <!-- </div> -->
@@ -201,13 +201,13 @@
                                             <label class="form-label required">E-mail ID</label>
                                             <input class="input small-text" name="email{{index}}"
                                                 placeholder="Enter your e-mail" [(ngModel)]="spoc[index].email" ngModel
-                                                [required]="index == 0" [disabled]="viewForm" />
+                                                [required]="index == 0" [disabled]="viewForm || spoc[index].u_id" />
                                         </div>
                                         <div class="flex-auto">
                                             <label class="form-label required">Mobile Number</label>
                                             <input class="input small-text" name="mobile{{index}}"
                                                 placeholder="Enter your mobile number" [(ngModel)]="spoc[index].mobile"
-                                                ngModel [required]="index == 0" [disabled]="viewForm" />
+                                                ngModel [required]="index == 0" [disabled]="viewForm || spoc[index].u_id" />
                                         </div>
                                     </div>
                                     

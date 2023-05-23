@@ -28,21 +28,17 @@
                                         <div *ngIf="!isUploaded">
                                             <p>Browse to select file</p>
                                             <p class="text-xs">Upload xlsx Max 5MB*</p>
-                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput
-                                                style="display:none">
                                         </div>
                                         <div *ngIf="isUploaded && !isLarge">
                                             <p>File upload successful</p>
                                             <p class="text-xs">Validate your file below</p>
-                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput
-                                                style="display:none">
                                         </div>
                                         <div *ngIf="isUploaded && isLarge">
                                             <p>File upload failed</p>
                                             <p class="text-xs">File size exceeded 5MB</p>
-                                            <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput
-                                                style="display:none">
                                         </div>
+                                        <input type="file" (change)="sendFile($event)" accept=".xlsx" #fileInput
+                                                style="display:none">
                                     </div>
                                 </div>
                             </div>
