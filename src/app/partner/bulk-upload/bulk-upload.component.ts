@@ -80,6 +80,10 @@ export class BulkUploadComponent {
           this.errorPercent = 100 - (count / this.totalRows) * 100;
           console.log(this.errorPercent, count, this.totalRows);
         }
+        else {
+          this.isInvalid = false;
+          this.invalidCount = 0;
+        }
       },
       error: (err) => {
         console.log(err);
