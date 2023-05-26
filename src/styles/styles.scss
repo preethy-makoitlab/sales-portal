@@ -373,5 +373,19 @@ input:-internal-autofill-selected {
     }
 }
 
+.dropdown-menu {
+    background: #FFFFFF;
+}
+
+.btn-ghost:hover {
+    background: transparent;
+}
+
+.dropdown-item:hover {
+    background: $clr-btn-primary;
+    color: #FFFFFF;
+}
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
