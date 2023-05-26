@@ -98,12 +98,21 @@ export class ManageMemberComponent {
 
   deleteMembers() {
     console.log(this.selectedMembersArray);
+    let updatedArray: any[] = [];
+    this.selectedMembersArray.forEach(member => {
+      const isIdPresent = this.tableData.some((obj) => obj.id === member);
+      if(isIdPresent) {
+        updatedArray.push(member);
+      }
+    })
+    this.selectedMembersArray = updatedArray;
     let req = {
       data: this.selectedMembersArray
     };
     this.memberService.bulkDeleteMember(req).subscribe({
       next: (value) => {
         console.log(value);
+        this.toastrService.showSuccess("Members deleted successfully");
         this.selectedMembersArray.forEach(member => {
           const newArray = this.tableData.filter(obj => obj.id !== member);
           this.tableData = newArray;
@@ -111,8 +120,10 @@ export class ManageMemberComponent {
         this.totalCount = this.tableData.length;
         this.subscriptionCount.available = Number(this.subscriptionCount.total) - this.totalCount;
         this.subscriptionCount.active = this.totalCount;
+        this.selectedMembersArray = [];
       },
       error: (err) => {
+        this.toastrService.showError("Error deleting members");
         console.log(err);
       }
     })

@@ -368,7 +368,7 @@ export class AddComponent {
 
   fetchSubscription() {
     this.gotonext = true;
-    this.submit(null);
+    // this.submit(null);
     this.subscriptionService.getSubscription(this.partnerId).subscribe({
       next: (value) => {
         console.log(value);

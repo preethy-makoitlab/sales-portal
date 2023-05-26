@@ -14,7 +14,7 @@ export class ManageComponent {
   totalCount: number = 0;
   activeCount: number = 0;
   passes: number = 0;
-  fields: any[] = ['Partner', 'City', 'State', 'No of Passes', 'No of Therapy Sessions', 'Plan Status'];
+  fields: any[] = ['Partner ID', 'Partner', 'City', 'State', 'No of Passes', 'No of Therapy Sessions', 'Plan Status'];
   actionField: Object = {
     label: 'Actions',
     colspan: '2'
@@ -79,7 +79,16 @@ export class ManageComponent {
           var endDate = (d.subscription?.subscriptionEnd ? isoToDDMMYYYY(d.subscription?.subscriptionEnd) : "");
           var data = [
             {
-              data: [partnerName, partnerId],
+              data: partnerId,
+              isImage: false,
+              isButton: false,
+              isEditable: false,
+              isClickable: false,
+              isSwitch: false,
+              isCheckbox: false
+            },
+            {
+              data: partnerName,
               isImage: false,
               isButton: false,
               isEditable: false,
