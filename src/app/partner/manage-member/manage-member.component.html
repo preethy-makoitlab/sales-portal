@@ -59,10 +59,10 @@
         </div>
     </div>
     <div *ngIf="selectedMembersArray && selectedMembersArray.length > 0" class="flex justify-end items-center gap-2">
-        <div class="mt-auto">
+        <div class="mt-auto" (click)="deleteMembers()">
             <div class="flex flex-row justify-between btn custom-btn-primary w-full">
                 <div>
-                    <img class="w-full" src="../../../assets/icons/bulk-delete.svg" (click)="deleteMembers()">
+                    <img class="w-full" src="../../../assets/icons/bulk-delete.svg">
                 </div>
             </div>
         </div>

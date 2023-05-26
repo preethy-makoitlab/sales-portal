@@ -47,8 +47,10 @@
                     <li class="step step-primary step-done overflow-hidden">
                         <div class="flex flex-col ml-4">
                             <div class="mt-4" *ngIf="isValidated">
-                                <p class="flex flex-row gap-4 text-sm" *ngIf="invalidCount > 0"><img
+                                <p class="flex flex-row gap-4 text-sm" *ngIf="invalidCount > 0 && validCount != 0"><img
                                         src="../../../assets/icons/success-tick.svg" />{{validCount}} rows valid</p>
+                                <p class="flex flex-row gap-4 text-sm" *ngIf="invalidCount > 0 && validCount == 0"><img
+                                    src="../../../assets/icons/warning.svg" />{{validCount}} rows valid</p>
                                 <p class="flex flex-row gap-4 text-sm" *ngIf="invalidCount === 0"><img
                                         src="../../../assets/icons/success-tick.svg" />No invalid rows</p>
                                 <div *ngIf="isInvalid">
