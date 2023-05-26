@@ -4,9 +4,17 @@
             [routerLink]="['/partner/managemember', member.partnerId]">
         <h1 class="header-text">Add Member</h1>
     </div>
-    <div class="flex flex-wrap w-1/4 justify-start" *ngIf="viewForm || editMode">
+    <!-- <div class="flex flex-wrap w-1/4 justify-start" *ngIf="viewForm || editMode">
         <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/partner/managemember', member.partnerId]">
         <h1 class="header-text">{{ member.name }}</h1>
+    </div> -->
+    <div class="flex flex-wrap w-1/4 justify-start" *ngIf="viewForm">
+        <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/partner/managemember', member.partnerId]">
+        <h1 class="header-text">View Member</h1>
+    </div>
+    <div class="flex flex-wrap w-1/4 justify-start" *ngIf="editMode">
+        <img class="left-arrow clickable" src="../../../assets/icons/left-arrow.svg" [routerLink]="['/partner/managemember', member.partnerId]">
+        <h1 class="header-text">Edit Member</h1>
     </div>
 </div>
 
@@ -16,7 +24,7 @@
         <form #addMemberForm="ngForm" (ngSubmit)="submit(addMemberForm)">
             <div class="flex flex-col flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
 
-                <div *ngIf="viewForm" class="flex flex-row justify-end gap-2">
+                <div *ngIf="viewForm || editMode" class="flex flex-row justify-end gap-2">
                     <div *ngIf="showDisable && !isDisabled" class="flex justify-end">
                         <button type="button" class="btn btn-error rounded-md" (click)="dialogShow()">Delete</button>
                     </div>
@@ -32,7 +40,7 @@
                         <app-alert-box [alertHeader]="alertHeaderEnable" [alertBody]="alertBodyEnable"
                             (closeAlert)="dialogShow()" (isDisable)="enableMember()"></app-alert-box>
                     </div>
-                    <div class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
+                    <div *ngIf="viewForm" class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex flex-row justify-between btn custom-btn-primary gap-1" (click)="editForm()">
                             <div>
                                 <img class="add-icon" src="../../../assets/icons/add-icon.svg">
@@ -47,7 +55,7 @@
                         Discard
                     </div>
                 </div>
-                <div *ngIf="!viewForm">
+                <div *ngIf="!viewForm && !editMode">
                     <div class="flex items-center justify-end flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
                         <div class="flex flex-row justify-between btn custom-btn-primary gap-1"
                             [routerLink]="['/partner/addmember/bulk', member.partnerId]">
@@ -62,11 +70,11 @@
                 </div>
 
                 <div class="flex items-center justify-between flex-wrap md:gap-4 lg:gap-4 sm:gap-2 gap-2">
-                    <div class="flex-auto">
+                    <!-- <div class="flex-auto">
                         <label class="form-label">Name</label>
                         <input class="input small-text" name="membername" placeholder="Enter Member Name"
                             [(ngModel)]="member.name" ngModel [disabled]="viewForm" />
-                    </div>
+                    </div> -->
                     <div class="flex-auto">
                         <label class="form-label required">Email ID</label>
                         <input class="input small-text" name="email" placeholder="Enter e-mail"
