@@ -1,3 +1,0 @@
-[submodule "src/app/common"]
-	path = src/app/common
-	url = git@gitlab.com:veract/anyo/shared-ui.git

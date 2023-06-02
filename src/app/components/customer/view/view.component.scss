@@ -1,0 +1,27 @@
+.container {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .customer-info {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .info-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      .line-item {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+      }
+    }
+  }
+}

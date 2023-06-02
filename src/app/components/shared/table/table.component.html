@@ -1,0 +1,89 @@
+<div class="table-container overflow-auto">
+    <!-- <div class="table-container overflow-auto" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onScroll($event)"> -->
+    <div class="flex w-full">
+        <table class="table-compact table-zebra table max-w-4xl">
+            <thead>
+                <tr>
+                    <th *ngFor="let field of fields; index as index" class="b1">
+                        <div class="label-icon">
+                            <div><span>{{field.label}}</span></div>
+                            <div *ngIf="field.sortable" class="icon-section"><fa-icon [icon]="faSortUp"
+                                    class="up-icon"></fa-icon><fa-icon [icon]="faSortDown" class="down-icon"></fa-icon>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of data">
+                    <td *ngFor="let obj of fields; index as index">
+                        <div *ngIf="!obj.multiData">
+                            <span *ngIf="obj.clickable" class="clickable">{{row[obj.field]}}</span>
+                            <span *ngIf="!obj.clickable && !obj.date">{{row[obj.field]}}</span>
+                            <span *ngIf="obj.date" class="clickable">{{getDate(row[obj.field])}}</span>
+                        </div>
+                        <div *ngIf="obj.multiData">
+                            <div class="multi-data-cell">
+                                <div *ngFor="let field of obj.fields">
+                                    <span *ngIf="field.clickable" (click)="goto(row.id, field.route)" class="clickable link-text">{{row[field.field]}}</span>
+                                    <span *ngIf="!field.clickable && !field.date">{{row[field.field]}}{{field.date}}</span>
+                                    <span *ngIf="field.date">{{getDate(row[field.field])}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="obj.data == null; else elseBlock">
+                            <div *ngIf="obj.isImage">
+                                <div *ngIf="obj.isClickable" class="flex justify-center items-center">
+                                    <img class="cursor-pointer" src="../../../../assets/icons/{{obj.imageFile}}"
+                                        (click)="goto(row.id, obj.route)" />
+                                </div>
+                                <div *ngIf="!obj.isClickable">
+                                    <img class="info" src="../../../assets/icons/{{obj.imageFile}}">
+                                </div>
+                            </div>
+                            <div *ngIf="obj.isSwitch">
+                                <input type="checkbox" class="switch" [checked]="row.isAvailable"
+                                    [disabled]="row.isDisabled" (click)="dialogShow($event, row.isAvailable, row.id)"
+                                    title="{{obj.tooltip}}" />
+                            </div>
+                            <div *ngIf="obj.isCheckbox">
+                                <input type="checkbox" class="checkbox checkbox-lg" (click)="selectRow(row.id)"
+                                    #checkbox />
+                            </div>
+                            <!-- <div *ngIf="obj.isButton">
+                              <div *ngIf="obj.buttonIcon">
+                                  <div class="flex flex-row btn btn-primary btn-block enable-button"
+                                      [routerLink]="/">
+                                      <img class="mr-2 w-6" src="../../../../assets/icons/{{obj.buttonIcon}}">
+                                      <span>{{obj.buttonLabel}}</span>
+                                  </div>
+                              </div>
+                              <div *ngIf="!obj.buttonIcon">
+                                  <button class="btn btn-primary btn-block enable-button"
+                                      [routerLink]="[obj.route]">{{obj.buttonLabel}}</button>
+                              </div>
+                          </div> -->
+                        </div>
+                        <ng-template #elseBlock>
+                            <div *ngIf="isArray(obj.data); else print" class="flex gap-2 items-center justify-center">
+                                <img *ngIf="obj.dataIcon" src="../../../../assets/icons/{{obj.dataIcon}}" />
+                                <div class="flex flex-col">
+                                    <p *ngFor="let data of obj.data">
+                                        {{data}}
+                                    </p>
+                                </div>
+                            </div>
+                            <ng-template #print>
+                                <div class="flex justify-center items-center gap-2">
+                                    <img *ngIf="obj.dataIcon" src="../../../../assets/icons/{{obj.dataIcon}}" />
+                                    {{obj.data}}
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

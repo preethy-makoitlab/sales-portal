@@ -1,0 +1,20 @@
+@import 'src/styles/constants.scss';
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  height: fit-content;
+  gap: 20px;
+
+  .section {
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;
+    align-items: start;
+    justify-content: center;
+
+    .dropdown-filter {
+      height: 50px;
+    }
+  }
+}

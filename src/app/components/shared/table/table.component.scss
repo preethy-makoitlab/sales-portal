@@ -1,0 +1,142 @@
+@import 'src/styles/constants.scss';
+
+.table {
+  max-width: 100%;
+  background: white;
+  color: black !important;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+.table>tbody>tr {
+  border-radius: 8px;
+}
+
+.table>thead>tr {
+  border-radius: 8px;
+}
+
+.table.table-zebra>tbody>tr:nth-child(2n)>td {
+  background: #F3F3FF;
+}
+
+.table>thead>tr>th {
+  background: #E1E1FD;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  color: #15154C;
+  border-color: transparent;
+  text-align: center;
+  .label-icon {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    .icon-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      align-items: center;
+      justify-content: center;
+
+      .up-icon {
+        margin-bottom: -14px;
+      }
+    }
+  }
+}
+
+.table>tbody>tr>td {
+  border-color: transparent;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #192A3E;
+  text-align: center;
+}
+
+.table>thead>tr :not(.th:first-child,.th:last-child) {
+  border-color: transparent;
+}
+
+tr {
+  &.disabled-row {
+    td {
+      background-color: #E8E8E8 !important;
+    }
+  }
+}
+
+.switch {
+  --switch-bg: #E1E1FD;
+  --switch-bg-hover: #E1E1FD;
+  --circle-color: #FFFFFF;
+  border-color: transparent;
+  border-radius: 200px;
+  border-width: 0px;
+  --switch-bg-checked: #219653;
+}
+
+.table-container {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  max-width: 100%;
+  max-height: 60vh;
+}
+
+.info {
+  max-width: max-content;
+}
+
+
+.enable-button {
+  background-color: #FFFFFF;
+  border-radius: 6px;
+  color: #15154C;
+  border: 2px solid #15154C;
+  border-radius: 6px;
+}
+
+.card {
+  background: $clr-bg-primary;
+  width: 10rem;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+}
+
+.card p {
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+  color: #6F6F6F;
+}
+
+.option1 img, .option2 img, .option3 img, .option4 img{
+  display: none;
+}
+
+.option1:hover img, .option2:hover img, .option3:hover img, .option4:hover img{
+  display: block;
+}
+
+.checkbox-lg {
+  border: 1.5px solid #D2D2D2 !important;
+  border-radius: 4px;
+  background-color: transparent;
+  --checkbox-border-hover: none;
+  --checkbox-bg-hover: none;
+}
+
+.thead.checkbox {
+  border: 1.5px solid #15154C !important;
+}
+
+.checkbox-lg:checked {
+  background-color: #15154C;
+}
