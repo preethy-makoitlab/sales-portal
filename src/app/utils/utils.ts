@@ -67,3 +67,8 @@ export function isDateInRange(startDateISO: string, endDateISO: string): boolean
       return currentDate >= startDate && currentDate <= endDate;
     }
 }
+
+export function sendMessageToParent(method: string, data: object) {
+    const message = {method: method, data : data}
+    window.parent.postMessage(message, '*');
+}

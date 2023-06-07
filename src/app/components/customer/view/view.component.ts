@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-view',
+  selector: 'app-customer-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss']
 })
@@ -49,17 +49,6 @@ export class ViewComponent {
   ]
   orders: any = [];
   fields = [{
-    label: 'Customer',
-    sortable: false,
-    multiData: true,
-    fields: [{
-      field: 'name', clickable: true, route: '/'
-    },
-    {
-      field: 'phoneNo'
-    }]
-  },
-  {
     label: 'Order ID',
     sortable: false,
     multiData: true,
@@ -127,19 +116,87 @@ export class ViewComponent {
   }
 
   getOrders() {
-    for (let i = 0; i < 10; i++) {
-      const statusIndex = Math.floor(Math.random() * 8);
+    const ordersResponse = {
+      "responseStatus": "Success",
+      "orderMap": {
+          "In Process": [
+              {
+                  "id": 1545357,
+                  "orderNumber": "IC-12282037",
+                  "ipsUserId": "9000447273",
+                  "receivedDt": "May 17, 2022 10:20:32 AM",
+                  "total": 0,
+                  "orderStatus": "In Process",
+                  "externalOrderStatus": "In Assembly",
+                  "orderItemLite": [
+                      {
+                          "orderItemId": 2012564,
+                          "designFee": 0,
+                          "quantity": 1,
+                          "productLite": {
+                              "productType": "Calendar",
+                              "productAttributeMap": {
+                                  "pageLaminationType": "Matte",
+                                  "designType": "No Design",
+                                  "calendarSize": "Table Calendar"
+                              }
+                          },
+                          "orderDescription": "Test Order"
+                      }
+                  ],
+                  "billingAddress": {
+                      "id": 6018149,
+                      "salutation": "Mr.",
+                      "firstName": "Pk",
+                      "lastName": "Kumar",
+                      "company": "9110621048",
+                      "line1": "#48 K.H. Residency BBMP Office,Road",
+                      "line2": "Viratnagar,Bomanahalli",
+                      "line3": "",
+                      "city": "Nagpur",
+                      "country": "India",
+                      "pincode": "Maharashtra",
+                      "mobile": "",
+                      "phone": "813107"
+                  },
+                  "shippingAddress": {
+                      "id": 6018150,
+                      "salutation": "Mr.",
+                      "firstName": "Pk",
+                      "lastName": "Kumar",
+                      "company": "9110621048",
+                      "line1": "#48 K.H. Residency BBMP Office,Road",
+                      "line2": "Viratnagar,Bomanahalli",
+                      "line3": "",
+                      "city": "Nagpur",
+                      "country": "India",
+                      "pincode": "Maharashtra",
+                      "mobile": "",
+                      "phone": "813107"
+                  },
+                  "balancedToBePayed": 0,
+                  "isDeficientInPayment": false
+              }
+          ],
+          "Delivered": [
+          ]
+      }
+    }
+
+  
+    const ordersList = ordersResponse?.orderMap?.['In Process'];
+    for (let i = 0; i < ordersList.length; i++) {
+      const orderDetails = ordersList[i].orderItemLite?.[0];
+      // const produ
       this.orders.push(
         {
-          name: `name${i + 1}`,
-          phoneNo: `phoneNo${i + 1}`,
-          orderId: `orderId${i + 1}`,
-          description: `description${i + 1}`,
+          orderId: ordersList[i].orderNumber,
+          description: orderDetails.orderDescription,
           product: `product${i + 1}`,
           orderDate: new Date(),
           expectedDelivery: new Date(),
           amount: 1000 * (i + 1),
-          status: this.statusFilters[statusIndex]
+          status: this.statusFilters[0]
         }
       )
     }

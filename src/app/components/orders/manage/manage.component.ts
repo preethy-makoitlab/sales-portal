@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-// import { TableComponent } from '../../table/table.component';
-// import { DashboardCountsComponent } from '../../common/dashboard-counts/dashboard-counts.component';
+import { Router, RouterModule } from '@angular/router';
+import { OrdersService } from 'src/app/services/orders.service';
 
 @Component({
   selector: 'app-manage',
@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent {
+  constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService) {}
   statusFilters: string[] = ['Pending', 'Pending payment', 'Upload pending', 'In Design', 'In Assembly', 'In Production', 'Shipped', 'Cancelled'];
   dateFilters: string[] = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Last 90 days'];
   filters = [
@@ -100,24 +101,31 @@ export class ManageComponent {
 
   ngOnInit(): void {
     this.getOrders();
+    window.addEventListener('message', (event) => {
+      this.populateOrders(event.data);
+    });
   }
 
   getOrders() {
-    for (let i = 0; i < 10; i++) {
-      const statusIndex = Math.floor(Math.random() * 8);
+    this.ordersService.getOrdersList('7781003466');
+  }
+
+  populateOrders(orders: any[]) {
+    orders.forEach(order => {
       this.orders.push(
         {
-          name: `name${i + 1}`,
-          phoneNo: `phoneNo${i + 1}`,
-          orderId: `orderId${i + 1}`,
-          description: `description${i + 1}`,
-          product: `product${i + 1}`,
-          orderDate: new Date(),
+          name: order[1] || '',
+          phoneNo: order[0] || '',
+          orderId: order[3],
+          description: order[5],
+          product: order[4],
+          orderDate: order[6],
           expectedDelivery: new Date(),
-          amount: 1000 * (i + 1),
-          status: this.statusFilters[statusIndex]
+          amount: order[7],
+          status: order[8],
+          guid: order[2]
         }
       )
-    }
+    })
   }
 }
