@@ -133,7 +133,6 @@ export class ManageComponent {
   }
 
   filterData(value: any) {
-    alert(value['Status']);
     if (Object.keys(value)?.[0] == 'Status') {
       this.selectedStatus = value['Status'];
     }
@@ -143,7 +142,7 @@ export class ManageComponent {
     else {
 
     }
-    const filteredData : any [] = []
+    const filteredData: any[] = []
     this.allOrders.forEach((order: string[]) => {
       if (!this.selectedStatus || (this.selectedStatus && order[8] === this.selectedStatus)) {
         if (!this.selectedDateRange) {

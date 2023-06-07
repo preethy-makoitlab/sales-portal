@@ -11,7 +11,7 @@ import { SharedService } from 'src/app/services/shared.service';
 export class ViewComponent {
   constructor(private router: Router, private route: ActivatedRoute, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
 
-  customerId : string = '';
+  customerId: string = '';
   customerInfo: any = { name: '', customerId: '', email: '', company: '', mobile: '', landline: '' };
   infoFields = [{
     label: "Name",
@@ -62,6 +62,7 @@ export class ViewComponent {
   totalOrderValue = 0;
   paymentPending = 0;
   totalPending = 0;
+  customerDetails: any = {};
   fields = [{
     label: 'Order ID',
     sortable: false,
@@ -110,11 +111,13 @@ export class ViewComponent {
 
   dashboardSections = [{
     title: 'Total Order Value',
-    value: '1,20,000'
+    subscription: true,
+    field: 'customerTotalOrderValue'
   },
   {
     title: 'Total Orders',
-    value: '120'
+    subscription: true,
+    field: 'customerTotalOrders'
   }, {
     title: 'Payment Pending',
     value: '1'
@@ -126,12 +129,12 @@ export class ViewComponent {
 
   ngOnInit(): void {
     window.addEventListener('message', (event) => {
-      this.allOrders = event.data;
       this.populateOrders(event.data);
+      this.allOrders = this.orders;
+      this.getCustomerInfo();
     });
     this.customerId = this.route.snapshot.paramMap.get('id') || '';
     this.getOrders();
-    this.getCustomerInfo();
   }
 
   getOrders() {
@@ -141,22 +144,26 @@ export class ViewComponent {
   populateOrders(orders: any[]) {
     this.totalOrders = orders.length || 0;
     this.orders = [];
-    orders?.forEach(order => {
-      this.totalOrderValue += order[7];
+    orders?.forEach((order, ind) => {
+      if (ind === 0) {
+        // temporarily fetch customerinfo from first element in array
+        this.customerDetails = order;
+      }
+      this.totalOrderValue += order.total;
       this.orders.push(this.getOrderRow(order))
     })
-    this.sharedService.setData('totalOrders', this.totalOrders);
-    this.sharedService.setData('totalOrderValue', this.totalOrderValue);
+    this.sharedService.setData('customerTotalOrders', this.totalOrders);
+    this.sharedService.setData('customerTotalOrderValue', this.totalOrderValue);
   }
 
   getCustomerInfo() {
     const customerData: any = {
-      name: 'Name1',
-      customerId: 'ID1',
-      email: 'name1@test.com',
-      companyName: 'Company1',
-      mobileNo: 'Mobile1',
-      landlineNo: 'Landline1'
+      name: this.customerDetails.billingAddress.firstName + ' ' + this.customerDetails.billingAddress.lastName,
+      customerId: this.customerDetails.ipsUserId,
+      email: 'test@test.com',
+      companyName: this.customerDetails.billingAddress.company,
+      mobileNo: this.customerDetails.billingAddress.mobile,
+      landlineNo: this.customerDetails.billingAddress.phone
     }
     this.infoFields.forEach(field => {
       this.customerInfo[field.field] = customerData[field.field];
@@ -164,7 +171,6 @@ export class ViewComponent {
   }
 
   filterData(value: any) {
-    alert(value['Status']);
     if (Object.keys(value)?.[0] == 'Status') {
       this.selectedStatus = value['Status'];
     }
@@ -174,11 +180,11 @@ export class ViewComponent {
     else {
 
     }
-    const filteredData : any [] = []
-    this.allOrders.forEach((order: string[]) => {
-      if (!this.selectedStatus || (this.selectedStatus && order[8] === this.selectedStatus)) {
+    const filteredData: any[] = []
+    this.allOrders.forEach((order: any) => {
+      if (!this.selectedStatus || (this.selectedStatus && order.status === this.selectedStatus)) {
         if (!this.selectedDateRange) {
-          filteredData.push(this.getOrderRow(order))
+          filteredData.push(order)
         }
       }
     })
@@ -186,15 +192,16 @@ export class ViewComponent {
   }
 
   getOrderRow(order: any) {
-    const product = order.orderItemLite[0].productLite.productType == 'PhotoBook' ? order.orderItemLite[0].productLite.productAttributeMap.coverType : order.orderItemLite[0].productLite.productType;
+    console.log(order);
+    const product = order?.orderItemLite?.[0].productLite?.productType == 'PhotoBook' ? order?.orderItemLite?.[0].productLite?.productAttributeMap?.coverType : order?.orderItemLite?.[0].productLite?.productType;
     return {
-      orderId: order.orderNumber || '',
-      description: order.orderItemLite[0].orderDescription || '',
+      orderId: order?.orderNumber || '',
+      description: order?.orderItemLite?.[0]?.orderDescription || '',
       product: product || '',
-      orderDate: order.receivedDt || '',
+      orderDate: order?.receivedDt || '',
       expectedDelivery: new Date(),
-      amount: order.total || '',
-      status: order.externalOrderStatus || ''
+      amount: order?.total || '',
+      status: order?.externalOrderStatus || ''
     }
   }
 }
