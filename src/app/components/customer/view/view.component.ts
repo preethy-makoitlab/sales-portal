@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { OrdersService } from 'src/app/services/orders.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-customer-view',
@@ -6,6 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./view.component.scss']
 })
 export class ViewComponent {
+  constructor(private router: Router, private route: ActivatedRoute, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
+
+  customerId : string = '';
   customerInfo: any = { name: '', customerId: '', email: '', company: '', mobile: '', landline: '' };
   infoFields = [{
     label: "Name",
@@ -47,7 +53,15 @@ export class ViewComponent {
       textInput: true
     },
   ]
+  selectedStatus = '';
+  selectedDateRange = '';
+  textSearch = '';
+  allOrders: any = [];
   orders: any = [];
+  totalOrders = 0;
+  totalOrderValue = 0;
+  paymentPending = 0;
+  totalPending = 0;
   fields = [{
     label: 'Order ID',
     sortable: false,
@@ -111,95 +125,28 @@ export class ViewComponent {
   }];
 
   ngOnInit(): void {
+    window.addEventListener('message', (event) => {
+      this.allOrders = event.data;
+      this.populateOrders(event.data);
+    });
+    this.customerId = this.route.snapshot.paramMap.get('id') || '';
     this.getOrders();
     this.getCustomerInfo();
   }
 
   getOrders() {
-    const ordersResponse = {
-      "responseStatus": "Success",
-      "orderMap": {
-          "In Process": [
-              {
-                  "id": 1545357,
-                  "orderNumber": "IC-12282037",
-                  "ipsUserId": "9000447273",
-                  "receivedDt": "May 17, 2022 10:20:32 AM",
-                  "total": 0,
-                  "orderStatus": "In Process",
-                  "externalOrderStatus": "In Assembly",
-                  "orderItemLite": [
-                      {
-                          "orderItemId": 2012564,
-                          "designFee": 0,
-                          "quantity": 1,
-                          "productLite": {
-                              "productType": "Calendar",
-                              "productAttributeMap": {
-                                  "pageLaminationType": "Matte",
-                                  "designType": "No Design",
-                                  "calendarSize": "Table Calendar"
-                              }
-                          },
-                          "orderDescription": "Test Order"
-                      }
-                  ],
-                  "billingAddress": {
-                      "id": 6018149,
-                      "salutation": "Mr.",
-                      "firstName": "Pk",
-                      "lastName": "Kumar",
-                      "company": "9110621048",
-                      "line1": "#48 K.H. Residency BBMP Office,Road",
-                      "line2": "Viratnagar,Bomanahalli",
-                      "line3": "",
-                      "city": "Nagpur",
-                      "country": "India",
-                      "pincode": "Maharashtra",
-                      "mobile": "",
-                      "phone": "813107"
-                  },
-                  "shippingAddress": {
-                      "id": 6018150,
-                      "salutation": "Mr.",
-                      "firstName": "Pk",
-                      "lastName": "Kumar",
-                      "company": "9110621048",
-                      "line1": "#48 K.H. Residency BBMP Office,Road",
-                      "line2": "Viratnagar,Bomanahalli",
-                      "line3": "",
-                      "city": "Nagpur",
-                      "country": "India",
-                      "pincode": "Maharashtra",
-                      "mobile": "",
-                      "phone": "813107"
-                  },
-                  "balancedToBePayed": 0,
-                  "isDeficientInPayment": false
-              }
-          ],
-          "Delivered": [
-          ]
-      }
-    }
+    this.ordersService.getCustomerOrders(this.customerId);
+  }
 
-  
-    const ordersList = ordersResponse?.orderMap?.['In Process'];
-    for (let i = 0; i < ordersList.length; i++) {
-      const orderDetails = ordersList[i].orderItemLite?.[0];
-      // const produ
-      this.orders.push(
-        {
-          orderId: ordersList[i].orderNumber,
-          description: orderDetails.orderDescription,
-          product: `product${i + 1}`,
-          orderDate: new Date(),
-          expectedDelivery: new Date(),
-          amount: 1000 * (i + 1),
-          status: this.statusFilters[0]
-        }
-      )
-    }
+  populateOrders(orders: any[]) {
+    this.totalOrders = orders.length || 0;
+    this.orders = [];
+    orders?.forEach(order => {
+      this.totalOrderValue += order[7];
+      this.orders.push(this.getOrderRow(order))
+    })
+    this.sharedService.setData('totalOrders', this.totalOrders);
+    this.sharedService.setData('totalOrderValue', this.totalOrderValue);
   }
 
   getCustomerInfo() {
@@ -214,5 +161,40 @@ export class ViewComponent {
     this.infoFields.forEach(field => {
       this.customerInfo[field.field] = customerData[field.field];
     })
+  }
+
+  filterData(value: any) {
+    alert(value['Status']);
+    if (Object.keys(value)?.[0] == 'Status') {
+      this.selectedStatus = value['Status'];
+    }
+    else if (Object.keys(value)?.[0] == 'Date Range') {
+      this.selectedDateRange = value['Date Range'];
+    }
+    else {
+
+    }
+    const filteredData : any [] = []
+    this.allOrders.forEach((order: string[]) => {
+      if (!this.selectedStatus || (this.selectedStatus && order[8] === this.selectedStatus)) {
+        if (!this.selectedDateRange) {
+          filteredData.push(this.getOrderRow(order))
+        }
+      }
+    })
+    this.orders = filteredData;
+  }
+
+  getOrderRow(order: any) {
+    const product = order.orderItemLite[0].productLite.productType == 'PhotoBook' ? order.orderItemLite[0].productLite.productAttributeMap.coverType : order.orderItemLite[0].productLite.productType;
+    return {
+      orderId: order.orderNumber || '',
+      description: order.orderItemLite[0].orderDescription || '',
+      product: product || '',
+      orderDate: order.receivedDt || '',
+      expectedDelivery: new Date(),
+      amount: order.total || '',
+      status: order.externalOrderStatus || ''
+    }
   }
 }

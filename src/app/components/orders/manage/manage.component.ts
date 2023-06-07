@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
-
+import { SharedService } from 'src/app/services/shared.service';
 @Component({
   selector: 'app-manage',
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent {
-  constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService) {}
+  constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
   statusFilters: string[] = ['Pending', 'Pending payment', 'Upload pending', 'In Design', 'In Assembly', 'In Production', 'Shipped', 'Cancelled'];
   dateFilters: string[] = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Last 90 days'];
   filters = [
@@ -25,16 +25,24 @@ export class ManageComponent {
       textInput: true
     },
   ]
+  selectedStatus = '';
+  selectedDateRange = '';
+  textSearch = '';
   orders: any = [];
+  allOrders: any = [];
+  totalOrders = 0;
+  totalOrderValue = 0;
+  paymentPending = 0;
+  totalPending = 0;
   fields = [{
     label: 'Customer',
     sortable: false,
     multiData: true,
     fields: [{
-      field: 'name', clickable: true, route: '/customer'
+      field: 'name', clickable: true, route: '/customer/view', param: 'guid'
     },
     {
-      field: 'phoneNo'
+      field: 'customerId'
     }]
   },
   {
@@ -85,11 +93,13 @@ export class ManageComponent {
 
   dashboardSections = [{
     title: 'Total Order Value',
-    value: '1,20,000'
+    subscription: true,
+    field: 'totalOrderValue'
   },
   {
     title: 'Total Orders',
-    value: '120'
+    subscription: true,
+    field: 'totalOrders'
   }, {
     title: 'Payment Pending',
     value: '1'
@@ -102,30 +112,60 @@ export class ManageComponent {
   ngOnInit(): void {
     this.getOrders();
     window.addEventListener('message', (event) => {
+      this.allOrders = event.data;
       this.populateOrders(event.data);
     });
   }
 
   getOrders() {
-    this.ordersService.getOrdersList('7781003466');
+    this.ordersService.getAllOrders('7781003466');
   }
 
   populateOrders(orders: any[]) {
-    orders.forEach(order => {
-      this.orders.push(
-        {
-          name: order[1] || '',
-          phoneNo: order[0] || '',
-          orderId: order[3],
-          description: order[5],
-          product: order[4],
-          orderDate: order[6],
-          expectedDelivery: new Date(),
-          amount: order[7],
-          status: order[8],
-          guid: order[2]
-        }
-      )
+    this.totalOrders = orders.length || 0;
+    this.orders = [];
+    orders?.forEach(order => {
+      this.totalOrderValue += order[7];
+      this.orders.push(this.getOrderRow(order))
     })
+    this.sharedService.setData('totalOrders', this.totalOrders);
+    this.sharedService.setData('totalOrderValue', this.totalOrderValue);
+  }
+
+  filterData(value: any) {
+    alert(value['Status']);
+    if (Object.keys(value)?.[0] == 'Status') {
+      this.selectedStatus = value['Status'];
+    }
+    else if (Object.keys(value)?.[0] == 'Date Range') {
+      this.selectedDateRange = value['Date Range'];
+    }
+    else {
+
+    }
+    const filteredData : any [] = []
+    this.allOrders.forEach((order: string[]) => {
+      if (!this.selectedStatus || (this.selectedStatus && order[8] === this.selectedStatus)) {
+        if (!this.selectedDateRange) {
+          filteredData.push(this.getOrderRow(order))
+        }
+      }
+    })
+    this.orders = filteredData;
+  }
+
+  getOrderRow(order: string[]) {
+    return {
+      name: order[1] || '',
+      customerId: order[0] || '',
+      orderId: order[3] || '',
+      description: order[5] || '',
+      product: order[4] || '',
+      orderDate: order[6] || '',
+      expectedDelivery: new Date(),
+      amount: order[7] || '',
+      status: order[8] || '',
+      guid: order[2] || ''
+    }
   }
 }

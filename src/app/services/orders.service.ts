@@ -13,7 +13,7 @@ export class OrdersService {
   protected basePath = environment.serviceUrl;
   constructor(protected httpClient: HttpClient) { }
 
-  public getOrdersList(
+  public getAllOrders(
     mobileNo?: string,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -36,7 +36,15 @@ export class OrdersService {
     // );
   }
 
-  public createListener(
+  public getCustomerOrders(
+    customerGuid?: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ) {
+    sendMessageToParent('getCustomerOrders', {customerGuid: customerGuid})
+  }
+
+  public create(
     body?: Object,
     observe: any = 'body',
     reportProgress: boolean = false
@@ -48,7 +56,7 @@ export class OrdersService {
   
     return this.httpClient.request<Object>(
       'post',
-      `${this.basePath}/listeners`,
+      `${this.basePath}/orders`,
       {
         body: body,
         params: queryParameters,
@@ -57,53 +65,4 @@ export class OrdersService {
       }
     );
   }
-
-  public getListener(
-    id?:  Object,
-    observe: any = 'body',
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-    
-    console.log(queryParameters);
-  
-    return this.httpClient.request<Object>(
-      'get',
-      `${this.basePath}/listeners/${String(id)}`,
-      {
-        params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  public updateListener(
-    id:  String,
-    body?: Object,
-    observe: any = 'body',
-    reportProgress: boolean = false
-  ): Observable<any> {
-    let queryParameters = new HttpParams({
-      encoder: new CustomHttpUrlEncodingCodec(),
-    });
-
-    queryParameters = queryParameters.set('id',String(id));
-
-    console.log(id, body);
-    
-    return this.httpClient.request<Object>(
-      'patch',
-      `${this.basePath}/listeners/${String(id)}`,
-      {
-        body: body,
-        // params: queryParameters,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
 }

@@ -25,7 +25,7 @@
                         <div *ngIf="obj.multiData">
                             <div class="multi-data-cell">
                                 <div *ngFor="let field of obj.fields">
-                                    <span *ngIf="field.clickable" (click)="goto(row.id, field.route)" class="clickable link-text">{{row[field.field]}}</span>
+                                    <span *ngIf="field.clickable" (click)="goto(row[field.param], field.route)" class="clickable link-text">{{row[field.field]}}</span>
                                     <span *ngIf="!field.clickable && !field.date">{{row[field.field]}}{{field.date}}</span>
                                     <span *ngIf="field.date">{{getDate(row[field.field])}}</span>
                                 </div>
@@ -40,11 +40,6 @@
                                 <div *ngIf="!obj.isClickable">
                                     <img class="info" src="../../../assets/icons/{{obj.imageFile}}">
                                 </div>
-                            </div>
-                            <div *ngIf="obj.isSwitch">
-                                <input type="checkbox" class="switch" [checked]="row.isAvailable"
-                                    [disabled]="row.isDisabled" (click)="dialogShow($event, row.isAvailable, row.id)"
-                                    title="{{obj.tooltip}}" />
                             </div>
                             <div *ngIf="obj.isCheckbox">
                                 <input type="checkbox" class="checkbox checkbox-lg" (click)="selectRow(row.id)"

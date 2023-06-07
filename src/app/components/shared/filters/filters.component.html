@@ -1,9 +1,9 @@
 <div class="container">
   <div class="section" *ngFor="let filter of filters; let i = index">
-    <input class="input large" *ngIf="filter.textInput" placeholder="{{filter.label}}">
-    <select class="dropdown dropdown-filter" *ngIf="filter.options">
-      <option class="dropdown-item" selected>{{filter.label}}</option>
-      <option class="dropdown-item" *ngFor="let option of filter.options; let j = index">{{option}}</option>
+    <input class="input large" *ngIf="filter.textInput" placeholder="{{filter.label}}" (keyup)="onKeyup($event)">
+    <select class="dropdown dropdown-filter" *ngIf="filter.options" (change)="onSelect(filter.label, $event)">
+      <option class="dropdown-item" selected value="">{{filter.label}}</option>
+      <option class="dropdown-item" *ngFor="let option of filter.options; let j = index" value="{{option}}">{{option}}</option>
     </select>
   </div>
   <!-- <button class="custom-btn-primary">Filter</button> -->

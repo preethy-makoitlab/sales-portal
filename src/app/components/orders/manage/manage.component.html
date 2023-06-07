@@ -1,5 +1,5 @@
 <div class="container">
 <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
-<app-filters [filters]="filters"></app-filters>
+<app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
 <app-table [fields]="fields" [data]="orders"></app-table>
 </div>

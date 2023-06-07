@@ -1,16 +1,21 @@
+@import 'src/styles/constants.scss';
+
 .container {
   padding: 20px;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-
   .customer-info {
     display: flex;
     flex-direction: row;
     gap: 50px;
     justify-content: space-between;
     flex-wrap: wrap;
-
+    border: $border-primary;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
     .info-item {
       display: flex;
       flex-direction: row;

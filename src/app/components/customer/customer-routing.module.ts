@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewComponent } from './view/view.component';
 
 const routes: Routes = [{
-  path: '',
+  path: 'view/:id',
   component: ViewComponent
 }];
 
