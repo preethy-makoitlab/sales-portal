@@ -65,4 +65,12 @@ export class OrdersService {
       }
     );
   }
+
+  public createOrder(
+    customerGuid?: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ) {
+    sendMessageToParent('orderPhotobook', {customerGuid: customerGuid})
+  }
 }

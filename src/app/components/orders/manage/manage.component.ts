@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { filterByDate, getDateRange } from 'src/app/utils/utils';
+
 @Component({
   selector: 'app-manage',
   templateUrl: './manage.component.html',
@@ -26,7 +28,7 @@ export class ManageComponent {
     },
   ]
   selectedStatus = '';
-  selectedDateRange = '';
+  selectedDateRange: any = {};
   textSearch = '';
   orders: any = [];
   allOrders: any = [];
@@ -112,8 +114,16 @@ export class ManageComponent {
   ngOnInit(): void {
     this.getOrders();
     window.addEventListener('message', (event) => {
-      this.allOrders = event.data;
-      this.populateOrders(event.data);
+      if (event?.data && Array.isArray(event.data)) {
+        event.data?.forEach(order => {
+          this.totalOrderValue += order[7];
+          this.allOrders.push(this.getOrderRow(order))
+        })
+        this.sharedService.setData('totalOrders', this.totalOrders);
+        this.sharedService.setData('totalOrderValue', this.totalOrderValue);
+      }
+      this.totalOrders = this.allOrders.length || 0;
+      this.orders = this.allOrders.slice();
     });
   }
 
@@ -121,36 +131,43 @@ export class ManageComponent {
     this.ordersService.getAllOrders('7781003466');
   }
 
-  populateOrders(orders: any[]) {
-    this.totalOrders = orders.length || 0;
-    this.orders = [];
-    orders?.forEach(order => {
-      this.totalOrderValue += order[7];
-      this.orders.push(this.getOrderRow(order))
-    })
-    this.sharedService.setData('totalOrders', this.totalOrders);
-    this.sharedService.setData('totalOrderValue', this.totalOrderValue);
-  }
+  // populateOrders(orders: any[]) {
+  //   this.totalOrders = orders.length || 0;
+  //   this.orders = [];
+  //   orders?.forEach(order => {
+  //     this.totalOrderValue += order[7];
+  //     this.orders.push(this.getOrderRow(order))
+  //   })
+  //   this.sharedService.setData('totalOrders', this.totalOrders);
+  //   this.sharedService.setData('totalOrderValue', this.totalOrderValue);
+  // }
 
   filterData(value: any) {
+    let dateRange : any = {};
     if (Object.keys(value)?.[0] == 'Status') {
       this.selectedStatus = value['Status'];
     }
     else if (Object.keys(value)?.[0] == 'Date Range') {
       this.selectedDateRange = value['Date Range'];
+      dateRange = getDateRange(this.selectedDateRange);
     }
     else {
-
+      this.textSearch = value['global'];
     }
-    const filteredData: any[] = []
-    this.allOrders.forEach((order: string[]) => {
-      if (!this.selectedStatus || (this.selectedStatus && order[8] === this.selectedStatus)) {
-        if (!this.selectedDateRange) {
-          filteredData.push(this.getOrderRow(order))
+    let filteredData: any[] = [];
+    this.orders = this.allOrders.slice();
+    if (this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
+      // filter by date
+      this.orders = filterByDate(this.orders, 'orderDate', this.selectedDateRange)
+    }
+    if (this.selectedStatus || this.textSearch) {
+      this.orders.forEach((order: any) => {
+        if ((!this.selectedStatus || (this.selectedStatus && order.status === this.selectedStatus)) && (!this.textSearch || (this.textSearch && (order.orderId?.toUpperCase().includes(this.textSearch.toUpperCase()) || order.customerId?.toUpperCase().includes(this.textSearch.toUpperCase()) || order.name?.toUpperCase().includes(this.textSearch.toUpperCase()))))) {
+          filteredData.push(order)
         }
-      }
-    })
-    this.orders = filteredData;
+      })
+      this.orders = filteredData.slice();
+    }
   }
 
   getOrderRow(order: string[]) {

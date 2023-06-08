@@ -1,4 +1,6 @@
 
+import * as moment from 'moment';
+
 export function isoToDDMMYYHHMM(date: string) { //dd-mm-yy
     if (!date) {
         return '';
@@ -40,6 +42,11 @@ export function dateToddMMYYYY(dateString: Date) {
     return formattedDate;
 }
 
+export function ddmmyyyyToDate(dateString: string) {
+    const dateParts = dateString.split("/");
+    return(new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0])); 
+}
+
 export function isoToTime(dateString: string) { //hh:mm
     const date: Date = new Date(dateString);
     const hours: number = date.getHours();
@@ -56,19 +63,62 @@ export function isoToYMD(isoString: string): string { //yyyy-mm-dd
     return `${year}-${month}-${day}`;
   }
 
-export function isDateInRange(startDateISO: string, endDateISO: string): boolean | string{
-    const currentDate = new Date();
+export function isDateInRange(inputDate: string, startDateISO: string, endDateISO: string): boolean {
+    const date = new Date(inputDate);
     const startDate = new Date(startDateISO);
     const endDate = new Date(endDateISO);
-    if(currentDate < startDate) {
-      return "early";
-    }
-    else {
-      return currentDate >= startDate && currentDate <= endDate;
-    }
+    return date >= startDate && date <= endDate;
 }
 
 export function sendMessageToParent(method: string, data: object) {
     const message = {method: method, data : data}
     window.parent.postMessage(message, '*');
+}
+
+export function getDateRange(range: string) {
+    const dateRange = {startDate: new Date().toISOString(), endDate: new Date().toISOString()}
+    switch(range) {
+        case 'Today':
+            return dateRange;
+        case 'Last 7 days':
+            dateRange.startDate = getNDaysBack(new Date(), 7).toISOString();
+            return dateRange;
+        case 'Last 30 days':
+            dateRange.startDate = getNDaysBack(new Date(), 30).toISOString();
+            return dateRange;
+        case 'Last 60 days':
+            dateRange.startDate = getNDaysBack(new Date(), 60).toISOString();
+            return dateRange;
+        case 'Last 90 days':
+            dateRange.startDate = getNDaysBack(new Date(), 90).toISOString();
+            return dateRange;
+        default: 
+            return dateRange.startDate = getNDaysBack(new Date(), 30).toISOString();
+    }
+}
+
+export function getNDaysBack(endDate: Date, daysCount: number) {
+    return new Date(endDate.setDate(endDate.getDate() - daysCount));
+}
+
+export function filterByDate(data: any[], dateField: string, dateRange: any) {
+    const filteredData: any[] = [];
+    data.forEach(d => {
+        if(d[dateField] && isValidDate(d[dateField])) {
+            const date = new Date(d[dateField]).toISOString();
+            if(date <= dateRange.endDate && date >= dateRange.startDate) {
+                filteredData.push(d)
+            }
+        }
+    })
+    return filteredData;
+}
+
+export function isValidDate(dateString: string) {
+    let isValid = false;
+    const date = new Date(dateString);
+    if(!isNaN(date.getTime())) {
+        isValid = true;
+    }
+    return isValid;
 }

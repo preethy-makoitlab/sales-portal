@@ -204,4 +204,8 @@ export class ViewComponent {
       status: order?.externalOrderStatus || ''
     }
   }
+
+  orderPhotobook() {
+    this.ordersService.createOrder(this.customerId);
+  }
 }
