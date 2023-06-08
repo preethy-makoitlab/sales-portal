@@ -11,7 +11,7 @@ import { filterByDate, getDateRange } from 'src/app/utils/utils';
 })
 export class ManageComponent {
   constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
-  statusFilters: string[] = ['Pending', 'Pending payment', 'Upload pending', 'In Design', 'In Assembly', 'In Production', 'Shipped', 'Cancelled'];
+  statusFilters: string[] = ['Waiting For Online QC', 'Waiting For Design', 'Submitted for Design Corrections', 'In Design', 'In Preview', 'Waiting For Assembly', 'In Assembly', 'In Printing', 'Shipped', 'Cancelled'];
   dateFilters: string[] = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Last 90 days'];
   filters = [
     {

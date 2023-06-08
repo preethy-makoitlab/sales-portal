@@ -38,7 +38,8 @@ export class ViewComponent {
     label: "Landline",
     field: "landlineNo"
   }]
-  statusFilters: string[] = ['Pending', 'Pending payment', 'Upload pending', 'In Design', 'In Assembly', 'In Production', 'Shipped', 'Cancelled'];
+  statusFilters: string[] = ['Waiting For Online QC', 'Waiting For Design', 'Submitted for Design Corrections', 'In Design', 'In Preview', 'Waiting For Assembly', 'In Assembly', 'In Printing', 'Shipped', 'Cancelled'];
+  // statusFilters: string[] = ['Pending', 'Pending payment', 'Upload pending', 'In Design', 'In Assembly', 'In Production', 'Shipped', 'Cancelled'];
   dateFilters: string[] = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Last 90 days'];
   filters = [
     {
