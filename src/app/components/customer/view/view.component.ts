@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { filterByDate, getDateRange } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-customer-view',
@@ -54,7 +55,7 @@ export class ViewComponent {
     },
   ]
   selectedStatus = '';
-  selectedDateRange = '';
+  selectedDateRange: any = {};
   textSearch = '';
   allOrders: any = [];
   orders: any = [];
@@ -175,20 +176,25 @@ export class ViewComponent {
       this.selectedStatus = value['Status'];
     }
     else if (Object.keys(value)?.[0] == 'Date Range') {
-      this.selectedDateRange = value['Date Range'];
+      this.selectedDateRange = getDateRange(value['Date Range']);
     }
     else {
-
+      this.textSearch = value['global'];
     }
-    const filteredData: any[] = []
-    this.allOrders.forEach((order: any) => {
-      if (!this.selectedStatus || (this.selectedStatus && order.status === this.selectedStatus)) {
-        if (!this.selectedDateRange) {
+    let filteredData: any[] = [];
+    this.orders = this.allOrders.slice();
+    if (this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
+      // filter by date
+      this.orders = filterByDate(this.orders, 'orderDate', this.selectedDateRange)
+    }
+    if (this.selectedStatus || this.textSearch) {
+      this.orders.forEach((order: any) => {
+        if ((!this.selectedStatus || (this.selectedStatus && order.status === this.selectedStatus)) && (!this.textSearch || (this.textSearch && (order.orderId?.toUpperCase().includes(this.textSearch.toUpperCase()) || order.customerId?.toUpperCase().includes(this.textSearch.toUpperCase()) || order.name?.toUpperCase().includes(this.textSearch.toUpperCase()))))) {
           filteredData.push(order)
         }
-      }
-    })
-    this.orders = filteredData;
+      })
+      this.orders = filteredData.slice();
+    }
   }
 
   getOrderRow(order: any) {

@@ -131,25 +131,12 @@ export class ManageComponent {
     this.ordersService.getAllOrders('7781003466');
   }
 
-  // populateOrders(orders: any[]) {
-  //   this.totalOrders = orders.length || 0;
-  //   this.orders = [];
-  //   orders?.forEach(order => {
-  //     this.totalOrderValue += order[7];
-  //     this.orders.push(this.getOrderRow(order))
-  //   })
-  //   this.sharedService.setData('totalOrders', this.totalOrders);
-  //   this.sharedService.setData('totalOrderValue', this.totalOrderValue);
-  // }
-
   filterData(value: any) {
-    let dateRange : any = {};
     if (Object.keys(value)?.[0] == 'Status') {
       this.selectedStatus = value['Status'];
     }
     else if (Object.keys(value)?.[0] == 'Date Range') {
-      this.selectedDateRange = value['Date Range'];
-      dateRange = getDateRange(this.selectedDateRange);
+      this.selectedDateRange = getDateRange(value['Date Range']);
     }
     else {
       this.textSearch = value['global'];
