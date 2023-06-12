@@ -41,6 +41,7 @@ export class ManageComponent {
     sortable: false,
     multiData: true,
     fields: [{
+      // field: 'name', clickable: true, param: 'guid'
       field: 'name', clickable: true, route: '/customer/view', param: 'guid'
     },
     {
@@ -116,13 +117,13 @@ export class ManageComponent {
     window.addEventListener('message', (event) => {
       if (event?.data && Array.isArray(event.data)) {
         event.data?.forEach(order => {
-          this.totalOrderValue += order[7];
+          this.totalOrderValue += order[11];
           this.allOrders.push(this.getOrderRow(order))
         })
-        this.sharedService.setData('totalOrders', this.totalOrders);
         this.sharedService.setData('totalOrderValue', this.totalOrderValue);
       }
       this.totalOrders = this.allOrders.length || 0;
+      this.sharedService.setData('totalOrders', this.totalOrders);
       this.orders = this.allOrders.slice();
     });
   }
@@ -161,14 +162,20 @@ export class ManageComponent {
     return {
       name: order[1] || '',
       customerId: order[0] || '',
-      orderId: order[3] || '',
-      description: order[5] || '',
-      product: order[4] || '',
-      orderDate: order[6] || '',
+      orderId: order[7] || '',
+      description: order[9] || '',
+      product: order[8] || '',
+      orderDate: order[10] || '',
       expectedDelivery: new Date(),
-      amount: order[7] || '',
-      status: order[8] || '',
-      guid: order[2] || ''
+      amount: order[11] || '',
+      status: order[12] || '',
+      guid: order[6] || '',
+      email: order[2] || '',
+      company: order[3] || ''
     }
+  }
+  
+  call(id: String) {
+    console.log(this.orders);
   }
 }
