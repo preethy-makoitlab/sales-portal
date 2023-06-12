@@ -113,6 +113,7 @@ export class ManageComponent {
   }];
 
   ngOnInit(): void {
+    console.log("in orders")
     this.getOrders();
     window.addEventListener('message', (event) => {
       if (event?.data && Array.isArray(event.data)) {

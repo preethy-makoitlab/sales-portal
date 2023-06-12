@@ -113,6 +113,13 @@ tbody {
     box-shadow: 0px 0px 6px rgba(33, 150, 83, 0.27);
 }
 
+// .dropdown {
+//     display: inline-block;
+//     position: relative;
+//     text-align: left;
+//     width: max-content
+// }
+
 .dropdown-item:hover {
     background: $clr-btn-primary;
     color: #FFFFFF;
@@ -182,7 +189,7 @@ tbody {
 
 .container {
     height: 100vh;
-    max-width: 100%;
+    max-width: 100% !important;
 }
 
 .custom-card {

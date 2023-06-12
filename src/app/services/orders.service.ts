@@ -21,7 +21,7 @@ export class OrdersService {
     // let queryParameters = new HttpParams({
     //   encoder: new CustomHttpUrlEncodingCodec(),
     // });
-
+    console.log("in getallorders")
     sendMessageToParent('getInProgressOrders', {mobileNo: mobileNo})
     
 
