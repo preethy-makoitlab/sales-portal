@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
 import { SharedService } from 'src/app/services/shared.service';
@@ -10,9 +10,9 @@ import { filterByDate, getDateRange } from 'src/app/utils/utils';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent {
-  constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
   statusFilters: string[] = ['Waiting For Online QC', 'Waiting For Design', 'Submitted for Design Corrections', 'In Design', 'In Preview', 'Waiting For Assembly', 'In Assembly', 'In Printing', 'Shipped', 'Cancelled'];
   dateFilters: string[] = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Last 90 days'];
+  isDesktopView = true;
   filters = [
     {
       label: 'Status',
@@ -36,7 +36,7 @@ export class ManageComponent {
   totalOrderValue = 0;
   paymentPending = 0;
   totalPending = 0;
-  fields = [{
+  tableFields = [{
     label: 'Customer',
     sortable: false,
     multiData: true,
@@ -94,6 +94,48 @@ export class ManageComponent {
     field: 'status'
   }]
 
+  cardFields = [{
+    label: 'Customer',
+    field: 'name',
+    clickable: true,
+    route: '/customer/view',
+    param: 'guid'
+  },
+  {
+    label: 'Customer ID',
+    field: 'customerId'
+  },
+  {
+    label: 'Order ID',
+    field: 'orderId'
+  },
+  {
+    label: 'Description',
+    field: 'description'
+  }, {
+    label: 'Product',
+    field: 'product'
+  }, {
+    label: 'Order Date',
+    date: true,
+    field: 'orderDate'
+  }, {
+    label: 'Expected Delivery',
+    date: true,
+    field: 'expectedDelivery'
+  }, {
+    label: 'Amount (INR)',
+    field: 'amount'
+  },
+  {
+    label: 'Status',
+    sortable: false,
+    multiData: false,
+    clickable: false,
+    button: true,
+    field: 'status'
+  }]
+
   dashboardSections = [{
     title: 'Total Order Value',
     subscription: true,
@@ -112,8 +154,18 @@ export class ManageComponent {
     value: '80'
   }];
 
+  constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
+  @HostListener('window:resize', [])
+  onResize() {
+    this.updateView();
+  }
+
+  updateView() {
+    this.isDesktopView = window.innerWidth >= 768;
+  }
+
   ngOnInit(): void {
-    console.log("in orders")
+    this.updateView()
     this.getOrders();
     window.addEventListener('message', (event) => {
       if (event?.data && Array.isArray(event.data)) {
@@ -175,7 +227,7 @@ export class ManageComponent {
       company: order[3] || ''
     }
   }
-  
+
   call(id: String) {
     console.log(this.orders);
   }

@@ -14,15 +14,6 @@ export class DashboardCountsComponent {
   constructor(private sharedService: SharedService){}
 
   ngOnInit() {
-    // for(let section of this.sections) {
-    //   const sectionMapped = section
-    //   if(section.subscription) {
-    //     this.subscriptions.push(this.sharedService.getData<string>(section.value).subscribe((data) => {
-    //       section[section.value] = data
-    //     }));
-    //   }
-    //   this.sectionsMapped.push(sectionMapped)
-    // }
     for(let i = 0; i < this.sections.length; i++) {
       const section = this.sections[i]
       if(section.subscription) {

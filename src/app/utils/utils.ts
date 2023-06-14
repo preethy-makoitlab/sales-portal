@@ -14,7 +14,7 @@ export function isoToDDMMYYHHMM(date: string) { //dd-mm-yy
     return day + '-' + month + '-' + year + ' ' + hour + ':' + minute;
 }
 
-export function isoToDDMMYYYY(date: string) { //dd-mm-yy
+export function isoToDDMMYYYY(date: string) { //dd/mm/yy
     if (!date) {
         return '';
     }

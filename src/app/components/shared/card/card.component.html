@@ -1,0 +1,16 @@
+<div class="card">
+	<div class="card-body">
+		<!-- <h6 class="card-header"></h6>
+		<p class="text-content2">Are you looking to increase your productivity at work?</p>
+		<div class="card-footer">
+			<button class="btn-secondary btn">Learn More</button>
+		</div> -->
+    <div *ngFor="let field of fields">
+      <p class="text-content2">{{field.label}} - 
+			<span *ngIf="field.clickable" class="clickable link-text" (click)="goto(data[field.param], field.route)">{{data[field.field]}}</span>
+			<span *ngIf="!field.clickable && !field.date">{{data[field.field]}}</span>
+			<span *ngIf="field.date" class="clickable">{{getDate(data[field.field])}}</span>
+		</p>
+    </div>
+	</div>
+</div>

@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 150px;
   gap: 20px;
   flex-wrap: wrap;
+  height: auto;
 
   .section {
     border-radius: 10px;
+    height: 150px;
     padding: 20px;
     flex: 1;
     align-items: center;

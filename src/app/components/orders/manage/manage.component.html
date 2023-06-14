@@ -1,5 +1,17 @@
-<div class="container">
-  <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
-  <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
-  <app-table [fields]="fields" [data]="orders" (call)="call($event)"></app-table>
+<div class="container flex flex-col w-full">
+  <div>
+    <a href="/customer">Manage Customers</a>
+  </div>
+  <div class="flex flex-col w-full">
+    <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
+  </div>
+  <div class="">
+    <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
+  </div>
+  <app-table [fields]="tableFields" [data]="orders" (call)="call($event)" *ngIf="isDesktopView"></app-table>
+  <div *ngIf="!isDesktopView">
+    <div class="m-2 w-full" *ngFor="let order of orders">
+      <app-card [fields]="cardFields" [data]="order" (call)="call($event)"></app-card>
+    </div>
+  </div>
 </div>
