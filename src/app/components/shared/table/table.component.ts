@@ -14,7 +14,7 @@ export class TableComponent {
   @Input() data!: any[]
   @Output() open = new EventEmitter<Object>();
   @Output() scroll = new EventEmitter<Event>();
-  @Output() call = new EventEmitter<String>();
+  @Output() call: EventEmitter<any> = new EventEmitter<any>();
   @Output() membersArray = new EventEmitter<any>();
   @ViewChildren('filter') filter!: QueryList<ElementRef>;
   @ViewChildren('checkbox') checkbox!: QueryList<ElementRef>;
@@ -37,7 +37,7 @@ export class TableComponent {
       this.router.navigate([route, id]);
     }
     else{
-      this.call.emit(id);
+      this.call.emit({id:id});
     }
     console.log(id);
   }

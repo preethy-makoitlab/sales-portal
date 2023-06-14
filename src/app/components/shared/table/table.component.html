@@ -7,8 +7,9 @@
                     <th *ngFor="let field of fields; index as index" class="b1">
                         <div class="label-icon">
                             <div><span>{{field.label}}</span></div>
-                            <div *ngIf="field.sortable" class="icon-section"><fa-icon [icon]="faSortUp"
-                                    class="up-icon"></fa-icon><fa-icon [icon]="faSortDown" class="down-icon"></fa-icon>
+                            <div *ngIf="field.sortable" class="icon-section">
+                                <fa-icon [icon]="faSortUp" class="up-icon"></fa-icon>
+                                <fa-icon [icon]="faSortDown" class="down-icon"></fa-icon>
                             </div>
                         </div>
                     </th>
@@ -18,14 +19,14 @@
                 <tr *ngFor="let row of data">
                     <td *ngFor="let obj of fields; index as index">
                         <div *ngIf="!obj.multiData">
-                            <span *ngIf="obj.clickable" class="clickable">{{row[obj.field]}}</span>
+                            <span *ngIf="obj.clickable" (click)="goto(row[obj.param], obj.route)" class="clickable link-text">{{obj.linkText || row[obj.field]}}</span>
                             <span *ngIf="!obj.clickable && !obj.date">{{row[obj.field]}}</span>
                             <span *ngIf="obj.date" class="clickable">{{getDate(row[obj.field])}}</span>
                         </div>
                         <div *ngIf="obj.multiData">
                             <div class="multi-data-cell">
                                 <div *ngFor="let field of obj.fields">
-                                    <span *ngIf="field.clickable" (click)="goto(row[field.param], field.route)" class="clickable link-text">{{row[field.field]}}</span>
+                                    <span *ngIf="field.clickable" (click)="goto(row[field.param], field.route)" class="clickable link-text">{{field.linkText || row[field.field]}}</span>
                                     <span *ngIf="!field.clickable && !field.date">{{row[field.field]}}{{field.date}}</span>
                                     <span *ngIf="field.date">{{getDate(row[field.field])}}</span>
                                 </div>
@@ -34,16 +35,14 @@
                         <div *ngIf="obj.data == null; else elseBlock">
                             <div *ngIf="obj.isImage">
                                 <div *ngIf="obj.isClickable" class="flex justify-center items-center">
-                                    <img class="cursor-pointer" src="../../../../assets/icons/{{obj.imageFile}}"
-                                        (click)="goto(row.id, obj.route)" />
+                                    <img class="cursor-pointer" src="../../../../assets/icons/{{obj.imageFile}}" (click)="goto(row.id, obj.route)" />
                                 </div>
                                 <div *ngIf="!obj.isClickable">
                                     <img class="info" src="../../../assets/icons/{{obj.imageFile}}">
                                 </div>
                             </div>
                             <div *ngIf="obj.isCheckbox">
-                                <input type="checkbox" class="checkbox checkbox-lg" (click)="selectRow(row.id)"
-                                    #checkbox />
+                                <input type="checkbox" class="checkbox checkbox-lg" (click)="selectRow(row.id)" #checkbox />
                             </div>
                             <!-- <div *ngIf="obj.isButton">
                               <div *ngIf="obj.buttonIcon">
@@ -70,8 +69,7 @@
                             </div>
                             <ng-template #print>
                                 <div class="flex justify-center items-center gap-2">
-                                    <img *ngIf="obj.dataIcon" src="../../../../assets/icons/{{obj.dataIcon}}" />
-                                    {{obj.data}}
+                                    <img *ngIf="obj.dataIcon" src="../../../../assets/icons/{{obj.dataIcon}}" /> {{obj.data}}
                                 </div>
                             </ng-template>
                         </ng-template>
