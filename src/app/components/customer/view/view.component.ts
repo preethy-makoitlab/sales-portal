@@ -148,11 +148,13 @@ export class ViewComponent {
     field: 'customerTotalOrders'
   }, {
     title: 'Payment Pending',
-    value: '1'
+    subscription: true,
+    field: 'customerPendingOrderValue'
   },
   {
-    title: 'Total Pending',
-    value: '80'
+    title: 'Pending Orders',
+    subscription: true,
+    field: 'customerPendingOrders'
   }];
 
   constructor(private router: Router, private route: ActivatedRoute, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
@@ -186,9 +188,15 @@ export class ViewComponent {
       }
       this.totalOrderValue += order.total;
       this.orders.push(this.getOrderRow(order))
+      if(order.isDeficientInPayment) {
+        this.totalPending ++;
+        this.paymentPending += order.balancedToBePayed || 0; 
+      }
     })
     this.sharedService.setData('customerTotalOrders', this.totalOrders);
     this.sharedService.setData('customerTotalOrderValue', this.totalOrderValue);
+    this.sharedService.setData('customerPendingOrders', this.totalPending);
+    this.sharedService.setData('customerPendingOrderValue', this.paymentPending);
   }
 
   getCustomerInfo() {

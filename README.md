@@ -21,7 +21,7 @@ going forward when we use state management, refer to state/user path. have added
 split component into modules and create them under components folder. create common reusable components under components/shared folder
 
 steps to deploy to prod:
-1. run 'npm run build'
+1. run 'ng build --configuration=production'
 2. transfer dist folder to /srv/naveen/sales-portal. rename dist folder with date if required
 3. sudo cp -R /srv/naveen/sales-portal/your_dist_folder_name /var/www/canvera/sales-portal
 4. in nginx config file (/etc/nginx/conf.d/virtual-ssl.conf), add alias of this latest file under /sales-portal path
