@@ -44,7 +44,7 @@ export function dateToddMMYYYY(dateString: Date) {
 
 export function ddmmyyyyToDate(dateString: string) {
     const dateParts = dateString.split("/");
-    return(new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0])); 
+    return (new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]));
 }
 
 export function isoToTime(dateString: string) { //hh:mm
@@ -61,7 +61,7 @@ export function isoToYMD(isoString: string): string { //yyyy-mm-dd
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
+}
 
 export function isDateInRange(inputDate: string, startDateISO: string, endDateISO: string): boolean {
     const date = new Date(inputDate);
@@ -71,13 +71,13 @@ export function isDateInRange(inputDate: string, startDateISO: string, endDateIS
 }
 
 export function sendMessageToParent(method: string, data: object) {
-    const message = {method: method, data : data}
+    const message = { method: method, data: data }
     window.parent.postMessage(message, '*');
 }
 
 export function getDateRange(range: string) {
-    const dateRange = {startDate: new Date().toISOString(), endDate: new Date().toISOString()}
-    switch(range) {
+    const dateRange = { startDate: new Date().toISOString(), endDate: new Date().toISOString() }
+    switch (range) {
         case 'Today':
             return dateRange;
         case 'Last 7 days':
@@ -92,7 +92,7 @@ export function getDateRange(range: string) {
         case 'Last 90 days':
             dateRange.startDate = getNDaysBack(new Date(), 90).toISOString();
             return dateRange;
-        default: 
+        default:
             return dateRange.startDate = getNDaysBack(new Date(), 30).toISOString();
     }
 }
@@ -104,9 +104,9 @@ export function getNDaysBack(endDate: Date, daysCount: number) {
 export function filterByDate(data: any[], dateField: string, dateRange: any) {
     const filteredData: any[] = [];
     data.forEach(d => {
-        if(d[dateField] && isValidDate(d[dateField])) {
+        if (d[dateField] && isValidDate(d[dateField])) {
             const date = new Date(d[dateField]).toISOString();
-            if(date <= dateRange.endDate && date >= dateRange.startDate) {
+            if (date <= dateRange.endDate && date >= dateRange.startDate) {
                 filteredData.push(d)
             }
         }
@@ -117,8 +117,12 @@ export function filterByDate(data: any[], dateField: string, dateRange: any) {
 export function isValidDate(dateString: string) {
     let isValid = false;
     const date = new Date(dateString);
-    if(!isNaN(date.getTime())) {
+    if (!isNaN(date.getTime())) {
         isValid = true;
     }
     return isValid;
+}
+
+export function isDesktopView() {
+    return window.innerWidth >= 768;
 }

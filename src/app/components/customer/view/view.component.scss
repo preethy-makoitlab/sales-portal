@@ -2,10 +2,10 @@
 
 .container {
   padding: 20px;
-  width: 100%;
+  // width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   margin-bottom: 50px;
   .order-section {
     display: flex;
@@ -16,11 +16,11 @@
     }
   }
   .customer-info {
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-direction: row;
+    // gap: 50px;
+    // justify-content: space-between;
+    // flex-wrap: wrap;
     border: $border-primary;
     padding: 30px;
     border-radius: 10px;

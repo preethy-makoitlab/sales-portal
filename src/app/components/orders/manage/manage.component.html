@@ -5,7 +5,7 @@
   <div class="flex flex-col w-full">
     <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
   </div>
-  <div class="">
+  <div>
     <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
   </div>
   <app-table [fields]="tableFields" [data]="orders" (call)="call($event)" *ngIf="isDesktopView"></app-table>

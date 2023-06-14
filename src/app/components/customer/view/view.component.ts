@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
 import { SharedService } from 'src/app/services/shared.service';
-import { filterByDate, getDateRange } from 'src/app/utils/utils';
+import { filterByDate, getDateRange, isDesktopView } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-customer-view',
@@ -10,8 +10,7 @@ import { filterByDate, getDateRange } from 'src/app/utils/utils';
   styleUrls: ['./view.component.scss']
 })
 export class ViewComponent {
-  constructor(private router: Router, private route: ActivatedRoute, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
-
+  isDesktopView = true;
   customerId: string = '';
   customerInfo: any = { name: '', customerId: '', email: '', company: '', mobile: '', landline: '' };
   infoFields = [{
@@ -65,7 +64,7 @@ export class ViewComponent {
   paymentPending = 0;
   totalPending = 0;
   customerDetails: any = {};
-  fields = [{
+  tableFields = [{
     label: 'Order ID',
     sortable: false,
     multiData: true,
@@ -111,6 +110,33 @@ export class ViewComponent {
     field: 'status'
   }]
 
+  cardFields = [{
+    label: 'Order ID',
+    field: 'orderId'
+  },
+  {
+    label: 'Description',
+    field: 'description'
+  }, {
+    label: 'Product',
+    field: 'product'
+  }, {
+    label: 'Order Date',
+    date: true,
+    field: 'orderDate'
+  }, {
+    label: 'Expected Delivery',
+    date: true,
+    field: 'expectedDelivery'
+  }, {
+    label: 'Amount (INR)',
+    field: 'amount'
+  },
+  {
+    label: 'Status',
+    field: 'status'
+  }]
+
   dashboardSections = [{
     title: 'Total Order Value',
     subscription: true,
@@ -129,7 +155,14 @@ export class ViewComponent {
     value: '80'
   }];
 
+  constructor(private router: Router, private route: ActivatedRoute, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
+  @HostListener('window:resize', [])
+  onResize() {
+    this.isDesktopView = isDesktopView();
+  }
+  
   ngOnInit(): void {
+    this.isDesktopView = isDesktopView();
     window.addEventListener('message', (event) => {
       this.populateOrders(event.data);
       this.allOrders = this.orders;

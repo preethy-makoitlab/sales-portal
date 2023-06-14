@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container flex flex-col w-full">
   <div class="order-section">
     <button class="custom-btn-primary" (click)="orderPhotobook()">Order Photobook</button>
   </div>
-  <div class="customer-info">
+  <div class="customer-info flex flex-row flex-wrap md:gap-20 lg:gap-50">
     <div class="info-item" *ngFor="let field of infoFields">
       <div class="line-item">
         <div>{{field.label}}</div>
@@ -10,7 +10,16 @@
       </div>
     </div>
   </div>
-  <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
-  <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
-  <app-table [fields]="fields" [data]="orders"></app-table>
+  <div class="flex flex-col w-full">
+    <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
+  </div>
+  <div>
+    <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
+  </div>
+  <app-table [fields]="tableFields" [data]="orders" *ngIf="isDesktopView"></app-table>
+  <div *ngIf="!isDesktopView">
+    <div class="m-2 w-full" *ngFor="let order of orders">
+      <app-card [fields]="cardFields" [data]="order"></app-card>
+    </div>
+  </div>
 </div>

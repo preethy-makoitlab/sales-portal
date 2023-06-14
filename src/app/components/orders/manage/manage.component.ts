@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { OrdersService } from 'src/app/services/orders.service';
 import { SharedService } from 'src/app/services/shared.service';
-import { filterByDate, getDateRange } from 'src/app/utils/utils';
+import { filterByDate, getDateRange, isDesktopView } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-manage',
@@ -129,10 +129,6 @@ export class ManageComponent {
   },
   {
     label: 'Status',
-    sortable: false,
-    multiData: false,
-    clickable: false,
-    button: true,
     field: 'status'
   }]
 
@@ -157,15 +153,11 @@ export class ManageComponent {
   constructor(private router: Router, private routerModule: RouterModule, private ordersService: OrdersService, private sharedService: SharedService) { }
   @HostListener('window:resize', [])
   onResize() {
-    this.updateView();
-  }
-
-  updateView() {
-    this.isDesktopView = window.innerWidth >= 768;
+    this.isDesktopView = isDesktopView();
   }
 
   ngOnInit(): void {
-    this.updateView()
+    this.isDesktopView = isDesktopView();
     this.getOrders();
     window.addEventListener('message', (event) => {
       if (event?.data && Array.isArray(event.data)) {
