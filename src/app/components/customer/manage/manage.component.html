@@ -1,4 +1,9 @@
 <div class="container">
     <app-filters [filters]="filters" (selectedValue)="filterData($event)"></app-filters>
-    <app-table [fields]="fields" [data]="customers" (call)="orderPhotobook($event)"></app-table>
+    <app-table [fields]="tableFields" [data]="customers" (call)="orderPhotobook($event)" *ngIf="isDesktopView"></app-table>
+  <div *ngIf="!isDesktopView">
+    <div class="m-2 w-full" *ngFor="let customer of customers">
+      <app-card [fields]="cardFields" [data]="customer" (call)="orderPhotobook($event)"></app-card>
+    </div>
+  </div>
 </div>

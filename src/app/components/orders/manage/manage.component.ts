@@ -177,6 +177,10 @@ export class ManageComponent {
     this.ordersService.getAllOrders('7781003466');
   }
 
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
+
   filterData(value: any) {
     if (Object.keys(value)?.[0] == 'Status') {
       this.selectedStatus = value['Status'];

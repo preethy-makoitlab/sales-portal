@@ -1,6 +1,6 @@
 <div class="container flex flex-col w-full">
-  <div>
-    <a href="/customer">Manage Customers</a>
+  <div class="flex justify-end mb-2">
+    <button class="custom-btn-primary p-2" (click)="goTo('/customer')">Manage Customers</button>
   </div>
   <div class="flex flex-col w-full">
     <app-dashboard-counts [sections]="dashboardSections"></app-dashboard-counts>
